@@ -13,12 +13,17 @@ public class MainController {
     @GetMapping("/")
     public ModelAndView mainPage() {
         var modelAndView = new ModelAndView("index");
-        modelAndView.addObject("name", "jon");
+        modelAndView.addObject("name", "world");
         return modelAndView;
     }
 
     @GetMapping("/login")
     public ModelAndView loginPage() {
         return new ModelAndView("login");
+    }
+
+    @GetMapping("/user")
+    public ModelAndView userPage() {
+        return new ModelAndView("user");
     }
 }

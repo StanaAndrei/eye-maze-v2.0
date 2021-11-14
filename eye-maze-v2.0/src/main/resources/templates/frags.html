@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <body>
     <div th:fragment="header">
@@ -7,7 +8,7 @@
             <li><a href="#home">Home</a></li>
             <li><a href="#news">News</a></li>
             <li><a href="#contact">Contact</a></li>
-            <li style="float:right"><a class="active" href="javascript:void(0)">you</a></li>
+            <li style="float:right"><a class="active" href="/login">login</a></li>
         </ul>
         <style>
             ul {
@@ -42,10 +43,13 @@
                 pointer-events: none;
             }
         </style>
+        <script defer>
+            if (sessionStorage.loginUUID) {
+                
+            }
+        </script>
     </div>
-    
+
 </body>
-<script>
-    
-</script>
+
 </html>
