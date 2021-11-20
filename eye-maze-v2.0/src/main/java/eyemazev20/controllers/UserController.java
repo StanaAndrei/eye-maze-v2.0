@@ -5,6 +5,7 @@ import eyemazev20.Services.AuthService;
 import eyemazev20.exceptions.HbmEx;
 import eyemazev20.models.User;
 import eyemazev20.utils.UtilVars;
+import netscape.javascript.JSObject;
 import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
 import org.springframework.http.ResponseEntity;

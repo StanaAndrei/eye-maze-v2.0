@@ -1,17 +1,28 @@
 package eyemazev20.models;
 
-import org.hibernate.annotations.GenericGenerator;
-
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import javax.persistence.*;
-import java.util.UUID;
 
 @Entity
 @Table(name = "Users")
+@NoArgsConstructor(force = true, access = AccessLevel.PUBLIC)
 public class User {
     @Id
     @GeneratedValue
     @Column(name = "id")
     private int id;
+
+    @Override
+    public String toString() {
+        return '{' +
+                "\"id\":" + id +
+                ", \"loginUUID\":\"" + loginUUID + '\"' +
+                ", \"username\":\"" + username + '\"' +
+                ", \"password\":\"" + password + '\"' +
+                ", \"email\":\"" + email + '\"' +
+                '}';
+    }
 
     @Column(name = "loginUUID", updatable = false)
     private String loginUUID;
@@ -30,7 +41,7 @@ public class User {
         this.password = password;
         this.email = email;
         this.loginUUID = loginUUID;
-    }
+    }//*/
 
     public String getLoginUUID() {
         return loginUUID;

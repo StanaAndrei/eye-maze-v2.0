@@ -5,10 +5,10 @@
 <body>
     <div th:fragment="header">
         <ul>
-            <li><a href="#home">Home</a></li>
+            <li><a href="/">Home</a></li>
             <li><a href="#news">News</a></li>
-            <li><a href="#contact">Contact</a></li>
-            <li style="float:right"><a class="active" href="/login">login</a></li>
+            <li><a href="/user">Profile</a></li>
+            <li style="float:right"><a class="active" href="/login">Login</a></li>
         </ul>
         <style>
             ul {
@@ -37,15 +37,29 @@
 
             .active {
                 background-color: #04AA6D;
-            }
-
-            .disabled-link {
-                pointer-events: none;
+                cursor: pointer;
             }
         </style>
         <script defer>
             if (sessionStorage.loginUUID) {
-                
+                $('.active').text('logout');
+                $('.active').removeAttr('href');
+                $('.active').click(e => {
+                    fetch('/api/logout', {
+                        method: 'DELETE',
+                        cache: 'no-cache',
+                        credentials: 'same-origin',
+                    }).then(response => {
+                        sessionStorage.removeItem('loginUUID');
+                        $('.active').text('login');
+                        $('.active').attr('href', '/login');
+                        $('.active').unbind();
+                        window.location.reload();
+                    }).catch(err => {
+                        alert(err);
+                    })
+
+                });
             }
         </script>
     </div>
