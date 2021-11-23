@@ -16,10 +16,8 @@ import javax.servlet.http.HttpSession;
 public class MainController {
 
     @GetMapping("/")
-    public ModelAndView mainPage() {
-        var modelAndView = new ModelAndView("index");
-        modelAndView.addObject("name", "world");
-        return modelAndView;
+    public String mainPage() {
+        return "index";
     }
 
     @GetMapping("/register")
