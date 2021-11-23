@@ -36,13 +36,19 @@ public class MainController {
     public ModelAndView userPage(HttpSession httpSession) {
         var modelAndView = new ModelAndView("user");
         final var attr = httpSession.getAttribute("loginUUID");
-        System.out.println(attr);
         if (attr == null) {
-            System.err.println("ATR--->NULL");
             return new ModelAndView("redirect:/login");
         }
         final var user = UserService.getUserData(attr.toString());
         modelAndView.addObject("username", user.getUsername());//*/
         return modelAndView;
+    }
+
+    @GetMapping("/play")
+    public String getPlayPage(HttpSession httpSession) {
+        if (httpSession.getAttribute("loginUUID") == null) {
+            return "redirect:/login";
+        }
+        return "play";
     }
 }

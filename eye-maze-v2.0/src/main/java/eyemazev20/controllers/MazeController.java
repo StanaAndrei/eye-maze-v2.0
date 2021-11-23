@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class MazeController {
 
-
     @GetMapping("/rand-maze-way")
     public static ResponseEntity<?> getRandMaze(@RequestParam int n, @RequestParam int m) {
         if (n == 0 || m == 0) {

@@ -19,6 +19,7 @@
         <br><br>
         <input type="submit" value="login">
     </form>
+    <i>No account! No problemo register <a href="/register">here</a>!</i>
 </body>
 <style>
     h2 {
@@ -52,17 +53,6 @@
                 alert('smth went wrong on server!');
                 console.error('Error:', error);
             });
-
-        /*
-        $.post("/api/login",
-            {
-                email: $('#email').val(),
-                password: $('#password').val()
-            },
-            function (data, status) {
-                alert("Data: " + data + "\nStatus: " + status);
-            }
-        );//*/
     })
 </script>
 
