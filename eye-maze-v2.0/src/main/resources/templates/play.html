@@ -9,16 +9,43 @@
 </head>
 
 <body>
-    <form action="">
-        <button>CREATE ROOM!</button>
-    </form>
+    <button id="create-btn">CREATE ROOM!</button>
     <hr>
-    <button>JOIN!</button>
+    <button id="join-btn">JOIN!</button>
 </body>
 <script>
-    $('form').submit(e => {
-        e.preventDefault();
+    $('#create-btn').click(async event => {
+        event.preventDefault();
+        const res = await fetch("/api/create-room", {
+            method: 'POST',
+            cache: 'no-cache',
+            credentials: 'same-origin'
+        });
+        const data = await res.json();
+        if (data.status > 300) {
+            alert('smth went wrong!');
+            return;
+        }
+        window.location.assign(`/room/${data}`);        
+    })
 
+    $('#join-btn').click(async event => {
+        event.preventDefault();
+        const uuid = prompt(`Room's code:`);
+        if (!uuid) {
+            return;
+        }
+        const res = await fetch(`/api/join-room/${uuid}`, {
+            method: 'PUT',
+            cache: 'no-cache',
+            credentials: 'same-origin'
+        });
+        if (res.status === 200) {
+            window.location.assign(`/room/${uuid}`);
+        } else {
+            alert('lobby is full!');
+        }
     })
 </script>
+
 </html>

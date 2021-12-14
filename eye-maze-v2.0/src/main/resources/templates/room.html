@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body onload="checkRef(); connect();">
+    <h1>LOBBY!</h1>
+    <p>Lobby code:
+        <input type="text" id="room-code" th:value="${roomCode}" readonly />
+    </p>
+    <button id="cpy-btn">copy to clipboard!</button>
+    <br><br><br>
+    <div id="message-history"
+        style="height:120px;width:300px;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;">
+    </div>
+    <br><br>
+    <input id="message-cont" type="text" maxlength="100">
+    <button id="send">send!</button>
+</body>
+<script>
+    let stompClient;
+
+    $('#cpy-btn').click(event => {
+        event.preventDefault();
+        const copyText = $("#room-code")[0];
+        copyText.select();
+        copyText.setSelectionRange(0, 99999);//for mb
+        navigator.clipboard.writeText(copyText.value);
+    });
+
+    function checkRef() {
+        if (!document.referrer.startsWith(document.location.origin)) {
+            window.location.assign('/play');
+        }
+    }
+
+    function showMessage(from, message) {
+        $('#message-history').append(`<p><b>${from}:</b> ${message}</p>`);
+        $('#message-history')[0].scrollTop = $('#message-history')[0].scrollHeight;
+    }
+
+    $('#send').click(event => {
+        event.preventDefault();
+        const message = $('#message-cont').val().trim();
+        if (!message) {
+            alert(`message cann't be empty!`);
+            return;
+        }
+        stompClient.send('/ws/room-messages', {}, JSON.stringify({
+            'messageContent': message
+        }));
+        $('#message-cont').val('');
+    })
+
+    function connect() {
+        let socket = new SockJS('/our-websocket');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, frame => {
+            //console.log('connected:' + frame);
+            stompClient.subscribe('/user/topic/room-messages', message => {
+                const { from, content } = JSON.parse(message.body);
+                showMessage(from, content);
+            })
+        })
+    }
+</script>
+
+</html>

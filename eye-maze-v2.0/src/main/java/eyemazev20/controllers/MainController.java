@@ -1,15 +1,13 @@
 package eyemazev20.controllers;
 
-import eyemazev20.Dtos.LoginUUIDDto;
+import eyemazev20.Services.AuthService;
 import eyemazev20.Services.UserService;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.UUID;
 
 @SessionAttributes("loginUUID")
 @Controller
@@ -47,6 +45,17 @@ public class MainController {
         if (httpSession.getAttribute("loginUUID") == null) {
             return "redirect:/login";
         }
+
         return "play";
+    }
+
+    @GetMapping("/room/{uuid}")
+    public ModelAndView getRoomPage(@PathVariable UUID uuid, HttpSession httpSession) {
+        if (!AuthService.isAuth(httpSession)) {
+            return new ModelAndView("redirect:/login");
+        }
+        final var modelAndView = new ModelAndView("room");
+        modelAndView.addObject("roomCode", uuid);
+        return modelAndView;
     }
 }

@@ -10,6 +10,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.util.UUID;
 import java.util.List;
 
@@ -46,5 +47,7 @@ public class AuthService {
         return userId;
     }
 
-
+    public static boolean isAuth(HttpSession httpSession) {
+        return httpSession.getAttribute("loginUUID") != null;
+    }
 }
