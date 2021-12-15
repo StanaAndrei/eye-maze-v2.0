@@ -40,8 +40,9 @@
                 cursor: pointer;
             }
         </style>
-        <script defer>
-            if (sessionStorage.loginUUID) {
+        <script  th:inline="javascript">
+            const loginUUID = '[[${loginUUID}]]';
+            if (loginUUID !== 'null') {
                 $('.active').text('logout');
                 $('.active').removeAttr('href');
                 $('.active').click(e => {
@@ -50,7 +51,7 @@
                         cache: 'no-cache',
                         credentials: 'same-origin',
                     }).then(response => {
-                        sessionStorage.removeItem('loginUUID');
+                        //sessionStorage.removeItem('loginUUID');
                         $('.active').text('login');
                         $('.active').attr('href', '/login');
                         $('.active').unbind();
@@ -62,6 +63,7 @@
                 });
             }
         </script>
+        
     </div>
 
 </body>

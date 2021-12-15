@@ -10,7 +10,7 @@
     <title>Document</title>
 </head>
 
-<body onload="sessionStorage.loginUUID ? window.location.assign('/') : {}">
+<body th:attr="onload='{\''+${session.loginUUID}+ '\' !== `null` ? window.location.assign(`/`) : {}}'">
     <h2>LOGIN</h2>
     <form>
         <input id="email" type="email" placeholder="email" autofocus>
@@ -27,6 +27,7 @@
     }
 </style>
 <script>
+    //th:attr="onload='sessionStorage.loginUUID ? window.location.assign(`/`) : {}'"
     document.querySelector('form').addEventListener('submit', e => {
         e.preventDefault();
         let o = {
@@ -47,7 +48,6 @@
                     alert('wrong login data!');
                     return;
                 }
-                sessionStorage.loginUUID = data;
                 window.location.reload();
             }).catch((error) => {
                 alert('smth went wrong on server!');

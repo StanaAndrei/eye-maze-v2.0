@@ -14,18 +14,19 @@ import java.util.UUID;
 public class MainController {
 
     @GetMapping("/")
-    public String mainPage() {
+    public String mainPage(HttpSession httpSession) {
         return "index";
     }
 
     @GetMapping("/register")
-    public String registerPage() {
+    public String registerPage(HttpSession httpSession) {
         return "register";
     }
 
     @GetMapping("/login")
-    public String loginPage(HttpSession httpSession) {
-        return "login";
+    public ModelAndView loginPage(HttpSession httpSession) {
+        final var mav = new ModelAndView("login");
+        return mav;
     }
 
     @GetMapping("/user")
