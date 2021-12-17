@@ -9,11 +9,23 @@
 </head>
 
 <body>
-    <button id="create-btn">CREATE ROOM!</button>
+    <button id="create-btn">CREATE LOBBY!</button>
     <hr>
     <button id="join-btn">JOIN!</button>
+    <br><br>
+    <button style="display: none;" id="join-curr">return to your current lobby</button>
 </body>
 <script>
+    const roomUUID = '[[${session.currRoomUUID}]]';
+    if (roomUUID && roomUUID !== 'null') {
+        $('#join-curr').css('display', 'block');
+    }
+
+    $('#join-curr').click(event => {
+        event.preventDefault();
+        window.location.assign(`/room/${roomUUID}`);
+    })
+
     $('#create-btn').click(async event => {
         event.preventDefault();
         const res = await fetch("/api/create-room", {
@@ -42,8 +54,10 @@
         });
         if (res.status === 200) {
             window.location.assign(`/room/${uuid}`);
-        } else {
+        } else if (res.status === 409) {
             alert('lobby is full!');
+        } else {
+            alert(`lobby doesn't exist!`);
         }
     })
 </script>

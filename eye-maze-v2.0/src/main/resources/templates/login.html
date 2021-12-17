@@ -44,8 +44,12 @@
             body: JSON.stringify(o)
         }).then(response => response.json())
             .then(data => {
-                if (data.status === 500) {
+                if (data === 'WRONG_DATA') {
                     alert('wrong login data!');
+                    return;
+                }
+                if (data === 'ALREADY_AUTH') {
+                    alert('you are logged on another device/session');
                     return;
                 }
                 window.location.reload();

@@ -1,6 +1,7 @@
 package eyemazev20.controllers;
 
 import eyemazev20.Services.AuthService;
+import eyemazev20.Services.RoomService;
 import eyemazev20.Services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -55,6 +56,21 @@ public class MainController {
         if (!AuthService.isAuth(httpSession)) {
             return new ModelAndView("redirect:/login");
         }
+        final  var loginUUID = httpSession.getAttribute("loginUUID").toString();
+
+        final var player0 = RoomService.uidToRoom.get(uuid).players[0];
+        final var player1 = RoomService.uidToRoom.get(uuid).players[1];
+
+        if (player0 == null && player1 == null) {
+            RoomService.uidToRoom.remove(uuid);
+            return new ModelAndView("redirect:/play");
+        }
+        if (loginUUID != null) {
+            if (player0 != null && !player0.equals(loginUUID) && player1 != null && !player1.equals(loginUUID)) {
+                return new ModelAndView("redirect:/play");
+            }
+        }
+
         final var modelAndView = new ModelAndView("room");
         modelAndView.addObject("roomCode", uuid);
         return modelAndView;

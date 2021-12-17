@@ -16,6 +16,8 @@
         <input type="text" id="room-code" th:value="${roomCode}" readonly />
     </p>
     <button id="cpy-btn">copy to clipboard!</button>
+    <br><br>
+    <button id="leave-btn">LEAVE!</button>
     <br><br><br>
     <div id="message-history"
         style="height:120px;width:300px;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;">
@@ -23,8 +25,21 @@
     <br><br>
     <input id="message-cont" type="text" maxlength="100">
     <button id="send">send!</button>
+    <hr>
 </body>
 <script>
+    const broadcastCh = new BroadcastChannel('check-dupl');
+    broadcastCh.postMessage('open');
+    broadcastCh.onmessage = event => {
+        if (event.data === "open") {
+            broadcastCh.postMessage(`dupl-found`);
+            alert("You can't open a duplicate of the lobby page!");
+        }
+        if (event.data === `dupl-found`) {
+            window.location.assign('/play');
+        }
+    };
+
     let stompClient;
 
     $('#cpy-btn').click(event => {
@@ -37,6 +52,7 @@
 
     function checkRef() {
         if (!document.referrer.startsWith(document.location.origin)) {
+            //alert();
             window.location.assign('/play');
         }
     }
@@ -70,6 +86,20 @@
             })
         })
     }
+
+    $('#leave-btn').click(async event => {
+        event.preventDefault();
+        const res = await fetch('/api/leave-room', {
+            method: 'PUT',
+            cache: 'no-cache',
+            credentials: 'same-origin'
+        });
+        if (res.status !== 200) {
+            alert('fail to leave lobby');
+            return;
+        }
+        window.location.assign('/play');
+    })
 </script>
 
 </html>

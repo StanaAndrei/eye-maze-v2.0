@@ -17,7 +17,11 @@ public class Room {
     }
 
     public void addSecond(final String second) {
-        players[1] = second;
+        if (players[0] == null) {
+            players[0] = second;
+        } else if (players[1] == null) {
+            players[1] = second;
+        }
     }
 
     public String[] getPlayers() {

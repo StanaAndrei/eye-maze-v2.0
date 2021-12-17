@@ -1,7 +1,6 @@
 package eyemazev20.Services;
 
 import eyemazev20.models.Room;
-import eyemazev20.utils.RoomsHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -9,38 +8,55 @@ import java.util.UUID;
 
 @Service
 public class RoomService {
-    //public static HashMap<UUID, Room> uidToRoom = new HashMap<>();
+    public static HashMap<UUID, Room> uidToRoom = new HashMap<>();
 
     public static boolean canBeJoined(UUID roomUuid) {
-        boolean confl = false;
-        confl |= !RoomsHolder.uidToRoom.containsKey((roomUuid));
-        if (!confl) {
-            confl |= RoomsHolder.uidToRoom.get((roomUuid)).getPlayers()[1] != null;
+        boolean ok = false;
+        ok |= RoomService.uidToRoom.containsKey((roomUuid));
+        if (ok) {
+            ok |= RoomService.uidToRoom.get((roomUuid)).getPlayers()[0] == null;
+            ok |= RoomService.uidToRoom.get((roomUuid)).getPlayers()[1] == null;
         }
-        return confl;
+        return ok;
+    }
+    
+    public static boolean canPlayerJoin(UUID roomUuid, String loginUUID) {
+        if (RoomService.uidToRoom.get(roomUuid).players[0].equals(loginUUID)) {
+            return true;
+        } else if (RoomService.uidToRoom.get(roomUuid).players[1].equals(loginUUID)) {
+            return true;
+        }
+        return false;
     }
 
     public static void joinRoom(UUID roomUuid, String loginUUID) {
-        var room = RoomsHolder.uidToRoom.get(roomUuid);
+        var room = RoomService.uidToRoom.get(roomUuid);
         room.addSecond(loginUUID);
-        RoomsHolder.uidToRoom.remove(roomUuid);
-        RoomsHolder.uidToRoom.put((roomUuid), room);//*/
+        RoomService.uidToRoom.remove(roomUuid);
+        RoomService.uidToRoom.put((roomUuid), room);//*/
     }
 
     public static void leaveRoom(UUID roomUuid, String loginUUID) {
-        if (RoomsHolder.uidToRoom.get(roomUuid).getPlayers()[0].equals(loginUUID)) {
-            RoomsHolder.uidToRoom.get(roomUuid).players[0] = null;
-        } else if (RoomsHolder.uidToRoom.get(roomUuid).getPlayers()[1].equals(loginUUID)) {
-            RoomsHolder.uidToRoom.get(roomUuid).players[1] = null;
+        if (roomUuid == null || loginUUID == null) {
+            return;
+        }
+        final var player0 = RoomService.uidToRoom.get(roomUuid).getPlayers()[0];
+        final var player1 = RoomService.uidToRoom.get(roomUuid).getPlayers()[1];
+        if (player0 != null && player0.equals(loginUUID)) {
+            RoomService.uidToRoom.get(roomUuid).players[0] = null;
+        } else if (player1 != null && player1.equals(loginUUID)) {
+            RoomService.uidToRoom.get(roomUuid).players[1] = null;
         }
     }
 
     public static UUID getRoomUUIDOfPlayer(String loginUUID) {
-        for (final var key : RoomsHolder.uidToRoom.keySet()) {
-            if (RoomsHolder.uidToRoom.get(key).players[0].equals(loginUUID)) {
+        for (final var key : RoomService.uidToRoom.keySet()) {
+            final var player0 = RoomService.uidToRoom.get(key).players[0];
+            final var player1 = RoomService.uidToRoom.get(key).players[1];
+            if (player0 != null && player0.equals(loginUUID)) {
                 return key;
             }
-            if (RoomsHolder.uidToRoom.get(key).players[1].equals(loginUUID)) {
+            if (player1 != null && RoomService.uidToRoom.get(key).players[1].equals(loginUUID)) {
                 return key;
             }
         }
@@ -48,9 +64,9 @@ public class RoomService {
     }
 
     public static String getOtherPlayer(UUID roomUuid, String loginUUID) {
-        if (RoomsHolder.uidToRoom.get(roomUuid).getPlayers()[0].equals(loginUUID)) {
-            return RoomsHolder.uidToRoom.get(roomUuid).players[1];
+        if (RoomService.uidToRoom.get(roomUuid).getPlayers()[0].equals(loginUUID)) {
+            return RoomService.uidToRoom.get(roomUuid).players[1];
         }
-        return RoomsHolder.uidToRoom.get(roomUuid).players[0];
+        return RoomService.uidToRoom.get(roomUuid).players[0];
     }
 }

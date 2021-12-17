@@ -5,14 +5,12 @@ import eyemazev20.Dtos.ws.ResMessage;
 import eyemazev20.Services.RoomService;
 import eyemazev20.Services.UserService;
 import eyemazev20.Services.ws.MessageService;
-import eyemazev20.utils.RoomsHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 
 import java.security.Principal;
-import java.sql.SQLOutput;
 
 @Controller
 public class MessageController {
