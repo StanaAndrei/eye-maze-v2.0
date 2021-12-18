@@ -14,6 +14,7 @@ public class RoomService {
         boolean ok = false;
         ok |= RoomService.uidToRoom.containsKey((roomUuid));
         if (ok) {
+            ok = false;
             ok |= RoomService.uidToRoom.get((roomUuid)).getPlayers()[0] == null;
             ok |= RoomService.uidToRoom.get((roomUuid)).getPlayers()[1] == null;
         }
