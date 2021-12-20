@@ -1,11 +1,30 @@
 package eyemazev20.models;
 
-import java.util.Arrays;
+import java.util.*;
 
 public class Room {
-    final public String []players;
+    private String []players;
+    private Set<String> ready;
+
+    public boolean canLaunch() {
+        return ready.size() == players.length;
+    }
+
+    public void resetNrOfReady() {
+        ready.clear();
+    }
+
+    public boolean addToReady(final String player) {
+        assert (players[0].equals(player) || players[1].equals(player));
+        if (ready.contains(player)) {
+            return false;
+        }
+        ready.add(player);
+        return true;
+    }
 
     public Room(final String first) {
+        ready = new HashSet<>();
         players = new String[]{first, null};
     }
 
@@ -26,5 +45,11 @@ public class Room {
 
     public String[] getPlayers() {
         return players;
+    }
+
+    public void removePlayer(int nr) {
+        assert nr < players.length;
+        players[nr] = null;
+
     }
 }

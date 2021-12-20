@@ -26,6 +26,13 @@
     <input id="message-cont" type="text" maxlength="100">
     <button id="send">send!</button>
     <hr>
+    <br>
+    <button id="launch">ready</button>
+    <br><br>
+    <p>press ready! After both players are ready the game will start soon!</p>
+    <b style="color: red;">DO NOT REFRESH THE PAGE!</b>
+    <h4 style="display: block;">PLAYERS THAT ARE READY:</h4>
+    <div id="are-ready"></div>
 </body>
 <script>
     const broadcastCh = new BroadcastChannel('check-dupl');
@@ -52,7 +59,6 @@
 
     function checkRef() {
         if (!document.referrer.startsWith(document.location.origin)) {
-            //alert();
             window.location.assign('/play');
         }
     }
@@ -84,6 +90,21 @@
                 const { from, content } = JSON.parse(message.body);
                 showMessage(from, content);
             })
+
+            stompClient.subscribe('/user/topic/launch-message', message => {
+                if (!message) {
+                    return;
+                }
+                const { who, state } = JSON.parse(message.body);
+                const roomUUID = '[[${session.currRoomUUID}]]';
+                if (state === 'LAUNCH') {
+                    window.onbeforeunload = undefined;
+                    window.location.assign(`/arena/${roomUUID}`);
+                    return;
+                }
+
+                $('#are-ready').append(`<h5>${who}</h5>`);
+            })
         })
     }
 
@@ -100,6 +121,12 @@
         }
         window.location.assign('/play');
     })
+
+    $('#launch').click(event => {
+        stompClient.send('/ws/launch-message');
+    })
+
+    window.onbeforeunload = () => '';    
 </script>
 
 </html>

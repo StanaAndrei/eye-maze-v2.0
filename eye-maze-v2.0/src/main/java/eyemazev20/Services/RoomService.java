@@ -20,15 +20,6 @@ public class RoomService {
         }
         return ok;
     }
-    
-    public static boolean canPlayerJoin(UUID roomUuid, String loginUUID) {
-        if (RoomService.uidToRoom.get(roomUuid).players[0].equals(loginUUID)) {
-            return true;
-        } else if (RoomService.uidToRoom.get(roomUuid).players[1].equals(loginUUID)) {
-            return true;
-        }
-        return false;
-    }
 
     public static void joinRoom(UUID roomUuid, String loginUUID) {
         var room = RoomService.uidToRoom.get(roomUuid);
@@ -44,20 +35,27 @@ public class RoomService {
         final var player0 = RoomService.uidToRoom.get(roomUuid).getPlayers()[0];
         final var player1 = RoomService.uidToRoom.get(roomUuid).getPlayers()[1];
         if (player0 != null && player0.equals(loginUUID)) {
-            RoomService.uidToRoom.get(roomUuid).players[0] = null;
+            RoomService.uidToRoom.get(roomUuid).removePlayer(0);
         } else if (player1 != null && player1.equals(loginUUID)) {
-            RoomService.uidToRoom.get(roomUuid).players[1] = null;
+            RoomService.uidToRoom.get(roomUuid).removePlayer(1);
         }
+
+        if (RoomService.uidToRoom.get(roomUuid).getPlayers()[0] == null
+                && RoomService.uidToRoom.get(roomUuid).getPlayers()[1] == null) {
+            RoomService.uidToRoom.remove(roomUuid);
+        }
+
+        RoomService.uidToRoom.get(roomUuid).resetNrOfReady();
     }
 
     public static UUID getRoomUUIDOfPlayer(String loginUUID) {
         for (final var key : RoomService.uidToRoom.keySet()) {
-            final var player0 = RoomService.uidToRoom.get(key).players[0];
-            final var player1 = RoomService.uidToRoom.get(key).players[1];
+            final var player0 = RoomService.uidToRoom.get(key).getPlayers()[0];
+            final var player1 = RoomService.uidToRoom.get(key).getPlayers()[1];
             if (player0 != null && player0.equals(loginUUID)) {
                 return key;
             }
-            if (player1 != null && RoomService.uidToRoom.get(key).players[1].equals(loginUUID)) {
+            if (player1 != null && player1.equals(loginUUID)) {
                 return key;
             }
         }
@@ -66,8 +64,8 @@ public class RoomService {
 
     public static String getOtherPlayer(UUID roomUuid, String loginUUID) {
         if (RoomService.uidToRoom.get(roomUuid).getPlayers()[0].equals(loginUUID)) {
-            return RoomService.uidToRoom.get(roomUuid).players[1];
+            return RoomService.uidToRoom.get(roomUuid).getPlayers()[1];
         }
-        return RoomService.uidToRoom.get(roomUuid).players[0];
+        return RoomService.uidToRoom.get(roomUuid).getPlayers()[0];
     }
 }

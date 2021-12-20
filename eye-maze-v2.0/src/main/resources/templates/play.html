@@ -10,9 +10,12 @@
 
 <body>
     <button id="create-btn">CREATE LOBBY!</button>
-    <hr>
+    <br><br>
     <button id="join-btn">JOIN!</button>
     <br><br>
+    <button id="src-ctrl">SEARCH GAME!(currently not working!)</button>
+    <br><br>
+    <hr>
     <button style="display: none;" id="join-curr">return to your current lobby</button>
 </body>
 <script>
@@ -38,7 +41,7 @@
             alert('smth went wrong!');
             return;
         }
-        window.location.assign(`/room/${data}`);        
+        window.location.assign(`/room/${data}`);
     })
 
     $('#join-btn').click(async event => {

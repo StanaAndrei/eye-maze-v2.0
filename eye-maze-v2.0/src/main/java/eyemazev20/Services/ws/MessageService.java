@@ -1,5 +1,6 @@
 package eyemazev20.Services.ws;
 
+import eyemazev20.Dtos.ws.LaunchResMess;
 import eyemazev20.Dtos.ws.ResMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -18,5 +19,9 @@ public class MessageService {
     public void sendPrivMess(String userId, String message, String from) {
         final var resMessage = new ResMessage(message, from);
         simpMessagingTemplate.convertAndSendToUser(userId, "/topic/room-messages", resMessage);
+    }
+
+    public void sendLauchMess(String userId, LaunchResMess launchResMess) {
+        simpMessagingTemplate.convertAndSendToUser(userId, "/topic/launch-message", launchResMess);
     }
 }
