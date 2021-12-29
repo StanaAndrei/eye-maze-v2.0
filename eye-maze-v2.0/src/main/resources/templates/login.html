@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
+    <script type="module" th:src="@{/scripts/user/login.js}"></script>
     <title>Document</title>
 </head>
 
@@ -26,38 +26,4 @@
         text-align: left;
     }
 </style>
-<script>
-    //th:attr="onload='sessionStorage.loginUUID ? window.location.assign(`/`) : {}'"
-    document.querySelector('form').addEventListener('submit', e => {
-        e.preventDefault();
-        let o = {
-            email: $('#email').val(),
-            password: $('#password').val()
-        };
-        fetch('/api/login', {
-            method: 'POST',
-            cache: 'no-cache',
-            credentials: 'same-origin',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(o)
-        }).then(response => response.json())
-            .then(data => {
-                if (data === 'WRONG_DATA') {
-                    alert('wrong login data!');
-                    return;
-                }
-                if (data === 'ALREADY_AUTH') {
-                    alert('you are logged on another device/session');
-                    return;
-                }
-                window.location.reload();
-            }).catch((error) => {
-                alert('smth went wrong on server!');
-                console.error('Error:', error);
-            });
-    })
-</script>
-
 </html>

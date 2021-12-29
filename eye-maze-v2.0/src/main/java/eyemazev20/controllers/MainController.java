@@ -3,7 +3,6 @@ package eyemazev20.controllers;
 import eyemazev20.Services.AuthService;
 import eyemazev20.Services.RoomService;
 import eyemazev20.Services.UserService;
-import eyemazev20.Services.ws.MessageService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -59,8 +58,8 @@ public class MainController {
         }
         final  var loginUUID = httpSession.getAttribute("loginUUID").toString();
 
-        final var player0 = RoomService.uidToRoom.get(uuid).getPlayers()[0];
-        final var player1 = RoomService.uidToRoom.get(uuid).getPlayers()[1];
+        final var player0 = RoomService.uidToRoom.get(uuid).getPlUUIDs()[0];
+        final var player1 = RoomService.uidToRoom.get(uuid).getPlUUIDs()[1];
 
         if (player0 == null && player1 == null) {
             RoomService.uidToRoom.remove(uuid);
@@ -87,8 +86,8 @@ public class MainController {
         }
         final  var loginUUID = httpSession.getAttribute("loginUUID").toString();
 
-        final var player0 = RoomService.uidToRoom.get(uuid).getPlayers()[0];
-        final var player1 = RoomService.uidToRoom.get(uuid).getPlayers()[1];
+        final var player0 = RoomService.uidToRoom.get(uuid).getPlUUIDs()[0];
+        final var player1 = RoomService.uidToRoom.get(uuid).getPlUUIDs()[1];
 
         if (player0 == null && player1 == null) {
             RoomService.uidToRoom.remove(uuid);
@@ -98,7 +97,8 @@ public class MainController {
             if (player0 != null && !player0.equals(loginUUID) && player1 != null && !player1.equals(loginUUID)) {
                 return new ModelAndView("redirect:/play");
             }
-        }
-        return new ModelAndView("arena");
+        }//*/
+        final var mav = new ModelAndView("arena");
+        return mav;
     }
 }

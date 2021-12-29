@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta th:name="loginUUID" th:content="${loginUUID}">
+    <script th:type="module" th:src="@{/scripts/core/arena/arena.js}"></script>
     <title>Document</title>
 </head>
-<body onload="checkRef();">
-    arena
+
+<body>
+    <h3>ARENA</h3>
+    <div id="arena"></div>
 </body>
-<script>
-    function checkRef() {
-        if (!document.referrer.startsWith(document.location.origin)) {
-            //window.location.assign('/play');
-        }
+<style>
+    body {
+        overflow: hidden;
     }
-</script>
+</style>
 </html>

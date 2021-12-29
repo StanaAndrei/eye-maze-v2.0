@@ -3,6 +3,7 @@ package eyemazev20.controllers.ws;
 import eyemazev20.Dtos.ws.LaunchResMess;
 import eyemazev20.Dtos.ws.Message;
 import eyemazev20.Dtos.ws.ResMessage;
+import eyemazev20.Services.GameService;
 import eyemazev20.Services.RoomService;
 import eyemazev20.Services.UserService;
 import eyemazev20.Services.ws.MessageService;
@@ -11,11 +12,17 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 import java.security.Principal;
+import java.util.UUID;
 
 @Controller
 public class MessageController {
     @Autowired
     private MessageService messageService;
+
+    private static void launch(final UUID roomUUID) {
+        System.out.println("LAUNCH!!!!");
+        GameService.initGame(roomUUID);
+    }
 
     @MessageMapping("/launch-message")
     @SendToUser("/topic/launch-message")
@@ -29,16 +36,18 @@ public class MessageController {
         final var user = UserService.getUserData(principal.getName());
         final var other = RoomService.getOtherPlayer(roomUUID, principal.getName());
         var state = LaunchResMess.State.READY;
+        //state = LaunchResMess.State.LAUNCH;//just for the debug
         LaunchResMess launchResMess = new LaunchResMess(user.getUsername(), state);//*/
         if (other == null) {
             return launchResMess;
         }
         messageService.sendLauchMess(other, launchResMess);
 
+
         if (RoomService.uidToRoom.get(roomUUID).canLaunch()) {
-            Thread.sleep(1500);
             state = LaunchResMess.State.LAUNCH;
             launchResMess = new LaunchResMess(user.getUsername(), state);
+            MessageController.launch(roomUUID);
             messageService.sendLauchMess(other, launchResMess);
         }
 

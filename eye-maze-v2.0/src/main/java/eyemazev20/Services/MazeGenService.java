@@ -2,7 +2,6 @@ package eyemazev20.Services;
 
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
@@ -15,7 +14,7 @@ class MazeGenService {
         return 0 <= i && i < n && 0 <= j && j < m;
     }
 
-    private static class Cell {
+    public static class Cell {
         public int line, col;
         public Cell(int line, int col) {
             this.line = line;
@@ -83,7 +82,7 @@ class MazeGenService {
     }
 
     public static ArrayList<Cell> genMaze(int n, int m) {
-        ArrayList<Cell> mazeWay = null;
+        ArrayList<Cell> mazeWay;
         Stack<Cell> stack = new Stack<>();
         int nrVis;
         boolean genFinished;

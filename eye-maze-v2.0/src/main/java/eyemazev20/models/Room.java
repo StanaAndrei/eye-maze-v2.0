@@ -3,11 +3,12 @@ package eyemazev20.models;
 import java.util.*;
 
 public class Room {
-    private String []players;
+    private String [] plUUIDs;
     private Set<String> ready;
+    public Game game = null;
 
     public boolean canLaunch() {
-        return ready.size() == players.length;
+        return ready.size() == plUUIDs.length;
     }
 
     public void resetNrOfReady() {
@@ -15,7 +16,7 @@ public class Room {
     }
 
     public boolean addToReady(final String player) {
-        assert (players[0].equals(player) || players[1].equals(player));
+        assert (plUUIDs[0].equals(player) || plUUIDs[1].equals(player));
         if (ready.contains(player)) {
             return false;
         }
@@ -25,31 +26,31 @@ public class Room {
 
     public Room(final String first) {
         ready = new HashSet<>();
-        players = new String[]{first, null};
+        plUUIDs = new String[]{first, null};
     }
 
     @Override
     public String toString() {
         return "Room{" +
-                "players=" + Arrays.toString(players) +
+                "name=" + Arrays.toString(plUUIDs) +
                 '}';
     }
 
     public void addSecond(final String second) {
-        if (players[0] == null) {
-            players[0] = second;
-        } else if (players[1] == null) {
-            players[1] = second;
+        if (plUUIDs[0] == null) {
+            plUUIDs[0] = second;
+        } else if (plUUIDs[1] == null) {
+            plUUIDs[1] = second;
         }
     }
 
-    public String[] getPlayers() {
-        return players;
+    public String[] getPlUUIDs() {
+        return plUUIDs;
     }
 
     public void removePlayer(int nr) {
-        assert nr < players.length;
-        players[nr] = null;
+        assert nr < plUUIDs.length;
+        plUUIDs[nr] = null;
 
     }
 }

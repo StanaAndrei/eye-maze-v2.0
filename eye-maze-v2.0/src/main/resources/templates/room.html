@@ -99,6 +99,8 @@
                 const roomUUID = '[[${session.currRoomUUID}]]';
                 if (state === 'LAUNCH') {
                     window.onbeforeunload = undefined;
+                    stompClient.disconnect(() => {}, {});
+                    sessionStorage.wMouse = (new URLSearchParams(window.location.search)).has('wmouse');
                     window.location.assign(`/arena/${roomUUID}`);
                     return;
                 }
@@ -126,7 +128,7 @@
         stompClient.send('/ws/launch-message');
     })
 
-    window.onbeforeunload = () => '';    
+    //window.onbeforeunload = () => '';    
 </script>
 
 </html>
