@@ -81,6 +81,17 @@
 			<version>2.3.3</version>
 		</dependency>
 
+		<!-- for orm test -->
+		<dependency>
+			<groupId>org.javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>3.25.0-GA</version>
+		</dependency>
+		<dependency>
+			<groupId>com.vladmihalcea</groupId>
+			<artifactId>hibernate-types-52</artifactId>
+			<version>2.10.4</version>
+		</dependency>
 	</dependencies>
 
 	<build>

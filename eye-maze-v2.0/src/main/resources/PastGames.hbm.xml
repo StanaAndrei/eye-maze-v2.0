@@ -1,0 +1,20 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name = "eyemazev20.models.orm.PastGame" table = "PASTGAMES">
+
+        <meta attribute = "class-description">
+            This class contains the past games detail.
+        </meta>
+
+        <id name = "roomUUID" type = "string" column = "roomUUID">
+        </id>
+
+        <property name = "plUUIDs" column = "plUUIDs" type = "string-array"/>
+        <property name = "scores" column = "scores" type="int[]"/>
+
+    </class>
+</hibernate-mapping>

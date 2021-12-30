@@ -14,9 +14,7 @@ public class Game {
     private Maze maze;
     private Player []players;
     public Game(Player []players, Maze maze) throws InvalidParameterException {
-        if (players.length != 2) {
-            throw new InvalidParameterException();
-        }
+        assert (players.length == 2);
         this.maze = maze;
         this.players = players;
     }
@@ -26,8 +24,6 @@ public class Game {
 
         state.put("NR_ROWS", UtilVars.MAZE_LEN);
         state.put("NR_COLS", UtilVars.MAZE_LEN);
-
-        final var loginUUIDs = RoomService.uidToRoom.get(roomUUId).getPlUUIDs();
 
         final var mazeState = new JSONArray();
         for (final var line : maze.getMazeCells()) {
@@ -48,6 +44,7 @@ public class Game {
         }
         state.put("mazeState", mazeState);
 
+        final var loginUUIDs = RoomService.uidToRoom.get(roomUUId).getPlUUIDs();
         final var playersAsJson = new JSONArray();
         for (int i = 0; i < players.length; i++) {
             JSONObject playerAsJson = new JSONObject();
@@ -73,16 +70,29 @@ public class Game {
             validMove.set(true);
         };
 
-        final int line = players[playerNr].getLine();
-        final int col = players[playerNr].getCol();
+        int line = players[playerNr].getLine(), col = players[playerNr].getCol();
         switch (dir) {
-            case UP: if (!maze.getMazeCells()[line][col].getWalls()[0]) utilMove.accept(line - 1, col); break;
-            case DOWN: if (!maze.getMazeCells()[line][col].getWalls()[2]) utilMove.accept(line + 1, col); break;
-            case LEFT: if (!maze.getMazeCells()[line][col].getWalls()[3]) utilMove.accept(line, col - 1); break;
-            case RIGHT: if (!maze.getMazeCells()[line][col].getWalls()[1]) utilMove.accept(line, col + 1); break;
+            case UP: if (!maze.getMazeCells()[line][col].getWalls()[0]) line--; break;
+            case DOWN: if (!maze.getMazeCells()[line][col].getWalls()[2]) line++; break;
+            case LEFT: if (!maze.getMazeCells()[line][col].getWalls()[3]) col--; break;
+            case RIGHT: if (!maze.getMazeCells()[line][col].getWalls()[1]) col++; break;
             default: throw new InvalidParameterException("INVALID DIR!");
+        }
+        utilMove.accept(line, col);
+
+        if (validMove.get() && maze.getMazeCells()[line][col].getHasCoin()) {
+            maze.getMazeCells()[line][col].removeCoin();
+            players[playerNr].incrementCoins();
+        }
+
+        if (line == maze.getMazeCells().length - 1 && col == maze.getMazeCells()[0].length - 1) {
+            players[playerNr].finish();
         }
 
         return validMove.get();
+    }
+
+    public Player[] getPlayers() {
+        return players;
     }
 }

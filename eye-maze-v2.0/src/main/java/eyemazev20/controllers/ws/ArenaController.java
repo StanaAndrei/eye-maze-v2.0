@@ -38,6 +38,17 @@ public class ArenaController {
             return null;
         }
         gameState = new StringDto(RoomService.uidToRoom.get(roomUUID).game.getGameStateAsJson(roomUUID).toString());
+
+        boolean isGameOver = true;
+        for (final var player : RoomService.uidToRoom.get(roomUUID).game.getPlayers()) {
+            isGameOver &= player.hadFinished();
+        }
+
+        if (isGameOver) {
+            gameState.setBuffer("OVER");
+            GameService.addGameToPastGames(roomUUID);
+        }
+
         entityCtrlService.sendMoveMessage(other, gameState);
         return gameState;
     }

@@ -1,8 +1,12 @@
 package eyemazev20.controllers;
 
+import eyemazev20.Dtos.PastGameDto;
+import eyemazev20.Dtos.StringDto;
 import eyemazev20.Services.AuthService;
+import eyemazev20.Services.GameService;
 import eyemazev20.Services.RoomService;
 import eyemazev20.Services.UserService;
+import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -99,6 +103,38 @@ public class MainController {
             }
         }//*/
         final var mav = new ModelAndView("arena");
+        return mav;
+    }
+
+    @GetMapping("/rooms")
+    public ModelAndView getLobbies(HttpSession httpSession) {
+        if (!AuthService.isAuth(httpSession)) {
+            return new ModelAndView("redirect:/");
+        }
+        final var mav = new ModelAndView("rooms");
+        //System.out.println(RoomService.uidToRoom.keySet());
+
+        mav.addObject("codes", RoomService.uidToRoom.keySet());
+        return mav;
+    }
+
+    @GetMapping("/mk-room")
+    public String getMkRoomPg(HttpSession httpSession) {
+        if (!AuthService.isAuth(httpSession)) return "redirect:/";
+        return "mkroom";
+    }
+
+    @GetMapping("/past-game/{uuid}")
+    public ModelAndView getPastGameStats(@PathVariable UUID uuid, HttpSession httpSession) {
+        final var mav = new ModelAndView("past-game");
+        StringDto pastgameData = new StringDto();
+        final var pastGame = GameService.getPastGameData(uuid);
+
+        final String pl0 = UserService.getUserData(pastGame.getPlUUIDs()[0]).getUsername();
+        final String pl1 = UserService.getUserData(pastGame.getPlUUIDs()[1]).getUsername();
+
+        PastGameDto pastGameDto = new PastGameDto(new String[]{pl0, pl1}, pastGame.getScores());
+        mav.addObject("pg", pastGameDto.toJson());
         return mav;
     }
 }

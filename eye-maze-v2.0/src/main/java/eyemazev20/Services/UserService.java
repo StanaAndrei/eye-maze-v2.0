@@ -1,13 +1,11 @@
 package eyemazev20.Services;
 
-import com.fasterxml.jackson.annotation.JsonValue;
 import eyemazev20.Dtos.UsernamePutReq;
 import eyemazev20.exceptions.HbmEx;
-import eyemazev20.models.User;
+import eyemazev20.models.orm.User;
 import eyemazev20.utils.UtilVars;
 import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
-import org.json.JSONObject;
 
 import java.util.List;
 

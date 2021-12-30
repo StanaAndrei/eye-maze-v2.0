@@ -6,7 +6,6 @@ import { getDial } from "./geometry.js";
 import GameState from "./GameState.js";
 
 let stompClient;
-let cells;
 
 const DELTA_TIME = 1e3;
 let currDial, lastDial = -1, currTime, lastTime = 0;
@@ -39,8 +38,17 @@ const initP5 = p5context => {
                     return;
                 }
 
-                const state = JSON.parse(JSON.parse(message.body).buffer);
-                GameState.setState(state);
+                const res = JSON.parse(message.body).buffer;
+
+                if (res === 'OVER') {
+                    alert('game over!');
+                    p5context.noLoop();
+                    stompClient.disconnect();
+                    return;
+                }
+
+                const state = JSON.parse(res);
+                GameState.setState(state);        
             })
 
             stompClient.send('/ws/move-message', {}, JSON.stringify({
@@ -54,7 +62,6 @@ const initP5 = p5context => {
         const DELTA_WIDTH = sessionStorage.wMouse ? 0 : 340;
         let canvas = p5context.createCanvas(window.innerWidth - DELTA_WIDTH, window.innerHeight);
         canvas.position(DELTA_WIDTH, 0);
-        //console.warn(document.querySelector('meta[name=loginUUID]').content);
     }
 
     p5context.draw = () => {

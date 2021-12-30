@@ -11,6 +11,24 @@ public class Player {
         RIGHT,
     }
     private int line, col;
+    private int coins = 0;
+    private boolean finished = false;
+
+    public boolean hadFinished() {
+        return finished;
+    }
+
+    public void finish() {
+        finished = true;
+    }
+
+    public void incrementCoins() {
+        coins++;
+    }
+
+    public int getCoins() {
+        return coins;
+    }
 
     public Player(final int line, final int col) {
         this.line = line;

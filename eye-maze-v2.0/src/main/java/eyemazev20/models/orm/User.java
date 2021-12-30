@@ -1,4 +1,4 @@
-package eyemazev20.models;
+package eyemazev20.models.orm;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

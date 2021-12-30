@@ -6,6 +6,7 @@ public class Room {
     private String [] plUUIDs;
     private Set<String> ready;
     public Game game = null;
+    private boolean isPublic = false;
 
     public boolean canLaunch() {
         return ready.size() == plUUIDs.length;

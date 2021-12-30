@@ -6,8 +6,12 @@ import java.util.Arrays;
 public class MazeCell {
     private int line, col;
     private final boolean []walls;
-    final private boolean hasCoin;
+    private boolean hasCoin;
     private final static double COIN_CH = .25;
+
+    public void removeCoin() {
+        hasCoin = false;
+    }
 
     public int getCol() {
         return col;

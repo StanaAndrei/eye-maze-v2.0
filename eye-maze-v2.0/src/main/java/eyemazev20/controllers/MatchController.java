@@ -33,7 +33,7 @@ public class MatchController {
     }
 
     @PutMapping("/join-room/{roomUuid}")
-    public ResponseEntity<?> joinRoom(@PathVariable UUID roomUuid, HttpSession httpSession) {
+    public ResponseEntity<Void> joinRoom(@PathVariable UUID roomUuid, HttpSession httpSession) {
         if (!AuthService.isAuth(httpSession)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -47,7 +47,7 @@ public class MatchController {
     }
 
     @PutMapping("/leave-room")
-    public ResponseEntity<?> leaveRoom(HttpSession httpSession) {
+    public ResponseEntity<Void> leaveRoom(HttpSession httpSession) {
         if (!AuthService.isAuth(httpSession)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -56,5 +56,14 @@ public class MatchController {
         RoomService.leaveRoom(roomUUID, loginUUID);
         httpSession.removeAttribute("currRoomUUID");
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/rooms")
+    public ResponseEntity<?> getAllRooms(HttpSession httpSession) {
+        if (!AuthService.isAuth(httpSession)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        return ResponseEntity.ok(RoomService.uidToRoom.keySet());
     }
 }
