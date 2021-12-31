@@ -2,6 +2,8 @@ package eyemazev20.models.orm;
 
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import com.vladmihalcea.hibernate.type.array.IntArrayType;
+import eyemazev20.Dtos.PastGameDto;
+import eyemazev20.Dtos.StringDto;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
@@ -14,6 +16,8 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Id;
 import javax.persistence.Column;
+import java.util.Arrays;
+import java.util.UUID;
 
 @TypeDefs({
         @TypeDef(
@@ -78,5 +82,10 @@ public class PastGame {
 
     public void setPlUUIDs(String[] plUUIDs) {
         this.plUUIDs = plUUIDs;
+    }
+
+    @Override
+    public String toString() {
+        return (new PastGameDto(UUID.fromString(roomUUID), plUUIDs, scores)).toJson().toString();
     }
 }

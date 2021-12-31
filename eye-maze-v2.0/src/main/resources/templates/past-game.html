@@ -1,15 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <title>Document</title>
 </head>
-<body>
-    past-game
-    <br>
-    <p th:text="'Hello, ' + ${pg} + '!'" />
 
+<body onload="">
+    INFO ABOUT PAST GAME
+    <br>
+    <!--<i style="color: red;">if data isn't loading refresh the page</i>-->
+    <br>
+    <table style="width:100%">
+        <tr>
+            <th>Name</th>
+            <th>Score</th>
+        </tr>
+        <tr>
+            <td id="name0"></td>
+            <td id="score0"></td>
+        </tr>
+        <tr>
+            <td id="name1"></td>
+            <td id="score1"></td>
+        </tr>
+    </table>
 </body>
+<script>
+    function loadData() {
+        const pgAsJson = '[[${pg}]]'.replaceAll('&quot;', '"');
+        const pg = JSON.parse(pgAsJson);
+        for (let i = 0; i < pg.playersName.length; i++) {
+            $(`#name${i}`).text(pg.playersName[i]);
+            $(`#score${i}`).text(pg.scores[i]);
+        }
+    }
+    loadData();
+    //for (let i = 0; i < 1e8; i++);
+    if ($('#name0').text() === '') {
+        alert();
+        setTimeout(loadData, 300);
+    }
+
+</script>
+<style>
+    tr,
+    td {
+        text-align: center;
+    }
+</style>
+
 </html>

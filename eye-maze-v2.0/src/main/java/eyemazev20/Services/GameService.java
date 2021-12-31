@@ -58,11 +58,19 @@ public class GameService {
     }
 
     public static PastGame getPastGameData(UUID roomUUID) {
-        final var qs = "SELECT pg.roomUUID, pg.pluuids, pg.scores FROM PastGames pg WHERE pg.roomUUID = :roomUUID";
+        final var qs = "SELECT {pg.*} FROM PastGames AS pg WHERE pg.roomUUID = :roomUUID";
         final var query = UtilVars.session.createSQLQuery(qs);//Query(qs);
         query.setParameter("roomUUID", roomUUID.toString());
         query.addEntity("pg", PastGame.class);
         PastGame res = ((List<PastGame>) query.list()).get(0);
         return res;
     }
+
+    public static ArrayList<PastGame> getPastGamesOfUser(String loginUUID) {
+        final var qs = "SELECT {pg.*} FROM PastGames AS pg WHERE :loginUUID = ANY(pg.plUUIDs)";
+        final var query = UtilVars.session.createSQLQuery(qs);
+        query.setParameter("loginUUID", loginUUID);
+        query.addEntity("pg", PastGame.class);
+        return (ArrayList<PastGame>) query.list();
+    }//*/
 }

@@ -45,8 +45,9 @@ public class ArenaController {
         }
 
         if (isGameOver) {
-            gameState.setBuffer("OVER");
+            gameState.setBuffer("OVER! " + roomUUID);
             GameService.addGameToPastGames(roomUUID);
+            RoomService.uidToRoom.remove(roomUUID);
         }
 
         entityCtrlService.sendMoveMessage(other, gameState);

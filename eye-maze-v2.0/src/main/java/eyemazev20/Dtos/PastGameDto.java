@@ -4,11 +4,19 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.json.JSONObject;
 
+import java.util.UUID;
+
 @NoArgsConstructor
 @AllArgsConstructor
 public class PastGameDto {
+    private UUID roomUUID;
     private String []playersName;
     private int []scores;
+
+    public PastGameDto(String []playersName, int[] scores) {
+        this.playersName = playersName;
+        this.scores = scores;
+    }
 
     public int[] getScores() {
         return scores;
