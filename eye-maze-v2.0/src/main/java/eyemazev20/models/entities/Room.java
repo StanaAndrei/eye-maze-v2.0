@@ -1,4 +1,6 @@
-package eyemazev20.models;
+package eyemazev20.models.entities;
+
+import eyemazev20.models.entities.Game;
 
 import java.util.*;
 
@@ -7,6 +9,7 @@ public class Room {
     private Set<String> ready;
     public Game game = null;
     private boolean isPublic = false;
+    public boolean []disco = new boolean[2];
 
     public boolean canLaunch() {
         return ready.size() == plUUIDs.length;

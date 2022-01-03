@@ -1,4 +1,4 @@
-package eyemazev20.controllers;
+package eyemazev20.controllers.api;
 
 import eyemazev20.Services.MazeGenService;
 import org.springframework.http.HttpStatus;

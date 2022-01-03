@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="module" th:src="@{/scripts/pages/play.js}"></script>
 </head>
 
 <body>
@@ -13,58 +14,17 @@
     <br><br>
     <button id="join-btn">JOIN!</button>
     <br><br>
-    <button id="src-ctrl">SEARCH GAME!(currently not working!)</button>
+    <button onclick="window.location.assign('/rooms')">room browser</button>
     <br><br>
     <hr>
-    <button style="display: none;" id="join-curr">return to your current lobby</button>
+    <button style="display: none;" id="join-curr">return to your current lobby/game</button>
 </body>
 <script>
     const roomUUID = '[[${session.currRoomUUID}]]';
+    console.log(roomUUID);
     if (roomUUID && roomUUID !== 'null') {
         $('#join-curr').css('display', 'block');
     }
-
-    $('#join-curr').click(event => {
-        event.preventDefault();
-        window.location.assign(`/room/${roomUUID}`);
-    })
-
-    $('#create-btn').click(async event => {
-        //window.location.assign('/mkroom');
-        
-        event.preventDefault();
-        const res = await fetch("/api/create-room", {
-            method: 'POST',
-            cache: 'no-cache',
-            credentials: 'same-origin'
-        });
-        const data = await res.json();
-        if (data.status > 300) {
-            alert('smth went wrong!');
-            return;
-        }
-        window.location.assign(`/room/${data}`);//*/
-    })
-
-    $('#join-btn').click(async event => {
-        event.preventDefault();
-        const uuid = prompt(`Room's code:`);
-        if (!uuid) {
-            return;
-        }
-        const res = await fetch(`/api/join-room/${uuid}`, {
-            method: 'PUT',
-            cache: 'no-cache',
-            credentials: 'same-origin'
-        });
-        if (res.status === 200) {
-            window.location.assign(`/room/${uuid}`);
-        } else if (res.status === 409) {
-            alert('lobby is full!');
-        } else {
-            alert(`lobby doesn't exist!`);
-        }
-    })
 </script>
 
 </html>

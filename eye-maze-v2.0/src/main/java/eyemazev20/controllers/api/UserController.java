@@ -1,4 +1,4 @@
-package eyemazev20.controllers;
+package eyemazev20.controllers.api;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PutMapping;

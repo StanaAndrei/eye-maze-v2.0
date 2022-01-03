@@ -1,6 +1,6 @@
 package eyemazev20.Services;
 
-import eyemazev20.Dtos.UsernamePutReq;
+import eyemazev20.Dtos.http.UsernamePutReq;
 import eyemazev20.exceptions.HbmEx;
 import eyemazev20.models.orm.User;
 import eyemazev20.utils.UtilVars;

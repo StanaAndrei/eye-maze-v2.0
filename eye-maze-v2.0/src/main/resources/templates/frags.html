@@ -51,7 +51,6 @@
                         cache: 'no-cache',
                         credentials: 'same-origin',
                     }).then(response => {
-                        //sessionStorage.removeItem('loginUUID');
                         $('.active').text('login');
                         $('.active').attr('href', '/login');
                         $('.active').unbind();

@@ -1,7 +1,4 @@
-package eyemazev20.models;
-
-import java.security.InvalidParameterException;
-import java.util.function.BiConsumer;
+package eyemazev20.models.entities;
 
 public class Player {
     public enum DIRS {
@@ -10,6 +7,8 @@ public class Player {
         LEFT,
         RIGHT,
     }
+    public final static int MAX_INV = 20;
+    public int nrInv = 0;
     private int line, col;
     private int coins = 0;
     private boolean finished = false;
@@ -20,6 +19,10 @@ public class Player {
 
     public void finish() {
         finished = true;
+    }
+
+    public void mkLoser() {
+        coins = -1;
     }
 
     public void incrementCoins() {

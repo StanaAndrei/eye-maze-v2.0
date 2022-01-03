@@ -1,20 +1,15 @@
-package eyemazev20.controllers;
+package eyemazev20.controllers.api;
 
 import eyemazev20.Services.AuthService;
 import eyemazev20.Services.RoomService;
-import eyemazev20.models.Room;
-import org.springframework.http.HttpEntity;
+import eyemazev20.models.entities.Room;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicReference;
 
 @RestController
 @RequestMapping("/api")
@@ -56,14 +51,5 @@ public class MatchController {
         RoomService.leaveRoom(roomUUID, loginUUID);
         httpSession.removeAttribute("currRoomUUID");
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @GetMapping("/rooms")
-    public ResponseEntity<?> getAllRooms(HttpSession httpSession) {
-        if (!AuthService.isAuth(httpSession)) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-
-        return ResponseEntity.ok(RoomService.uidToRoom.keySet());
     }
 }

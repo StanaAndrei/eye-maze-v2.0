@@ -3,30 +3,10 @@ import "https://cdn.jsdelivr.net/npm/p5@1.4.0/lib/p5.js"
 import "https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js"
 import "https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"
 import "https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"
-import { getDial } from "./geometry.js";
+import handleInp from "./handleInp.js"
 import GameState from "./GameState.js";
 
 let stompClient;
-
-const DELTA_TIME = 1e3;
-let currDial, lastDial = -1, currTime, lastTime = 0;
-function handleInp(p5context) {
-    const { mouseX, mouseY } = p5context;
-    currDial = getDial(mouseX, mouseY, p5context);
-
-    if (currDial !== lastDial) {
-        lastTime = currTime = p5context.millis();
-        lastDial = currDial;
-    } else {
-        currTime = p5context.millis();
-        if (currTime - lastTime >= DELTA_TIME) {
-            lastDial = -1;
-            return currDial;
-        }
-    }
-
-    return '';
-}
 
 const initP5 = p5context => {
     p5context.preload = () => {
@@ -57,7 +37,7 @@ const initP5 = p5context => {
             })
 
             stompClient.send('/ws/move-message', {}, JSON.stringify({
-                'buffer': ''
+                'buffer': 'UP'
             }));//*/
         });
         
@@ -67,14 +47,28 @@ const initP5 = p5context => {
         const DELTA_WIDTH = sessionStorage.wMouse ? 0 : 340;
         let canvas = p5context.createCanvas(window.innerWidth - DELTA_WIDTH, window.innerHeight);
         canvas.position(DELTA_WIDTH, 0);
+        if (!document.hasFocus()) {/*
+            stompClient.send('/ws/move-message', {}, JSON.stringify({
+                'buffer': 'afk'
+            }));//*/
+        }
     }
 
+    let fr = 0;
     p5context.draw = () => {
+        if (!document.hasFocus()) {/*
+            stompClient.send('/ws/move-message', {}, JSON.stringify({
+                'buffer': 'afk'
+            }));//*/
+        }
+
         p5context.background('black');
         GameState.draw(p5context);
 
         const inp = handleInp(p5context);
         if (inp) {
+            console.warn(inp);
+            fr = 0;
             stompClient.send('/ws/move-message', {}, JSON.stringify({
                 'buffer': inp
             }));//*/

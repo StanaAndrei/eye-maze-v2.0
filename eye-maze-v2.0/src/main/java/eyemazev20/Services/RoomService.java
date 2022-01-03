@@ -1,11 +1,9 @@
 package eyemazev20.Services;
 
-import eyemazev20.models.Room;
+import eyemazev20.models.entities.Room;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -65,6 +63,9 @@ public class RoomService {
     }
 
     public static String getOtherPlayer(UUID roomUuid, String loginUUID) {
+        if (RoomService.uidToRoom.get(roomUuid) == null || RoomService.uidToRoom.get(roomUuid).getPlUUIDs() == null) {
+            return null;
+        }
         if (RoomService.uidToRoom.get(roomUuid).getPlUUIDs()[0].equals(loginUUID)) {
             return RoomService.uidToRoom.get(roomUuid).getPlUUIDs()[1];
         }

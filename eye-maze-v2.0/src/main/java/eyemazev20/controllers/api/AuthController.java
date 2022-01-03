@@ -1,9 +1,9 @@
-package eyemazev20.controllers;
+package eyemazev20.controllers.api;
 
-import eyemazev20.Dtos.AuthReq;
-import eyemazev20.Dtos.RegReq;
+import eyemazev20.Dtos.http.AuthReq;
+import eyemazev20.Dtos.http.RegReq;
 import eyemazev20.Services.AuthService;
-import eyemazev20.utils.UtilVars;
+import eyemazev20.config.HttpSessionConfig;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -11,14 +11,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 @RequestMapping("/api")
 @RestController
 public class AuthController {
-    Set<String> currAuth = new HashSet<>();
     enum LOGIN_STATS {
         ALREADY_AUTH,
         SUCCESS,
@@ -31,14 +29,13 @@ public class AuthController {
         try {
             loginUUID = AuthService.getLoginUUID(authReq);
         } catch (Exception e) {
-            return new ResponseEntity<>(LOGIN_STATS.WRONG_DATA, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(LOGIN_STATS.WRONG_DATA, HttpStatus.CONFLICT);
         }
 
-        if (currAuth.contains(loginUUID.toString())) {
+        if (httpSession.getAttribute("loginUUID") != null) {
             return new ResponseEntity<>(LOGIN_STATS.ALREADY_AUTH, HttpStatus.IM_USED);
         }
 
-        currAuth.add(loginUUID.toString());
         httpSession.setAttribute("loginUUID", loginUUID);
         return ResponseEntity.ok(LOGIN_STATS.SUCCESS);
     }
@@ -54,8 +51,8 @@ public class AuthController {
         if (httpSession.getAttribute("loginUUID") == null) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
-        currAuth.remove(httpSession.getAttribute("loginUUID").toString());
         httpSession.removeAttribute("loginUUID");
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -4,9 +4,21 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="module" th:src="@{/scripts/pages/rooms.js}"></script>
     <title>Document</title>
 </head>
-<body>
-    <p th:text="${codes}" />
+<body onload="setTimeout(() => window.location.reload(), 3000)">
+    <b>click to join!</b><br>
+    <i th:text="'available rooms: ' + ${#lists.size(codes)}"></i><br>
+    <ul th:each="code : ${codes}">
+        <li th:id="${code}" th:text="${code}"></li>
+    </ul>
 </body>
+<style>
+    li, ul :hover {
+        cursor: pointer;
+        color: aqua;
+    }
+</style>
 </html>

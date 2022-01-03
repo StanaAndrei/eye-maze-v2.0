@@ -1,10 +1,11 @@
-package eyemazev20.models;
+package eyemazev20.models.entities;
 
 import eyemazev20.Services.MazeGenService;
+
 import java.util.ArrayList;
 
 public class Maze {
-    private MazeCell [][]mazeCells;
+    private MazeCell[][]mazeCells;
 
     public MazeCell[][] getMazeCells() {
         return mazeCells;

@@ -1,10 +1,10 @@
 package eyemazev20.Services;
 
-import eyemazev20.Dtos.StringDto;
+import eyemazev20.Dtos.http.StringDto;
 import eyemazev20.exceptions.HbmEx;
-import eyemazev20.models.Game;
-import eyemazev20.models.Maze;
-import eyemazev20.models.Player;
+import eyemazev20.models.entities.Game;
+import eyemazev20.models.entities.Maze;
+import eyemazev20.models.entities.Player;
 import eyemazev20.models.orm.PastGame;
 import eyemazev20.utils.UtilVars;
 import org.hibernate.HibernateException;
@@ -17,20 +17,26 @@ import java.util.UUID;
 
 @Service
 public class GameService {
-    public static void initGame(final UUID roomUUID) {
+    public static void initGame(final UUID roomUUID) throws InterruptedException {
         var players = new Player[] {new Player(0, 0), new Player(0, 0)};
 
         final var way = MazeGenService.genMaze(UtilVars.MAZE_LEN, UtilVars.MAZE_LEN);
         final var maze = new Maze(UtilVars.MAZE_LEN, UtilVars.MAZE_LEN, way);
+        Thread.sleep(2000);
         RoomService.uidToRoom.get(roomUUID).game = new Game(players, maze);
     }
 
     public static boolean movePlayer(final UUID roomUUId, final String dir, int playerNr) {
-        if (RoomService.uidToRoom.get(roomUUId).game.getPlayers()[playerNr].hadFinished()) {
+        if (dir.isEmpty() || dir.equalsIgnoreCase("afk")) {
             return false;
         }
-
         return RoomService.uidToRoom.get(roomUUId).game.move(Player.DIRS.valueOf(dir), playerNr);
+    }
+
+    public static void finishGame(StringDto gameState, UUID roomUUID) {
+        gameState.setBuffer("OVER! " + roomUUID);
+        GameService.addGameToPastGames(roomUUID);
+        RoomService.uidToRoom.remove(roomUUID);
     }
 
     public static void addGameToPastGames(final UUID roomUUID) {

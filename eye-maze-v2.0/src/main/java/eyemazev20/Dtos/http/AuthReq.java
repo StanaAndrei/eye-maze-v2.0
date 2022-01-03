@@ -1,4 +1,4 @@
-package eyemazev20.Dtos;
+package eyemazev20.Dtos.http;
 
 public class AuthReq {
     private String email, password;

@@ -1,4 +1,4 @@
-package eyemazev20.controllers;
+package eyemazev20.controllers.views;
 
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;

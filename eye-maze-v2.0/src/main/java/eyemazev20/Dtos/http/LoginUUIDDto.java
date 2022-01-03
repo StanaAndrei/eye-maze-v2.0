@@ -1,4 +1,4 @@
-package eyemazev20.Dtos;
+package eyemazev20.Dtos.http;
 
 public class LoginUUIDDto {
     private String loginUUID;

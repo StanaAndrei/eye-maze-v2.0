@@ -1,4 +1,4 @@
-package eyemazev20.Dtos;
+package eyemazev20.Dtos.http;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

@@ -19,8 +19,8 @@ public class MessageController {
     @Autowired
     private MessageService messageService;
 
-    private static void launch(final UUID roomUUID) {
-        System.out.println("LAUNCH!!!!");
+    private static void launch(final UUID roomUUID) throws InterruptedException {
+        System.out.println("LAUNCH!!!!" + roomUUID.toString());
         GameService.initGame(roomUUID);
     }
 

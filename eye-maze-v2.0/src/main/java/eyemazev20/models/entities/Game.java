@@ -1,18 +1,20 @@
-package eyemazev20.models;
+package eyemazev20.models.entities;
 
+import eyemazev20.Dtos.http.StringDto;
+import eyemazev20.Services.GameService;
 import eyemazev20.Services.RoomService;
 import eyemazev20.utils.UtilVars;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.security.InvalidParameterException;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
 
 public class Game {
     private Maze maze;
-    private Player []players;
+    private Player[]players;
     public Game(Player []players, Maze maze) throws InvalidParameterException {
         assert (players.length == 2);
         this.maze = maze;
@@ -63,10 +65,15 @@ public class Game {
         final BiConsumer<Integer, Integer> utilMove = (line, col) -> {
             if (line >= 0 && line < maze.getMazeCells().length) {
                 players[playerNr].setLine(line);
+            } else {
+                return;
             }
             if (col >= 0 && col < maze.getMazeCells()[0].length) {
                 players[playerNr].setCol(col);
+            } else {
+                return;
             }
+            System.out.println("SET ATOMIC" + line + "   " + col);
             validMove.set(true);
         };
 
@@ -78,20 +85,27 @@ public class Game {
             case RIGHT: if (!maze.getMazeCells()[line][col].getWalls()[1]) col++; break;
             default: throw new InvalidParameterException("INVALID DIR!");
         }
-        utilMove.accept(line, col);
-
+        if (!(players[playerNr].getLine() == line && players[playerNr].getCol() == col))
+            utilMove.accept(line, col);
         if (validMove.get() && maze.getMazeCells()[line][col].getHasCoin()) {
             maze.getMazeCells()[line][col].removeCoin();
             players[playerNr].incrementCoins();
         }
-
         if (line == maze.getMazeCells().length - 1 && col == maze.getMazeCells()[0].length - 1) {
             players[playerNr].finish();
+            Timer timer = new Timer();
+            Calendar calendar = Calendar.getInstance(); // gets a calendar using the default time zone and locale.
+            calendar.add(Calendar.SECOND, 5);
+            Date date = calendar.getTime();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    players[playerNr ^ 1].finish();
+                }
+            }, date);
         }
-
         return validMove.get();
     }
-
     public Player[] getPlayers() {
         return players;
     }

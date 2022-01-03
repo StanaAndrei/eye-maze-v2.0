@@ -1,41 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
+import joinRoom from "../api/join.js";
 
-<head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
+$('li').click(async event => {
+    event.preventDefault();
+    const code = event.target.id;
+    await joinRoom(code);
+})
 
-<body onload="checkRef(); connect();">
-    <h1>LOBBY!</h1>
-    <p>Lobby code:
-        <input type="text" id="room-code" th:value="${roomCode}" readonly />
-    </p>
-    <button id="cpy-btn">copy to clipboard!</button>
-    <br><br>
-    <button id="leave-btn">LEAVE!</button>
-    <br><br><br>
-    <div id="message-history"
-        style="height:120px;width:300px;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;">
-    </div>
-    <br><br>
-    <input id="message-cont" type="text" maxlength="100">
-    <button id="send">send!</button>
-    <hr>
-    <br>
-    <button id="launch">ready</button>
-    <br><br>
-    <p>press ready! After both players are ready the game will start soon!</p>
-    <b style="color: red;">DO NOT REFRESH THE PAGE!</b>
-    <h4 style="display: block;">PLAYERS THAT ARE READY:</h4>
-    <div id="are-ready"></div>
-</body>
-<script>
-    const broadcastCh = new BroadcastChannel('check-dupl');
+const broadcastCh = new BroadcastChannel('check-dupl');
     broadcastCh.postMessage('open');
     broadcastCh.onmessage = event => {
         if (event.data === "open") {
@@ -129,7 +100,6 @@
     })
 
     window.onblur = async () => {
-        return;
         const res = await fetch('/api/leave-room', {
             method: 'PUT',
             cache: 'no-cache',
@@ -141,6 +111,3 @@
         }
         window.location.assign('/play');
     }
-</script>
-
-</html>

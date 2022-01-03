@@ -10,9 +10,11 @@
 </head>
 
 <body onload="">
+    <div th:replace="frags :: header"></div>
+    <br>
     INFO ABOUT PAST GAME
     <br>
-    <!--<i style="color: red;">if data isn't loading refresh the page</i>-->
+    <i style="color: red;">if data isn't loading pls refresh the page</i>
     <br>
     <table style="width:100%">
         <tr>
@@ -32,19 +34,15 @@
 <script>
     function loadData() {
         const pgAsJson = '[[${pg}]]'.replaceAll('&quot;', '"');
+
         const pg = JSON.parse(pgAsJson);
+
         for (let i = 0; i < pg.playersName.length; i++) {
             $(`#name${i}`).text(pg.playersName[i]);
             $(`#score${i}`).text(pg.scores[i]);
         }
     }
     loadData();
-    //for (let i = 0; i < 1e8; i++);
-    if ($('#name0').text() === '') {
-        alert();
-        setTimeout(loadData, 300);
-    }
-
 </script>
 <style>
     tr,

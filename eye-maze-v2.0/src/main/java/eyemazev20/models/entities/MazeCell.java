@@ -1,4 +1,4 @@
-package eyemazev20.models;
+package eyemazev20.models.entities;
 
 import java.security.InvalidParameterException;
 import java.util.Arrays;
