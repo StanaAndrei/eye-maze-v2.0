@@ -5,6 +5,7 @@ import eyemazev20.exceptions.HbmEx;
 import eyemazev20.models.entities.Game;
 import eyemazev20.models.entities.Maze;
 import eyemazev20.models.entities.Player;
+import eyemazev20.models.entities.Room;
 import eyemazev20.models.orm.PastGame;
 import eyemazev20.utils.UtilVars;
 import org.hibernate.HibernateException;
@@ -27,6 +28,9 @@ public class GameService {
     }
 
     public static boolean movePlayer(final UUID roomUUId, final String dir, int playerNr) {
+        if (RoomService.uidToRoom.get(roomUUId).game.getPlayers()[playerNr].hadFinished()) {
+            return false;
+        }
         if (dir.isEmpty() || dir.equalsIgnoreCase("afk")) {
             return false;
         }
