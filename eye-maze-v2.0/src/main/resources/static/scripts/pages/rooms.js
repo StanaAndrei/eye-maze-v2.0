@@ -1,4 +1,5 @@
-import joinRoom from "../api/join.js";
+import joinRoom from "../api/room/join.js";
+import leaveRoom from "../api/room/leave.js";
 
 $('li').click(async event => {
     event.preventDefault();
@@ -83,16 +84,7 @@ const broadcastCh = new BroadcastChannel('check-dupl');
 
     $('#leave-btn').click(async event => {
         event.preventDefault();
-        const res = await fetch('/api/leave-room', {
-            method: 'PUT',
-            cache: 'no-cache',
-            credentials: 'same-origin'
-        });
-        if (res.status !== 200) {
-            alert('fail to leave lobby');
-            return;
-        }
-        window.location.assign('/play');
+        await leaveRoom();
     })
 
     $('#launch').click(event => {
@@ -100,14 +92,5 @@ const broadcastCh = new BroadcastChannel('check-dupl');
     })
 
     window.onblur = async () => {
-        const res = await fetch('/api/leave-room', {
-            method: 'PUT',
-            cache: 'no-cache',
-            credentials: 'same-origin'
-        });
-        if (res.status !== 200) {
-            alert('fail to leave lobby');
-            return;
-        }
-        window.location.assign('/play');
+        //await leaveRoom();
     }

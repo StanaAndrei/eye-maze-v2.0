@@ -1,4 +1,4 @@
-import joinRoom from "../api/join.js";
+import joinRoom from "../api/room/join.js";
 
 $('#join-curr').click(event => {
     event.preventDefault();
