@@ -1,10 +1,17 @@
 package eyemazev20.models.entities;
 
+import eyemazev20.Dtos.http.MazeParams;
 import eyemazev20.models.entities.Game;
 
 import java.util.*;
 
 public class Room {
+    private MazeParams mazeParams;
+
+    public MazeParams getMazeParams() {
+        return mazeParams;
+    }
+
     private String [] plUUIDs;
     private Set<String> ready;
     public Game game = null;
@@ -28,9 +35,10 @@ public class Room {
         return true;
     }
 
-    public Room(final String first) {
+    public Room(final String first, final MazeParams mazeParams) {
         ready = new HashSet<>();
         plUUIDs = new String[]{first, null};
+        this.mazeParams = mazeParams;
     }
 
     @Override

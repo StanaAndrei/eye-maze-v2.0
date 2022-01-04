@@ -4,15 +4,19 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="module" th:src="@{/scripts/pages/mkroom.js}"></script>
+
     <title>Document</title>
 </head>
 <body>
     <h4>MAZE SETTINGS:</h4><br>
     <form>
-        <input placeholder="size(3->50)" type="number" min="3" max="50"><br>
-        <input type="submit">
-    </form><br>
+        <label for="">size(3-50)</label><br>
+        <input placeholder="lines" id="lines" type="number" min="3" max="50" value="7"><br>
+        <input placeholder="cols" id="cols" type="number" min="3" max="50" value="5"><br>
+        <input type="submit" value="generate">
+    </form><br>or<hr>
+
     <button id="def">generate random maze with default settings</button>
     <p>or...</p>
     <button id="imp">import a custom maze</button>

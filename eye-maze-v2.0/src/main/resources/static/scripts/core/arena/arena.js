@@ -19,13 +19,13 @@ const initP5 = p5context => {
                 }
 
                 const res = JSON.parse(message.body).buffer;
-
+/*
                 if (res === 'OVER') {
                     alert('game over!');
                     p5context.noLoop();
                     stompClient.disconnect();
                     return;
-                }
+                }//*/
 
                 try {
                     const state = JSON.parse(res);
@@ -54,7 +54,6 @@ const initP5 = p5context => {
         }
     }
 
-    let fr = 0;
     p5context.draw = () => {
         if (!document.hasFocus()) {/*
             stompClient.send('/ws/move-message', {}, JSON.stringify({
@@ -67,8 +66,6 @@ const initP5 = p5context => {
 
         const inp = handleInp(p5context);
         if (inp) {
-            console.warn(inp);
-            fr = 0;
             stompClient.send('/ws/move-message', {}, JSON.stringify({
                 'buffer': inp
             }));//*/

@@ -6,6 +6,7 @@ export default class GameState {
     static m;
     static players;
     static setState(state) {
+        //NR_COLS,,,,,NR_ROWS,,,,CELL_H,,,,CELL_W
         this.n = state.NR_ROWS;
         this.m = state.NR_COLS;
         this.cells = new Array(this.n).fill().map(() => new Array(this.m));
@@ -18,8 +19,8 @@ export default class GameState {
     }
 
     static draw(p5context) {
-        Cell.CELL_W = p5context.width / this.n;
-        Cell.CELL_H = p5context.height / this.m;
+        Cell.CELL_W = p5context.width / this.m;
+        Cell.CELL_H = p5context.height / this.n;
         const loginUUID = document.querySelector('meta[name=loginUUID]').content;
         for (let i = 0; i < this.n; i++) {
             for (let j = 0; j < this.m; j++) {

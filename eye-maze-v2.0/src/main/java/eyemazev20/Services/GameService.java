@@ -18,12 +18,19 @@ import java.util.UUID;
 
 @Service
 public class GameService {
-    public static void initGame(final UUID roomUUID) throws InterruptedException {
+    public static void initGame(final UUID roomUUID) {
         var players = new Player[] {new Player(0, 0), new Player(0, 0)};
-        final var way = MazeGenService.genMaze(UtilVars.MAZE_LEN, UtilVars.MAZE_LEN);
-        final var maze = new Maze(UtilVars.MAZE_LEN, UtilVars.MAZE_LEN, way,
-                new Point(), new Point(UtilVars.MAZE_LEN - 1, UtilVars.MAZE_LEN - 1));
-        Thread.sleep(2000);
+        int nrLines = UtilVars.MAZE_LEN, nrCols = UtilVars.MAZE_LEN;
+
+        final var mazeParams = RoomService.uidToRoom.get(roomUUID).getMazeParams();
+        if (mazeParams != null) {
+            nrLines = mazeParams.getNrLines();
+            nrCols = mazeParams.getNrCols();
+        }
+
+        final var way = MazeGenService.genMaze(nrLines, nrCols);
+        final var maze = new Maze(nrLines, nrCols, way,
+                new Point(), new Point(nrLines - 1, nrCols - 1));
         RoomService.uidToRoom.get(roomUUID).game = new Game(players, maze);
     }
 

@@ -6,19 +6,7 @@ $('#join-curr').click(event => {
 })
 
 $('#create-btn').click(async event => {
-    //window.location.assign('/mkroom');
-    event.preventDefault();
-    const res = await fetch("/api/create-room", {
-        method: 'POST',
-        cache: 'no-cache',
-        credentials: 'same-origin'
-    });
-    const data = await res.json();
-    if (data.status > 300) {
-        alert('smth went wrong!');
-        return;
-    }
-    window.location.assign(`/room/${data}`);//*/
+    window.location.assign('/mkroom');    
 })
 
 $('#join-btn').click(async event => {
