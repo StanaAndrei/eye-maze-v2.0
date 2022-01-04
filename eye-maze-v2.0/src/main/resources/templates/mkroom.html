@@ -8,12 +8,13 @@
     <title>Document</title>
 </head>
 <body>
-    <form method="POST" action="/api/">
-        <label for="">name:</label>
-        <input type="text"><br>
-        <label for="">size(3->50)</label>
-        <input type="number" min="3" max="50"><br>
-        
-    </form>
+    <h4>MAZE SETTINGS:</h4><br>
+    <form>
+        <input placeholder="size(3->50)" type="number" min="3" max="50"><br>
+        <input type="submit">
+    </form><br>
+    <button id="def">generate random maze with default settings</button>
+    <p>or...</p>
+    <button id="imp">import a custom maze</button>
 </body>
 </html>

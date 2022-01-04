@@ -1,7 +1,5 @@
 package eyemazev20.models.entities;
 
-import eyemazev20.Dtos.http.StringDto;
-import eyemazev20.Services.GameService;
 import eyemazev20.Services.RoomService;
 import eyemazev20.utils.UtilVars;
 import org.json.JSONArray;
@@ -13,8 +11,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
 
 public class Game {
-    private Maze maze;
-    private Player[]players;
+    final private Maze maze;
+    final private Player[]players;
     public Game(Player []players, Maze maze) throws InvalidParameterException {
         assert (players.length == 2);
         this.maze = maze;
@@ -24,8 +22,8 @@ public class Game {
     public JSONObject getGameStateAsJson(final UUID roomUUId) {
         final var state = new JSONObject();
 
-        state.put("NR_ROWS", UtilVars.MAZE_LEN);
-        state.put("NR_COLS", UtilVars.MAZE_LEN);
+        state.put("NR_ROWS", RoomService.uidToRoom.get(roomUUId).game.maze.getMazeCells().length);
+        state.put("NR_COLS", RoomService.uidToRoom.get(roomUUId).game.maze.getMazeCells()[0].length);
 
         final var mazeState = new JSONArray();
         for (final var line : maze.getMazeCells()) {
@@ -73,7 +71,6 @@ public class Game {
             } else {
                 return;
             }
-            System.out.println("SET ATOMIC" + line + "   " + col);
             validMove.set(true);
         };
 
@@ -85,13 +82,14 @@ public class Game {
             case RIGHT: if (!maze.getMazeCells()[line][col].getWalls()[1]) col++; break;
             default: throw new InvalidParameterException("INVALID DIR!");
         }
-        if (!(players[playerNr].getLine() == line && players[playerNr].getCol() == col))
+        if (!(players[playerNr].getLine() == line && players[playerNr].getCol() == col)) {
             utilMove.accept(line, col);
+        }
         if (validMove.get() && maze.getMazeCells()[line][col].getHasCoin()) {
             maze.getMazeCells()[line][col].removeCoin();
             players[playerNr].incrementCoins();
         }
-        if (line == maze.getMazeCells().length - 1 && col == maze.getMazeCells()[0].length - 1) {
+        if (line == maze.getEnd().getLine() && col == maze.getEnd().getCol()) {
             players[playerNr].finish();
             Timer timer = new Timer();
             Calendar calendar = Calendar.getInstance(); // gets a calendar using the default time zone and locale.

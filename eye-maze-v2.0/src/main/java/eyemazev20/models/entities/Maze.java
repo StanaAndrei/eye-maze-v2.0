@@ -1,17 +1,39 @@
 package eyemazev20.models.entities;
 
 import eyemazev20.Services.MazeGenService;
+import eyemazev20.utils.Point;
 
 import java.util.ArrayList;
 
 public class Maze {
     private MazeCell[][]mazeCells;
+    private Point start, end;
+
+    public Point getEnd() {
+        return end;
+    }
+
+    public void setEnd(Point end) {
+        this.end = end;
+    }
+
+    public Point getStart() {
+        return start;
+    }
+
+    public void setStart(Point start) {
+        this.start = start;
+    }
 
     public MazeCell[][] getMazeCells() {
         return mazeCells;
     }
 
-    public Maze(int n, int m, ArrayList<MazeGenService.Cell> way) {
+    public Maze(int n, int m, ArrayList<MazeGenService.Cell> way, Point start, Point end) {
+        assert (start.getLine() >= 0 && start.getCol() >= 0);
+        assert (end.getLine() < n && end.getCol() < m);
+        this.start = start;
+        this.end = end;
         mazeCells = new MazeCell[n][m];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {

@@ -30,7 +30,7 @@ public class GameViewController {
             //Thread.sleep((long) (1000 * Math.random() + Math.random() * 100));
 
             PastGameDto pastGameDto = new PastGameDto(new String[]{pl0, pl1}, pastGame.getScores());
-            mav.addObject("pg", pastGameDto.toJson());        RoomService.uidToRoom.remove(uuid);
+            mav.addObject("pg", pastGameDto.toJson());
             RoomService.uidToRoom.remove(uuid);
             httpSession.removeAttribute("currRoomUUID");
         } catch (Exception e) {

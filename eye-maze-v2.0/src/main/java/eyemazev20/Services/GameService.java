@@ -5,8 +5,8 @@ import eyemazev20.exceptions.HbmEx;
 import eyemazev20.models.entities.Game;
 import eyemazev20.models.entities.Maze;
 import eyemazev20.models.entities.Player;
-import eyemazev20.models.entities.Room;
 import eyemazev20.models.orm.PastGame;
+import eyemazev20.utils.Point;
 import eyemazev20.utils.UtilVars;
 import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
@@ -20,9 +20,9 @@ import java.util.UUID;
 public class GameService {
     public static void initGame(final UUID roomUUID) throws InterruptedException {
         var players = new Player[] {new Player(0, 0), new Player(0, 0)};
-
         final var way = MazeGenService.genMaze(UtilVars.MAZE_LEN, UtilVars.MAZE_LEN);
-        final var maze = new Maze(UtilVars.MAZE_LEN, UtilVars.MAZE_LEN, way);
+        final var maze = new Maze(UtilVars.MAZE_LEN, UtilVars.MAZE_LEN, way,
+                new Point(), new Point(UtilVars.MAZE_LEN - 1, UtilVars.MAZE_LEN - 1));
         Thread.sleep(2000);
         RoomService.uidToRoom.get(roomUUID).game = new Game(players, maze);
     }
@@ -72,8 +72,7 @@ public class GameService {
         final var query = UtilVars.session.createSQLQuery(qs);//Query(qs);
         query.setParameter("roomUUID", roomUUID.toString());
         query.addEntity("pg", PastGame.class);
-        PastGame res = ((List<PastGame>) query.list()).get(0);
-        return res;
+        return ((List<PastGame>) query.list()).get(0);
     }
 
     public static ArrayList<PastGame> getPastGamesOfUser(String loginUUID) {
