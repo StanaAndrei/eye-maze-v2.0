@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="module" th:src="@{/scripts/pages/play.js}"></script>
+    <meta th:name="currRoomUUID" th:content="${session.currRoomUUID}">
 </head>
 
 <body>
@@ -20,11 +21,7 @@
     <button style="display: none;" id="join-curr">return to your current lobby/game</button>
 </body>
 <script>
-    const roomUUID = '[[${session.currRoomUUID}]]';
-    console.log(roomUUID);
-    if (roomUUID && roomUUID !== 'null') {
-        $('#join-curr').css('display', 'block');
-    }
+    
 </script>
 
 </html>

@@ -6,9 +6,7 @@ $('#join-curr').click(event => {
 })
 
 $('#create-btn').click(async event => {
-    console.log('asd');
     //window.location.assign('/mkroom');
-
     event.preventDefault();
     const res = await fetch("/api/create-room", {
         method: 'POST',
@@ -31,3 +29,8 @@ $('#join-btn').click(async event => {
     }
     await joinRoom(uuid);
 })
+
+const roomUUID = document.querySelector('meta[name=currRoomUUID]').content;
+if (roomUUID && roomUUID !== 'null') {
+    $('#join-curr').css('display', 'block');
+}

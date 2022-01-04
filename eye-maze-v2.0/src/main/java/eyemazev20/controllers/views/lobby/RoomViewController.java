@@ -61,11 +61,12 @@ public class RoomViewController {
         return mav;
     }
 
-    @GetMapping("/mk-room")
+    @GetMapping("/mkroom")
     public String getMkRoomPg(HttpSession httpSession) {
         if (!AuthService.isAuth(httpSession)) {
             return "redirect:/login";
         }
+
 
         return "mkroom";
     }
