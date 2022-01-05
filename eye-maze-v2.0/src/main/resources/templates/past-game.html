@@ -16,6 +16,8 @@
     <br>
     <i style="color: red;">if data isn't loading pls refresh the page</i>
     <br>
+    <h6>finished at:</h6>
+    <h6 id="data"></h6>
     <table style="width:100%">
         <tr>
             <th>Name</th>
@@ -34,9 +36,9 @@
 <script>
     function loadData() {
         const pgAsJson = '[[${pg}]]'.replaceAll('&quot;', '"');
-
         const pg = JSON.parse(pgAsJson);
 
+        $('#data').text(pg.timestp);
         for (let i = 0; i < pg.playersName.length; i++) {
             $(`#name${i}`).text(pg.playersName[i]);
             $(`#score${i}`).text(pg.scores[i]);

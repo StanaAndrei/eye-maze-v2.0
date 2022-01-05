@@ -46,7 +46,7 @@ public class PastGame {
             columnDefinition = "text[]"
     )
     private String[] plUUIDs;
-/*
+
     public Timestamp getTimestp() {
         return timestp;
     }
@@ -56,8 +56,9 @@ public class PastGame {
     }
 
     @Type(type = "timestamp")
+    @Column(name = "timestp")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Timestamp timestp;//*/
-
 
     public int[] getScores() {
         return scores;
@@ -87,10 +88,5 @@ public class PastGame {
 
     public void setPlUUIDs(String[] plUUIDs) {
         this.plUUIDs = plUUIDs;
-    }
-
-    @Override
-    public String toString() {
-        return (new PastGameDto(UUID.fromString(roomUUID), plUUIDs, scores)).toJson().toString();
     }
 }

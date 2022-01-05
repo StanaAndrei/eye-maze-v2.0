@@ -9,7 +9,7 @@ import javax.persistence.*;
 @NoArgsConstructor(force = true, access = AccessLevel.PUBLIC)
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 

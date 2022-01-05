@@ -29,7 +29,8 @@ public class GameViewController {
             final String pl1 = UserService.getUserData(pastGame.getPlUUIDs()[1]).getUsername();
             //Thread.sleep((long) (1000 * Math.random() + Math.random() * 100));
 
-            PastGameDto pastGameDto = new PastGameDto(new String[]{pl0, pl1}, pastGame.getScores());
+            System.out.println("tst:" + pastGame.getTimestp());
+            var pastGameDto = new PastGameDto(new String[]{pl0, pl1}, pastGame.getScores(), pastGame.getTimestp());
             mav.addObject("pg", pastGameDto.toJson());
             RoomService.uidToRoom.remove(uuid);
             httpSession.removeAttribute("currRoomUUID");
