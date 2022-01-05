@@ -8,17 +8,15 @@
     <title>Document</title>
 </head>
 
-<body>    
+<body>
     <h1>HISTORY</h1>
     <h3 th:text="'Total matches: ' + ${#lists.size(pastGames)}"></h3><br>
     <ul th:each="pastGame : ${pastGames}">
         <li th:style="
                 ${(#strings.equals(pastGame.plUUIDs[0], session.loginUUID) && pastGame.scores[0] > pastGame.scores[1])
                 ? 'color:green' : 'color:red'}
-             "
-             th:text="'code: ' + ${pastGame.roomUUID}"
-             th:attr="onclick=|window.location.assign('/past-game/${pastGame.roomUUID}')|" 
-             ></li>
+             " th:text="'code: ' + ${pastGame.roomUUID} + '<br>' + "
+            th:attr="onclick=|window.location.assign('/past-game/${pastGame.roomUUID}')|"></li>
     </ul>
 
 </body>
@@ -26,8 +24,18 @@
     h1 {
         text-align: center;
     }
-    ul, li :hover {
+
+    ul,
+    li :hover {
         cursor: pointer;
     }
+
+    li {
+        width: 320px;
+        padding: 10px;
+        border: 5px solid gray;
+        margin: 0;
+    }
 </style>
+
 </html>

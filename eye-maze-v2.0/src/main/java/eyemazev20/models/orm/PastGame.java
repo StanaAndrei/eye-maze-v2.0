@@ -5,13 +5,12 @@ import com.vladmihalcea.hibernate.type.array.IntArrayType;
 import eyemazev20.Dtos.http.PastGameDto;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
-import org.hibernate.annotations.TypeDefs;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.sql.Timestamp;
-import java.util.UUID;
 
 @TypeDefs({
         @TypeDef(
@@ -55,9 +54,9 @@ public class PastGame {
         this.timestp = timestp;
     }
 
-    @Type(type = "timestamp")
     @Column(name = "timestp")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @ColumnDefault(value="CURRENT_TIMESTAMP")
+    @Generated(GenerationTime.INSERT)
     private Timestamp timestp;//*/
 
     public int[] getScores() {
