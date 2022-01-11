@@ -16,7 +16,7 @@
         <property name="show_sql">true</property>
 
         <mapping class="eyemazev20.models.orm.PastGame"></mapping>
-
-        <mapping resource="Users.hbm.xml"></mapping>
+        <mapping class="eyemazev20.models.orm.MazeOrm"></mapping>
+        <mapping class="eyemazev20.models.orm.User"></mapping>
     </session-factory>
 </hibernate-configuration>

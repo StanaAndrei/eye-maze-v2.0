@@ -19,14 +19,14 @@ public class MessageController {
     @Autowired
     private MessageService messageService;
 
-    private static void launch(final UUID roomUUID) throws InterruptedException {
+    private static void launch(final UUID roomUUID) throws Exception {
         System.out.println("LAUNCH!!!!" + roomUUID.toString());
         GameService.initGame(roomUUID);
     }
 
     @MessageMapping("/launch-message")
     @SendToUser("/topic/launch-message")
-    public LaunchResMess launchGame(final Principal principal) throws InterruptedException {
+    public LaunchResMess launchGame(final Principal principal) throws Exception {
         final var roomUUID = RoomService.getRoomUUIDOfPlayer(principal.getName());
 
         if (!RoomService.uidToRoom.get(roomUUID).addToReady(principal.getName())) {

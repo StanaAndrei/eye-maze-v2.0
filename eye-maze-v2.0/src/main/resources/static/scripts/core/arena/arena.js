@@ -17,30 +17,20 @@ const initP5 = p5context => {
                 if (!message) {
                     return;
                 }
-
                 const res = JSON.parse(message.body).buffer;
-/*
-                if (res === 'OVER') {
-                    alert('game over!');
-                    p5context.noLoop();
-                    stompClient.disconnect();
-                    return;
-                }//*/
-
-                try {
-                    const state = JSON.parse(res);
-                    GameState.setState(state);        
-                } catch (err) {
+                if (res.startsWith('OVER!')) {
                     setTimeout(() => window.location.assign(`/past-game/${res.substr(6)}`), 1000);
+                } else {
+                    const state = JSON.parse(res);
+                    GameState.setState(state);
                 }
-
             })
 
             stompClient.send('/ws/move-message', {}, JSON.stringify({
                 'buffer': 'UP'
             }));//*/
         });
-        
+
     }
 
     p5context.setup = () => {

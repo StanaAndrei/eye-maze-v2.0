@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="module" th:src="@{/scripts/pages/mkmaze.js}"></script>
+</head>
+
+<body>
+    <table>
+        <tr>
+            <td id="maze"></td>
+            <td>
+                <div id="settings">
+                    <input type="text" placeholder="maze name" id="mzname">
+                    <br>
+                    <label for="">size(3->50):</label><br>
+                    <input type="number" id="lines" value="10" min="3" max="50">
+                    <input type="number" id="cols" value="10" min="3" max="50">
+                    <button id="ch-dim">change dimensions!</button>
+                    <br>
+                    <button id="submit-maze" onclick="alert()">submit maze!</button>
+                    <hr>
+                    <h4>TOOLS</h4>
+                    <form id="radios">
+                        <p>select what u want to do with walls:</p>
+                        <input type="radio" class="radio" name="wall_act" value="rem" checked>
+                        <label for="rem">remove wall</label><br>
+                        <input type="radio" class="radio" name="wall_act" value="add">
+                        <label for="add">add wall</label><br>
+                    </form>
+                    <form id="radios2" style="background-color: grey;">
+                        <p>select what u want to put in a cell:</p>
+                        <input type="radio" class="radio2" name="to_place" value="coin" checked>
+                        <label for="coin" style="color: yellow;">coin</label><br>
+                        <input type="radio" class="radio2" name="to_place" value="start">
+                        <label for="start" style="color: rgb(138, 43, 226);">entrance</label><br>
+                        <input type="radio" class="radio2" name="to_place" value="finish">
+                        <label for="finish" style="color: rgb(56, 94, 0);">exit door</label><br>
+                    </form>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+<style>
+    body {
+        user-select: none;
+    }
+</style>
+</html>

@@ -4,6 +4,7 @@ import eyemazev20.Dtos.http.MazeParams;
 import eyemazev20.Services.AuthService;
 import eyemazev20.Services.RoomService;
 import eyemazev20.models.entities.Room;
+import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,15 +19,17 @@ public class MatchController {
     @PostMapping("/create-room")
     public ResponseEntity<UUID> createRoom(
             final HttpSession httpSession,
-            @RequestBody(required = false) final MazeParams mazeParams
+            @RequestBody(required = false) final MazeParams mazeParams,
+            @RequestParam(name = "mz-name", required = false) final String mzName
     ) {
+        System.out.println("mzname:" + mzName);
         if (!AuthService.isAuth(httpSession)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         leaveRoom(httpSession);
         final var uuid = UUID.randomUUID();
         final var loginUUID = httpSession.getAttribute("loginUUID").toString();
-        RoomService.uidToRoom.put(uuid, new Room(loginUUID, mazeParams));
+        RoomService.uidToRoom.put(uuid, new Room(loginUUID, mazeParams, mzName));
         httpSession.setAttribute("currRoomUUID", uuid.toString());
         return ResponseEntity.ok(uuid);
     }

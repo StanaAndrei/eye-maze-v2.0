@@ -7,6 +7,7 @@ import java.util.*;
 
 public class Room {
     private MazeParams mazeParams;
+    private String mzName;
 
     public MazeParams getMazeParams() {
         return mazeParams;
@@ -35,10 +36,15 @@ public class Room {
         return true;
     }
 
-    public Room(final String first, final MazeParams mazeParams) {
+    public String getMzName() {
+        return mzName;
+    }
+
+    public Room(final String first, final MazeParams mazeParams, final String mzName) {
         ready = new HashSet<>();
         plUUIDs = new String[]{first, null};
         this.mazeParams = mazeParams;
+        this.mzName = mzName;
     }
 
     @Override

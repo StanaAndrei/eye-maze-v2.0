@@ -1,10 +1,12 @@
 package eyemazev20.Services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import eyemazev20.Dtos.http.StringDto;
 import eyemazev20.exceptions.HbmEx;
 import eyemazev20.models.entities.Game;
 import eyemazev20.models.entities.Maze;
 import eyemazev20.models.entities.Player;
+import eyemazev20.models.orm.MazeOrm;
 import eyemazev20.models.orm.PastGame;
 import eyemazev20.utils.Point;
 import eyemazev20.utils.UtilVars;
@@ -18,9 +20,11 @@ import java.util.UUID;
 
 @Service
 public class GameService {
-    public static void initGame(final UUID roomUUID) {
-        var players = new Player[] {new Player(0, 0), new Player(0, 0)};
-        int nrLines = UtilVars.MAZE_LEN, nrCols = UtilVars.MAZE_LEN;
+    public static void initGame(final UUID roomUUID) throws Exception {
+        int playerStartI = 0, playerStartJ = 0;
+
+
+        int nrLines = UtilVars.DEFAULT_MAZE_LEN, nrCols = UtilVars.DEFAULT_MAZE_LEN;
 
         final var mazeParams = RoomService.uidToRoom.get(roomUUID).getMazeParams();
         if (mazeParams != null) {
@@ -29,8 +33,19 @@ public class GameService {
         }
 
         final var way = MazeGenService.genMaze(nrLines, nrCols);
-        final var maze = new Maze(nrLines, nrCols, way,
-                new Point(), new Point(nrLines - 1, nrCols - 1));
+
+        Maze maze;
+        final var mzName = RoomService.uidToRoom.get(roomUUID).getMzName();
+        if (mzName == null) {
+            maze = new Maze(nrLines, nrCols, way,
+                    new Point(), new Point(nrLines - 1, nrCols - 1));
+        } else {
+            final MazeOrm mzOrm = MazeServices.getDataByName(mzName);
+            maze = new Maze(mzOrm.getForm());
+            playerStartI = maze.getStart().getLine();
+            playerStartJ = maze.getStart().getCol();
+        }
+        var players = new Player[] {new Player(playerStartI, playerStartJ), new Player(playerStartJ, playerStartJ)};
         RoomService.uidToRoom.get(roomUUID).game = new Game(players, maze);
     }
 

@@ -43,16 +43,12 @@ public class ArenaController {
         }
         final var plUUIDs = RoomService.uidToRoom.get(roomUUID).getPlUUIDs();
         final int playerNr = principal.getName().equals(plUUIDs[0]) ? 0 : 1;
-        System.err.println("IN GAMEEEEEEEEEEEEEEE  " + RoomService.uidToRoom.get(roomUUID).game.getPlayers()[playerNr].nrInv
-        + "----playerNr:" + playerNr);
 
         final boolean validMove = GameService.movePlayer(roomUUID, moveData.getBuffer(), playerNr);
-        System.out.println(validMove);
         if (!validMove && !RoomService.uidToRoom.get(roomUUID).game.getPlayers()[playerNr].hadFinished()) {
-            System.out.println("INVALID MOVE");
             RoomService.uidToRoom.get(roomUUID).game.getPlayers()[playerNr].nrInv++;
             if (RoomService.uidToRoom.get(roomUUID).game.getPlayers()[playerNr].nrInv == Player.MAX_INV || moveData.getBuffer().equals("afk")) {
-                System.err.println("AFK" + playerNr);
+                //System.err.println("AFK" + playerNr);
                 RoomService.uidToRoom.get(roomUUID).game.getPlayers()[playerNr].mkLoser();
                 gameState = new StringDto();
                 GameService.finishGame(gameState, roomUUID);//*/
@@ -76,6 +72,7 @@ public class ArenaController {
         return gameState;
     }
 
+    @SuppressWarnings("unused")
     @EventListener
     public void onDisconnectEvent(SessionDisconnectEvent event) {
         final UUID roomUUID = RoomService.getRoomUUIDOfPlayer(event.getUser().toString());

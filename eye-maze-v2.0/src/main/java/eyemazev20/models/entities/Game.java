@@ -1,7 +1,6 @@
 package eyemazev20.models.entities;
 
 import eyemazev20.Services.RoomService;
-import eyemazev20.utils.UtilVars;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -55,6 +54,9 @@ public class Game {
         }
         state.put("players", playersAsJson);
 
+        //finish point
+        state.put("finish", maze.getFinish().toJson());
+
         return state;
     }
 
@@ -89,7 +91,7 @@ public class Game {
             maze.getMazeCells()[line][col].removeCoin();
             players[playerNr].incrementCoins();
         }
-        if (line == maze.getEnd().getLine() && col == maze.getEnd().getCol()) {
+        if (line == maze.getFinish().getLine() && col == maze.getFinish().getCol()) {
             players[playerNr].finish();
             Timer timer = new Timer();
             Calendar calendar = Calendar.getInstance(); // gets a calendar using the default time zone and locale.

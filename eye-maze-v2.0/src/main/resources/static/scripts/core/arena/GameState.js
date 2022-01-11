@@ -5,6 +5,7 @@ export default class GameState {
     static n;
     static m;
     static players;
+    static finish;
     static setState(state) {
         //NR_COLS,,,,,NR_ROWS,,,,CELL_H,,,,CELL_W
         this.n = state.NR_ROWS;
@@ -15,7 +16,7 @@ export default class GameState {
             this.cells[line][col] = new Cell(line, col, walls, hasCoin);
         }
         this.players = state.players;
-
+        this.finish = state.finish;
     }
 
     static draw(p5context) {
@@ -31,6 +32,9 @@ export default class GameState {
                         const op = plUUID === loginUUID ? 255 : 100;
                         const color = p5context.color(245, 5, 5, op);
                         this.cells[i][j].highlight(p5context, color);
+                    }
+                    if (i === this.finish.line && j === this.finish.col) {
+                        this.cells[i][j].highlight(p5context, p5context.color(56, 94, 0));
                     }
                 }
             }

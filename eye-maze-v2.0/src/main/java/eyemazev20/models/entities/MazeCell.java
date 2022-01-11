@@ -1,11 +1,16 @@
 package eyemazev20.models.entities;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import lombok.NoArgsConstructor;
+import org.json.JSONObject;
+
 import java.security.InvalidParameterException;
 import java.util.Arrays;
 
+@NoArgsConstructor
 public class MazeCell {
     private int line, col;
-    private final boolean []walls;
+    private boolean []walls;
     private boolean hasCoin;
     private final static double COIN_CH = .25;
 
@@ -31,6 +36,18 @@ public class MazeCell {
         walls = new boolean[4];
         Arrays.fill(walls, true);
         hasCoin = line != 0 && col != 0 && Math.random() < COIN_CH;
+    }
+
+    public MazeCell(String mazeCellAsJson) throws JsonProcessingException {
+        JSONObject jsonObject = new JSONObject(mazeCellAsJson);
+        this.line = jsonObject.getInt("line");
+        this.col = jsonObject.getInt("col");
+        this.hasCoin = jsonObject.getBoolean("hasCoin");
+        final var wallsAsJson = jsonObject.getJSONArray("walls");
+        walls = new boolean[4];
+        for (int i = 0; i < wallsAsJson.length(); i++) {
+            this.walls[i] = wallsAsJson.getBoolean(i);
+        }
     }
 
     private static boolean areAdj(MazeCell a, MazeCell b) {
@@ -64,12 +81,12 @@ public class MazeCell {
 
     @Override
     public String toString() {
-        return "MazeCell{" +
-                "line=" + line +
-                ", col=" + col +
-                ", walls=" + Arrays.toString(walls) +
-                ", hasCoin=" + hasCoin +
-                '}';
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("line", line);
+        jsonObject.put("col", col);
+        jsonObject.put("hasCoin", hasCoin);
+        jsonObject.put("walls", walls);
+        return jsonObject.toString();
     }
 
     public boolean[] getWalls() {

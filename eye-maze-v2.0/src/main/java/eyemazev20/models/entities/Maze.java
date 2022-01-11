@@ -1,20 +1,20 @@
 package eyemazev20.models.entities;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import eyemazev20.Services.MazeGenService;
 import eyemazev20.utils.Point;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Maze {
     private MazeCell[][]mazeCells;
-    private Point start, end;
+    private Point start, finish;
 
-    public Point getEnd() {
-        return end;
-    }
-
-    public void setEnd(Point end) {
-        this.end = end;
+    public Point getFinish() {
+        return finish;
     }
 
     public Point getStart() {
@@ -33,7 +33,7 @@ public class Maze {
         assert (start.getLine() >= 0 && start.getCol() >= 0);
         assert (end.getLine() < n && end.getCol() < m);
         this.start = start;
-        this.end = end;
+        this.finish = end;
         mazeCells = new MazeCell[n][m];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
@@ -49,6 +49,26 @@ public class Maze {
             final int currCol = way.get(i).col;
 
             MazeCell.removeWalls(mazeCells[lastLine][lastCol], mazeCells[currLine][currCol]);
+        }
+    }
+
+    public Maze(final String mazeForm) throws JsonProcessingException {
+        System.out.println(mazeForm);
+        final var objMapper = new ObjectMapper();
+        final var jsonMz = new JSONObject(mazeForm);
+
+        final int nrLines = jsonMz.getInt("nrLines");
+        final int nrCols = jsonMz.getInt("nrCols");
+        this.start = objMapper.readValue(jsonMz.get("start").toString(), Point.class);
+        this.finish = objMapper.readValue(jsonMz.get("finish").toString(), Point.class);
+
+        final List<MazeCell> cells1d = objMapper.readerForListOf(MazeCell.class)
+                                                    .readValue(jsonMz.get("cells").toString());
+        mazeCells = new MazeCell[nrLines][nrCols];
+        for (int i = 0, nr = 0; i < nrLines; i++) {
+            for (int j = 0; j < nrCols; j++) {
+                mazeCells[i][j] = cells1d.get(nr++);
+            }
         }
     }
 }

@@ -3,23 +3,23 @@ export default class Cell {
     static CELL_H;
 
     constructor(i, j, walls, hasCoin) {
-        this.i = i;
-        this.j = j;
+        this.line = i;
+        this.col = j;
         this.walls = walls;
         this.hasCoin = hasCoin;
     }
 
     highlight(p5context, color) {
-        const startX = this.j * Cell.CELL_W;
-        const startY = this.i * Cell.CELL_H;
+        const startX = this.col * Cell.CELL_W;
+        const startY = this.line * Cell.CELL_H;
         p5context.noStroke();
         p5context.fill(color);
         p5context.rect(startX, startY, Cell.CELL_W - 3, Cell.CELL_H - 5);
     }
 
     draw(p5context) {
-        const startX = this.j * Cell.CELL_W;
-        const startY = this.i * Cell.CELL_H;
+        const startX = this.col * Cell.CELL_W;
+        const startY = this.line * Cell.CELL_H;
         p5context.stroke(255, 255, 255, 200);
         p5context.strokeWeight(4);
         //walls
@@ -44,7 +44,7 @@ export default class Cell {
         //coin
         if (this.hasCoin) {
             p5context.push();
-            p5context.fill(255, 251, 0, 200);
+            p5context.fill(255, 251, 0);
             p5context.strokeWeight(1);
             p5context.circle(
                 startX + Cell.CELL_W / 2,

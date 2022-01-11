@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button><a style="text-decoration: none; text-align: center; color: aqua;" href="/mkmaze">mk a new maze</a></button>
+    <br>
+    mazes: <br>
+    <ul th:each="name : ${names}">
+        <li th:id="${name}" th:text="${name}"></li>
+    </ul>
+</body>
+</html>
