@@ -11,7 +11,7 @@ export default async function createRoom(mazeParams = null, param = '') {
     const data = await res.json();
     if (data.status > 300) {
         alert('smth went wrong!');
-        return;
+        throw new Error();
     }
     window.location.assign(`/room/${data}`);//*/
 }

@@ -21,5 +21,9 @@ $('#imp').click(async event => {
     if (!mzName) {
         return;
     }
-    await createRoom(null, `mz-name=${mzName}`);
+    try {
+        await createRoom(null, `mz-name=${mzName}`);
+    } catch (e) {
+        alert('smth went wrong! check if the name of maze is correct!');
+    }
 })

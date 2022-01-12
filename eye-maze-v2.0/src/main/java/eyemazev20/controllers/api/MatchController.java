@@ -2,6 +2,7 @@ package eyemazev20.controllers.api;
 
 import eyemazev20.Dtos.http.MazeParams;
 import eyemazev20.Services.AuthService;
+import eyemazev20.Services.MazeServices;
 import eyemazev20.Services.RoomService;
 import eyemazev20.models.entities.Room;
 import org.json.JSONObject;
@@ -24,6 +25,9 @@ public class MatchController {
     ) {
         System.out.println("mzname:" + mzName);
         if (!AuthService.isAuth(httpSession)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        if (mzName != null && !MazeServices.canAccessMz(mzName)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         leaveRoom(httpSession);

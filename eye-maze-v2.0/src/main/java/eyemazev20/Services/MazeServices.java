@@ -49,4 +49,13 @@ public class MazeServices {
         query.setParameter("mzName", mzName);
         return ((List<MazeOrm>) query.list()).get(0);
     }
+
+    public static boolean canAccessMz(final String mzName) {
+        final var qs = "SELECT COUNT(*)=1 FROM MazeOrm WHERE mzName = :mzName";
+        final var query = UtilVars.session.createQuery(qs);
+        query.setParameter("mzName", mzName);
+        boolean r = ((List<Boolean>) query.list()).get(0);
+        System.out.println(r);
+        return r;
+    }
 }
