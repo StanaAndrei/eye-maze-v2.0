@@ -14,12 +14,20 @@ public class MazeForm {
         return line >= 0 && line < nrLines && col >= 0 && col < nrCols;
     }
 
-    public static boolean isValid(final MazeFormDto mazeFormDto) {/*
+    public static boolean isValid(final MazeFormDto mazeFormDto) {
         final int nrLines = mazeFormDto.getNrLines(), nrCols = mazeFormDto.getNrCols();
         final var vis = new boolean[nrLines][nrCols];
         vis[mazeFormDto.getStart().getLine()][mazeFormDto.getStart().getCol()] = true;
         Queue<Point> queue = new LinkedList<>();
         queue.add(mazeFormDto.getStart());
+        //map 1d -> 2d
+        MazeCell [][]mazeCells = new MazeCell[nrLines][nrCols];
+        for (int i = 0, nr = 0; i < nrLines; i++) {
+            for (int j = 0; j < nrCols; j++) {
+                mazeCells[i][j] = mazeFormDto.getMazeCells()[nr++];
+            }
+        }
+
         while (!queue.isEmpty()) {
             final var currP = queue.remove();
             if (currP.equals(mazeFormDto.getFinish())) {
@@ -29,8 +37,8 @@ public class MazeForm {
                 final int newLine = currP.getLine() + dirLine[dir];
                 final int newCol = currP.getCol() + dirCol[dir];
                 if (isInside(newLine, newCol, nrLines, nrCols)) {
-                    final var currWalls = mazeFormDto.getMazeCells()[currP.getLine()][currP.getCol()].getWalls();
-                    final var newWalls = mazeFormDto.getMazeCells()[newLine][newCol].getWalls();
+                    final var currWalls = mazeCells[currP.getLine()][currP.getCol()].getWalls();
+                    final var newWalls = mazeCells[newLine][newCol].getWalls();
                     var ok = false;
                     ok |= (dirLine[dir] == -1 && !currWalls[0] && !newWalls[2]);
                     ok |= (dirLine[dir] == 1 && !currWalls[2] && !newWalls[0]);

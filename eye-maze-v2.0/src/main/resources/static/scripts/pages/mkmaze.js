@@ -96,12 +96,12 @@ const initP5 = p5context => {
         console.warn(123);
         p5context.createCanvas(window.innerWidth * 3 / 4, window.innerHeight);
         fidim();
+        start = {line: 0, col: 0};
+        finish = {line: n - 1, col: m - 1};
     }
 
     p5context.draw = () => {
         p5context.background('black');
-        if (n !== cells.length && m !== cells[0].length) {
-        }
 
         const { mouseX, mouseY } = p5context;
         Cell.CELL_W = p5context.width / m;

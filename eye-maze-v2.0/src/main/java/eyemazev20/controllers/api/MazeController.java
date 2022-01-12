@@ -27,7 +27,9 @@ public class MazeController {
         }
         final var loginUUID = httpSession.getAttribute("loginUUID");
         final var user = UserService.getUserData(loginUUID.toString());
-        System.out.println("SV MZ");
+        if (!MazeForm.isValid(mazeFormDto)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         MazeServices.saveMazeToDb(new MazeOrm(mazeFormDto.getName(), mazeFormDto.toString(), user.getId()));
         return new ResponseEntity<>(HttpStatus.OK);
     }
