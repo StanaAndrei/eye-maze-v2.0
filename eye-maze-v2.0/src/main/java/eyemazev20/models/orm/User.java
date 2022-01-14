@@ -10,7 +10,7 @@ import javax.persistence.*;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id", updatable = false)
     private int id;
 
     @Override
@@ -33,8 +33,19 @@ public class User {
     @Column(name = "userpassword")
     private String password;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
+
+    @Column(name = "profilePicB64", nullable = false)
+    private String profilePicB64;
+
+    public String getProfilePicB64() {
+        return profilePicB64;
+    }
+
+    public void setProfilePicB64(String profilePicB64) {
+        this.profilePicB64 = profilePicB64;
+    }//*/
 
     public User(String username, String password, String email, String loginUUID) {
         this.username = username;

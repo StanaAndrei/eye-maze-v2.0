@@ -1,17 +1,36 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="module" th:src="@{/scripts/pages/user.js}"></script>
     <title>Document</title>
 </head>
+
 <body>
     <h1>USER PAGE</h1>
     <p th:text="'Hello, ' + ${username} + '!'"></p>
     <hr>
     <b><a href="/history">MATCH HISTORY!</a></b>
     <hr>
-    <b><a href="/my-mazes">my custom mazes</a></b>
+    <b><a href="/my-mazes">my custom mazes</a></b><br>
+    <hr><br>
+    <h3>Update profile!</h3>
+    <!--<input type="file" onchange="encodeImageFileAsURL(this)" /><br>-->
+    <hr>
+    <p>update info:</p>
+    <i>if you don't want to update smth do not fill the field</i>
+    <form id="up-info">
+        <input id="username" placeholder="username" type="text"><br>
+        <input id="email" placeholder="email" type="text"><br>
+        <input id="password" placeholder="password" type="password"><br>
+        <input type="submit" value="submit!"><br>
+    </form>
 </body>
+<script>
+    
+</script>
+
 </html>
