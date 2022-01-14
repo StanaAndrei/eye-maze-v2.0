@@ -1,15 +1,36 @@
 import "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
 let userInfoUpDto = new Object();
 
-function encodeImageFileAsURL(element) {
-    var file = element.files[0];
-    var reader = new FileReader();
-    reader.onloadend = async () => {
-        console.log('RESULT', reader.result)
-        
+let imgInput = document.getElementById('image-input');
+$('#image-input').change(e => {
+    e.preventDefault();
+    if (e.target.files) {
+        let imageFile = e.target.files[0];
+        let reader = new FileReader();
+        reader.onload = e => {
+            let img = document.createElement("img");
+            img.onload = event => {/*
+                // Dynamically create a canvas element
+                let canvas = document.createElement("canvas");
+
+                // let canvas = document.getElementById("canvas");
+                let ctx = canvas.getContext("2d");
+
+                canvas.width = 47;
+                canvas.height = 47;
+                // Actual resizing
+                ctx.drawImage(img, 0, 0, 47, 47);
+
+                // Show resized image in preview element
+                let dataurl = canvas.toDataURL(imageFile.type);//*/
+                $("#preview")[0].src = reader.result;
+                userInfoUpDto.profilePicB64 = reader.result;
+            }
+            img.src = e.target.result;
+        }
+        reader.readAsDataURL(imageFile);
     }
-    reader.readAsDataURL(file);
-}
+});
 
 $('#up-info').submit(event => {
     event.preventDefault();
@@ -30,14 +51,14 @@ $('#up-info').submit(event => {
         },
         body: JSON.stringify(userInfoUpDto)
     })
-    .then(res => {
-        if (res.status !== 200) {
-            alert('error!');
-            return;
-        }
-        window.location.reload();
-    }).catch(err => {
-        alert('error!')
-        console.error(err);
-    });
+        .then(res => {
+            if (res.status !== 200) {
+                alert('error!');
+                return;
+            }
+            window.location.reload();
+        }).catch(err => {
+            alert('error!')
+            console.error(err);
+        });
 })

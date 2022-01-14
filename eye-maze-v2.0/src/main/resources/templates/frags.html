@@ -9,6 +9,8 @@
             <li><a href="/play">Play</a></li>
             <li><a href="/user">Profile</a></li>
             <img style="float:right"
+            width="47"
+            height="47"
                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC8AAAAvCAMAAABE+WOeAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAABNVBMVEXk5ufj5ebn6Ono6uro6uvn6erl5+jo6erX2tzO0dPKztDM0NLV2Nnh4+TN0NK1u72ssrWqsbSqsLSrsrWyuLrGyszn6enm6Ong4uO6v8KqsLOss7autLevtbits7azuLvZ293Y2929wsTR1NbEycu5vsCwtrje4eLa3d7O0tTP0tTCxsnHy86rsbW7wMPFysyvtbe5vsHIzM6rsbS8wcPQ09XDyMrc3uCxt7rg4+SpsLO2vL67wMKyt7rd4OHj5efBxcittLe4vsDe4OHT19iwtrm4vcDN0dPp6uvJzc/W2dvp6+zd3+G6v8G0ubyyuLvCx8nb3t/i5OXl5+fM0NGzubvi5Oa3vL+0urzV2Nqssrbc3+DY2ty+w8Xj5ufa3N7Dx8qnrrGor7KzubzBxsjDx8n////O98nUAAAAAWJLR0RmLNTZJQAAAAd0SU1FB+YBDRE1K9CqUeMAAAHRSURBVEjH7ZVZQxMxFIUnnSahmyRTIJgmKViLQOkaQFqrKItQWVRQNheKy///C0zR2jYtSV/0yfM0D9/JTXLvmXjef/19gY7Gp72IH/UhGteBwUQsnkim/HEcAKEHk4QGQXpqOjXjNAA2+5BnhAyleHYOugwoNUml+CVJxLyrAnvEu3jHkE0h625gLujhoYE/xtYCKE/6eSEWntgKsEU1QAtJlywFAF6m0uALNt5fCQy+WGKW4/plg6+QqmX/IFoz19ertvXx2tD+120Xyp4K835y1gawUnGggNqoI2t/k3qwvzUf2Aei0OibH/3MnYBmQ8ou/vwFcw705kutX3Vwwre2mTswHttZ3VUZJV/vec5AhjSE+2gu1kq8AQcYMg9Ys4vZ4dr60fHbUNnj/Lul9+j+0APPP1luSkrTGXUnQqmoJurR05EOEPE+fAzSnah3hy38InyjdTYq9cCfP+dKSmMgKuFv4uISD+GbOKaICf9uw5VuwaHJjHMxGg8NolGG5iDz++g7RyM+MKbsk3CIfI70DGDmi5ZWXKb7cvmVXSvX+lIn/9wqiLb0rrRrodjunYBt3Whql/72ve+8tR/tnw4Vyic9HmK3oPm+ufRPXtpbgddoiP1fH/oAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjItMDEtMTNUMTc6NTM6MzUrMDA6MDD964iwAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIyLTAxLTEzVDE3OjUzOjM1KzAwOjAwjLYwDAAAAABJRU5ErkJggg=="
                 alt="FAILED TO LOAD IMG!">
             <li style="float:right">
@@ -66,6 +68,15 @@
 
                 });
             }
+
+            fetch(`/api/user-data`, {
+                method: 'GET',
+                cache: 'no-cache',
+                credentials: 'same-origin'
+            }).then(res => res.json())
+                .then(res => {
+                    $('img')[0].src = res.profilePicB64;
+                }).catch();
         </script>
 
     </div>

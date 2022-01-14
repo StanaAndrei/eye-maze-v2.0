@@ -9,6 +9,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @Data
 @ToString
-public class UserInfoUpDto {
+public class UserInfoDto {
     private String username, userpassword, email, profilePicB64;
 }

@@ -18,11 +18,16 @@
     <b><a href="/my-mazes">my custom mazes</a></b><br>
     <hr><br>
     <h3>Update profile!</h3>
-    <!--<input type="file" onchange="encodeImageFileAsURL(this)" /><br>-->
     <hr>
     <p>update info:</p>
     <i>if you don't want to update smth do not fill the field</i>
     <form id="up-info">
+        <label for="file">update profile pic:</label>
+        <input type="file" id="image-input" accept = "image/*">
+        <br>
+        <p>here you will have the preview after update:</p>
+        <img width="47" height="47" id="preview"></img><hr>
+        <br><br><br>
         <input id="username" placeholder="username" type="text"><br>
         <input id="email" placeholder="email" type="text"><br>
         <input id="password" placeholder="password" type="password"><br>

@@ -1,6 +1,6 @@
 package eyemazev20.Services;
 
-import eyemazev20.Dtos.http.UserInfoUpDto;
+import eyemazev20.Dtos.http.UserInfoDto;
 import eyemazev20.exceptions.HbmEx;
 import eyemazev20.models.orm.User;
 import eyemazev20.utils.UtilVars;
@@ -18,23 +18,23 @@ public class UserService {
         List list = query.list();
         return (User)list.get(0);
     }
-    public static void updateUserInfo(final int id, final UserInfoUpDto userInfoUpDto) {
+    public static void updateUserInfo(final int id, final UserInfoDto userInfoDto) {
         Transaction transaction = null;
         try {
             transaction = UtilVars.session.beginTransaction();
             final var user = (User) UtilVars.session.get(User.class, id);
 
-            if (userInfoUpDto.getUsername() != null && !userInfoUpDto.getUsername().isEmpty()) {
-                user.setUsername(userInfoUpDto.getUsername());
+            if (userInfoDto.getUsername() != null && !userInfoDto.getUsername().isEmpty()) {
+                user.setUsername(userInfoDto.getUsername());
             }
-            if (userInfoUpDto.getEmail() != null && !userInfoUpDto.getEmail().isEmpty()) {
-                user.setEmail(userInfoUpDto.getEmail());
+            if (userInfoDto.getEmail() != null && !userInfoDto.getEmail().isEmpty()) {
+                user.setEmail(userInfoDto.getEmail());
             }
-            if (userInfoUpDto.getUserpassword() != null && !userInfoUpDto.getUserpassword().isEmpty()) {
-                user.setPassword(userInfoUpDto.getUserpassword());
+            if (userInfoDto.getUserpassword() != null && !userInfoDto.getUserpassword().isEmpty()) {
+                user.setPassword(userInfoDto.getUserpassword());
             }
-            if (userInfoUpDto.getProfilePicB64() != null && !userInfoUpDto.getProfilePicB64().isEmpty()) {
-                user.setProfilePicB64(userInfoUpDto.getProfilePicB64());
+            if (userInfoDto.getProfilePicB64() != null && !userInfoDto.getProfilePicB64().isEmpty()) {
+                user.setProfilePicB64(userInfoDto.getProfilePicB64());
             }
 
             UtilVars.session.update(user);
