@@ -1,12 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script type="module" th:src="@{/scripts/pages/global-chat.js}"></script>
+    <meta th:name="messages" th:content="${messages}">
+    <meta th:name="loginUUID" th:content="${session.loginUUID}">
     <title>Document</title>
 </head>
+
 <body>
-    coming soon!
+    <h2>Global chat</h2>
+    <div id="chat">
+
+    </div>
+    <div class="sticky">
+        <input type="text" />
+        <button id="send">send!</button>
+    </div>
+
 </body>
+<style>
+    h2 {
+        text-align: center;
+    }
+
+    body {
+        margin: 0 auto;
+        max-width: 800px;
+        padding: 0 20px;
+    }
+
+    .container {
+        border: 2px solid #dedede;
+        background-color: #f1f1f1;
+        border-radius: 5px;
+        padding: 10px;
+        margin: 10px 0;
+    }
+
+    .darker {
+        border-color: #ccc;
+        background-color: #ddd;
+    }
+
+    .container::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+
+    .container img {
+        float: left;
+        max-width: 60px;
+        width: 100%;
+        margin-right: 20px;
+        border-radius: 50%;
+    }
+
+    .container img.right {
+        float: right;
+        margin-left: 20px;
+        margin-right: 0;
+    }
+
+    img {
+        width: 100%;
+    }
+
+    .time-right {
+        float: right;
+        color: #aaa;
+    }
+
+    .time-left {
+        float: left;
+        color: #999;
+    }
+
+    div.sticky {
+        position: -webkit-sticky;
+        position: sticky;
+        bottom: 0;
+        padding: 5px;
+        background-color: #cae8ca;
+        border: 2px solid #4CAF50;
+    }
+</style>
+
 </html>

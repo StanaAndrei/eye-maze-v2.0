@@ -1,5 +1,6 @@
 package eyemazev20.controllers.ws;
 
+import eyemazev20.Dtos.http.StringDto;
 import eyemazev20.Dtos.ws.LaunchResMess;
 import eyemazev20.Dtos.ws.Message;
 import eyemazev20.Dtos.ws.ResMessage;
@@ -11,18 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.util.HtmlUtils;
+
 import java.security.Principal;
 import java.util.UUID;
 
+@SuppressWarnings("unused")
 @Controller
 public class MessageController {
     @Autowired
     private MessageService messageService;
-
-    private static void launch(final UUID roomUUID) throws Exception {
-        System.out.println("LAUNCH!!!!" + roomUUID.toString());
-        GameService.initGame(roomUUID);
-    }
 
     @MessageMapping("/launch-message")
     @SendToUser("/topic/launch-message")
@@ -47,7 +46,7 @@ public class MessageController {
         if (RoomService.uidToRoom.get(roomUUID).canLaunch()) {
             state = LaunchResMess.State.LAUNCH;
             launchResMess = new LaunchResMess(user.getUsername(), state);
-            MessageController.launch(roomUUID);
+            GameService.initGame(roomUUID);
             messageService.sendLauchMess(other, launchResMess);
         }
 
@@ -56,17 +55,18 @@ public class MessageController {
 
     @MessageMapping("/room-messages")
     @SendToUser("/topic/room-messages")
-    public ResMessage sendRoomMessage(final Message message, final Principal principal) {
+    public ResMessage sendRoomMessage(final StringDto message, final Principal principal) {
         final var roomUUID = RoomService.getRoomUUIDOfPlayer(principal.getName());
         final var target = RoomService.getOtherPlayer(roomUUID, principal.getName());
 
+        final String buffer = HtmlUtils.htmlEscape(message.getBuffer());
         if (target == null) {
-            return new ResMessage(message.getMessageContent(), "you");
+            return new ResMessage(buffer, "you");
         }
 
         final var user = UserService.getUserData(principal.getName());
 
-        messageService.sendPrivMess(target, message.getMessageContent(), user.getUsername());//*/
-        return new ResMessage(message.getMessageContent(), "you");
+        messageService.sendPrivMess(target, buffer, user.getUsername());//*/
+        return new ResMessage(buffer, "you");
     }
 }

@@ -2,6 +2,10 @@ package eyemazev20.models.orm;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
+
 import javax.persistence.*;
 
 @Entity
@@ -9,22 +13,11 @@ import javax.persistence.*;
 @NoArgsConstructor(force = true, access = AccessLevel.PUBLIC)
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "id", updatable = false)
     private int id;
 
-    @Override
-    public String toString() {
-        return '{' +
-                "\"id\":" + id +
-                ", \"loginUUID\":\"" + loginUUID + '\"' +
-                ", \"username\":\"" + username + '\"' +
-                ", \"password\":\"" + password + '\"' +
-                ", \"email\":\"" + email + '\"' +
-                '}';
-    }
-
-    @Column(name = "loginUUID", updatable = false)
+    @Column(name = "loginUUID", updatable = false, unique = true)
     private String loginUUID;
 
     @Column(name = "username")
@@ -36,7 +29,9 @@ public class User {
     @Column(name = "email", unique = true)
     private String email;
 
-    @Column(name = "profilePicB64", nullable = false)
+    @GeneratedValue
+    @Generated(GenerationTime.INSERT)/*def is blank profile pic code*/
+    @Column(name = "profilePicB64")
     private String profilePicB64;
 
     public String getProfilePicB64() {

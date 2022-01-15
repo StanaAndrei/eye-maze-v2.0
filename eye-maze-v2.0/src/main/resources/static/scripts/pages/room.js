@@ -39,7 +39,7 @@ $('#send').click(event => {
         return;
     }
     stompClient.send('/ws/room-messages', {}, JSON.stringify({
-        'messageContent': message
+        'buffer': message
     }));
     $('#message-cont').val('');
 })

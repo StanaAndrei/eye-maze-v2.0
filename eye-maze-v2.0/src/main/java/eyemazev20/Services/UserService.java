@@ -10,6 +10,14 @@ import org.hibernate.Transaction;
 import java.util.List;
 
 public class UserService {
+    public static User getUserData(final int id) {
+        final var qs = "FROM User WHERE " +
+                "id = :id";
+        final var query = UtilVars.session.createQuery(qs);
+        query.setParameter("id", id);
+        List list = query.list();
+        return (User)list.get(0);
+    }
     public static User getUserData(final String loginUUID) {
         final var qs = "FROM User WHERE " +
                 "loginUUID = :loginUUID";
