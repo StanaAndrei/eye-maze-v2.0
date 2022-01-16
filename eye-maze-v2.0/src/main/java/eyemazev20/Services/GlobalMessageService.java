@@ -7,6 +7,8 @@ import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -21,9 +23,18 @@ public class GlobalMessageService {
             HbmEx.handleHbmErrs(transaction, hibernateException);
         }
     }
-    public static List<GlobalMessage> getMessages() {
-        final var hql = "FROM GlobalMessage";
+    public static ArrayList<Object[]> getMessages() {
+        final var hql = "SELECT gm.content, gm.timestp, u.profilePicB64, u.username, u.loginUUID " +
+                "FROM GlobalMessage gm JOIN User u ON(gm.senderId = u.id)";
         final var query = UtilVars.session.createQuery(hql);
-        return query.list();
+        List list = query.list();
+        Iterator it = list.iterator();
+        final var rows = new ArrayList<Object[]>();
+        while (it.hasNext()) {
+            final var cols = (Object[]) it.next();
+            //System.out.println(rows[0] + "|" + rows[1] + "|" + rows[4]);
+            rows.add(cols);
+        }
+        return rows;
     }
 }

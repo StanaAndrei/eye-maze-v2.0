@@ -12,7 +12,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 @NoArgsConstructor
-@Entity
+@Entity(name = "GlobalMessage")
 @Table(name = "GlobalMessages")
 @Data
 public class GlobalMessage {
@@ -27,7 +27,7 @@ public class GlobalMessage {
     @Column(name = "timestp")
     private Timestamp timestp;
 
-    @JoinColumn(name = "senderId", referencedColumnName = "id", nullable = false)//ref to user
+    @JoinColumn(name = "user_id", referencedColumnName = "senderId")
     private int senderId;
 
     public GlobalMessage(String content, Timestamp timestp, int senderId) {
