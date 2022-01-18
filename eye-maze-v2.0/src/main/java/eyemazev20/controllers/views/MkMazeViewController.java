@@ -6,21 +6,39 @@ import eyemazev20.Services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.servlet.http.HttpSession;
 
 @Controller
 public class MkMazeViewController {
-    @GetMapping("/mkmaze")
-    public String mkMaze(HttpSession httpSession) {
+    @GetMapping(value = {"/mkmaze", "/mkmaze/{mzname}"})
+    public String mkMaze(
+            final HttpSession httpSession,
+            @PathVariable(required = false, name = "mzname") final String mzname,
+            final Model model
+    ) {
         if (!AuthService.isAuth(httpSession)) {
             return "redirect:/login";
+        }
+        if (mzname != null) {
+            try {
+                final var mzData = MazeServices.getDataByName(mzname);
+                if (mzData != null) {
+                    model.addAttribute("mzform", mzData.getForm());
+                }
+            } catch (Exception e) {
+                return "mkmaze";
+            }
+        }//*/
+        if (mzname == null) {
+            model.addAttribute("mzform", "TO_BE_CREATED");
         }
         return "mkmaze";
     }
 
     @GetMapping("/my-mazes")
-    public String viewAllMazes(HttpSession httpSession, Model model) {
+    public String viewAllMazes(final HttpSession httpSession, final Model model) {
         if (!AuthService.isAuth(httpSession)) {
             return "redirect:/login";
         }

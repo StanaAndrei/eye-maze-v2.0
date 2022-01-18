@@ -46,11 +46,12 @@ public class MazeForm {
                     ok |= (dirCol[dir] == 1 && !currWalls[1] && !newWalls[3]);
                     if (ok) {
                         vis[newLine][newCol] = true;
-                        queue.add(new Point(newLine, newCol));
+                        queue.add(new Point(newLine, newCol)); //@ERROR: "java.lang.OutOfMemoryError: Java heap space"
                     }
                 }
             }
         }//*/
+
         return false;
     }
 }

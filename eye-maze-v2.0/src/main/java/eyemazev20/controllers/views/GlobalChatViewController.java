@@ -3,7 +3,6 @@ package eyemazev20.controllers.views;
 import eyemazev20.Dtos.http.GlobalMessageOutDto;
 import eyemazev20.Services.AuthService;
 import eyemazev20.Services.GlobalMessageService;
-import eyemazev20.Services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

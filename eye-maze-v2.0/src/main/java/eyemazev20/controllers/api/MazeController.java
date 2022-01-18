@@ -18,7 +18,11 @@ import java.lang.reflect.Array;
 @RequestMapping("/api")
 public class MazeController {
     @PostMapping("/upload-maze")
-    public ResponseEntity<Void> uploadMaze(@RequestBody MazeFormDto mazeFormDto, final HttpSession httpSession) {
+    public ResponseEntity<Void> uploadMaze(
+            @RequestBody MazeFormDto mazeFormDto,
+            final HttpSession httpSession,
+            @RequestParam(required = false, name = "update", defaultValue = "false") final boolean update
+    ) {
         if (!AuthService.isAuth(httpSession)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
@@ -34,7 +38,17 @@ public class MazeController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/rand-maze-way")//just for texting
+    @DeleteMapping("/remove-maze/{mzname}")
+    public ResponseEntity<?> removeMazeFromDb(@PathVariable final String mzname, final HttpSession httpSession) {
+        if (!AuthService.isAuth(httpSession)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        final int mazeId = MazeServices.getDataByName(mzname).getId();
+        MazeServices.removeMazeFromDb(mazeId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/rand-maze-way")//just for testing
     public ResponseEntity<?> getRandMaze(@RequestParam int n, @RequestParam int m) {
         if (n == 0 || m == 0) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

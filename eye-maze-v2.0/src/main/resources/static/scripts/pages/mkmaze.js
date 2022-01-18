@@ -3,16 +3,43 @@ import "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
 import Cell from "./../core/entities/cell.js";
 let cells, start, finish;
 let n, m;
-let mazeConfig;
+let mzform = document.querySelector('meta[name=mzform]').content;
+//const exists = document.querySelector('meta[name=exists]').content;
 
 const fidim = () => {
-    n = Number($('#lines').val()), m = Number($('#cols').val());
-    cells = new Array(n).fill().map(() => new Array(m));
-    for (let i = 0; i < n; i++) {
-        for (let j = 0; j < m; j++) {
-            cells[i][j] = new Cell(i, j, new Array(4).fill(true), false)
-        }
+    if (mzform !== "TO_BE_CREATED") {
+        mzform = JSON.parse(mzform);
+    } else {
+        mzform = null;
     }
+
+    if (!mzform) {
+        n = Number($('#lines').val()), m = Number($('#cols').val());
+        cells = new Array(n).fill().map(() => new Array(m));
+        for (let i = 0; i < n; i++) {
+            for (let j = 0; j < m; j++) {
+                cells[i][j] = new Cell(i, j, new Array(4).fill(true), false);
+            }
+        }
+    } else {
+        n = mzform.nrLines, m = mzform.nrCols;
+        $('#lines').val(n), $('#cols').val(m);
+        cells = new Array(n).fill().map(() => new Array(m));
+        
+        for (let i = 0; i < mzform.cells.length; i++) {
+            mzform.cells[i] = JSON.parse(mzform.cells[i]);
+        }
+
+        for (let i = 0, nr = 0; i < n; i++) {
+            for (let j = 0; j < m; j++) {
+                const cell = mzform.cells[nr++];
+                cells[i][j] = new Cell(cell.line, cell.col, cell.walls, cell.hasCoin);
+            }
+        }
+        start = mzform.start;
+        finish = mzform.finish;
+    }
+
 }
 
 const redim = () => {
@@ -91,13 +118,17 @@ $('#ch-dim').click(e => {
 })
 
 const initP5 = p5context => {
-
     p5context.setup = () => {
-        console.warn(123);
+        if (mzform === '') {
+            document.body.style.display = "none";
+            alert('The maze does not exists!');
+            window.location.assign('/mkmaze');
+            return;
+        }
         p5context.createCanvas(window.innerWidth * 3 / 4, window.innerHeight);
         fidim();
-        start = {line: 0, col: 0};
-        finish = {line: n - 1, col: m - 1};
+        start = { line: 0, col: 0 };
+        finish = { line: n - 1, col: m - 1 };
     }
 
     p5context.draw = () => {

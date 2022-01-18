@@ -55,7 +55,10 @@ public class MazeServices {
         final var query = UtilVars.session.createQuery(qs);
         query.setParameter("mzName", mzName);
         boolean r = ((List<Boolean>) query.list()).get(0);
-        System.out.println(r);
         return r;
+    }
+
+    public static void updateMzForm(final String mzName) {
+
     }
 }

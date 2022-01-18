@@ -31,4 +31,8 @@ public class MazeOrm {
     public String getForm() {
         return form;
     }
+
+    public int getId() {
+        return id;
+    }
 }

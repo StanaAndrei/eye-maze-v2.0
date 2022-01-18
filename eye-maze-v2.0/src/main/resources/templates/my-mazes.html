@@ -1,17 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Document</title>
 </head>
+
 <body>
     <button><a style="text-decoration: none; text-align: center; color: aqua;" href="/mkmaze">mk a new maze</a></button>
     <br>
     mazes: <br>
     <ul th:each="name : ${names}">
-        <li th:id="${name}" th:text="${name}"></li>
+        <li th:id="${name}"><a target="_blank" th:text="${name}" th:href="'mkmaze/' + ${name}"></a>
+            <span id="i-holder">
+                <i class="fa fa-trash-o" style="font-size:24px; color: red" th:id="${name}" onclick="remMz(this)"></i>
+            </span>
+        </li>
     </ul>
 </body>
+<style>
+    a,
+    a::after {
+        text-decoration: none;
+        color: blue;
+        font-size: larger;
+    }
+
+    #i-holder {
+        padding-left: 25px;
+    }
+
+    i:hover {
+        cursor: pointer;
+    }
+</style>
+<script>
+    function remMz({ id: mzName }) {
+        fetch(`api/remove-maze/${mzName}`, {
+            method: 'DELETE',
+            cache: 'no-cache',
+            credentials: 'same-origin'
+        }).then(res => res.status === 200 ? window.location.reload() : alert('error')).catch(() => alert('error'));
+    }
+</script>
+
 </html>
