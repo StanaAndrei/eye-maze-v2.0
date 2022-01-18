@@ -36,7 +36,7 @@ public class MazeForm {
             for (int dir = 0; dir < dirLine.length; dir++) {
                 final int newLine = currP.getLine() + dirLine[dir];
                 final int newCol = currP.getCol() + dirCol[dir];
-                if (isInside(newLine, newCol, nrLines, nrCols)) {
+                if (isInside(newLine, newCol, nrLines, nrCols) && !vis[newLine][newCol]) {
                     final var currWalls = mazeCells[currP.getLine()][currP.getCol()].getWalls();
                     final var newWalls = mazeCells[newLine][newCol].getWalls();
                     var ok = false;

@@ -114,6 +114,10 @@ $('#submit-maze').click(async e => {
 })
 
 $('#ch-dim').click(e => {
+    if (Number($('#lines').val()) * Number($('#cols').val()) > 22 * 22) {
+        alert('error: maze too large');
+        return;
+    }
     redim();
 })
 
