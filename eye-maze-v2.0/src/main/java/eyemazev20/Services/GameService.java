@@ -45,7 +45,7 @@ public class GameService {
             playerStartI = maze.getStart().getLine();
             playerStartJ = maze.getStart().getCol();
         }
-        var players = new Player[] {new Player(playerStartI, playerStartJ), new Player(playerStartJ, playerStartJ)};
+        var players = new Player[] {new Player(playerStartI, playerStartJ), new Player(playerStartI, playerStartJ)};
         RoomService.uidToRoom.get(roomUUID).game = new Game(players, maze);
     }
 

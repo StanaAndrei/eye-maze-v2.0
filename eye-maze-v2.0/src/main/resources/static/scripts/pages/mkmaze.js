@@ -4,7 +4,6 @@ import Cell from "./../core/entities/cell.js";
 let cells, start, finish;
 let n, m;
 let mzform = document.querySelector('meta[name=mzform]').content;
-//const exists = document.querySelector('meta[name=exists]').content;
 
 const fidim = () => {
     if (mzform !== "TO_BE_CREATED") {

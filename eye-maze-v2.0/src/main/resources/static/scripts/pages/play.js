@@ -5,7 +5,8 @@ $('#join-curr').click(event => {
     window.location.assign(`/room/${roomUUID}`);
 })
 
-$('#create-btn').click(async event => {
+$('#create-btn').click(event => {
+    event.preventDefault();
     window.location.assign('/mkroom');    
 })
 
