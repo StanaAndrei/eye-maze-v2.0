@@ -1,6 +1,5 @@
 import "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
 import "https://cdn.jsdelivr.net/npm/p5@1.4.0/lib/p5.js"
-import "https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js"
 import "https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"
 import "https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"
 import handleInp from "./handleInp.js"

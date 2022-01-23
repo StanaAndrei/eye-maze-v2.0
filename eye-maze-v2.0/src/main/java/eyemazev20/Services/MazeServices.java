@@ -6,7 +6,10 @@ import eyemazev20.utils.UtilVars;
 import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Service;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -60,5 +63,21 @@ public class MazeServices {
 
     public static void updateMzForm(final String mzName) {
 
+    }
+
+    @Nullable
+    public static ArrayList<Object[]> getAllMazes() {
+        final var hql = "SELECT mz.id, mz.name, u.username " +
+                "FROM MazeOrm AS mz JOIN User AS u ON(mz.mkerId = u.id) " +
+                "GROUP BY mz.id, u.username";
+        final var query = UtilVars.session.createQuery(hql);
+        final var list = query.list();
+        final var it = list.iterator();
+        final var rows = new ArrayList<Object[]>();
+        while (it.hasNext()) {
+            final var cols = (Object[]) it.next();
+            rows.add(cols);
+        }
+        return rows;
     }
 }

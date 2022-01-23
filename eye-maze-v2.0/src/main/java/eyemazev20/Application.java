@@ -12,7 +12,7 @@ import java.util.Properties;
 public class Application {
 	private static void testing() {
 		System.err.println("WORKS");
-		GlobalMessageService.getMessages();
+		//GlobalMessageService.getMessages();
 	}
 
 	public static void main(String[] args) {

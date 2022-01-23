@@ -5,6 +5,7 @@ import eyemazev20.models.orm.GlobalMessage;
 import eyemazev20.utils.UtilVars;
 import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,6 +24,8 @@ public class GlobalMessageService {
             HbmEx.handleHbmErrs(transaction, hibernateException);
         }
     }
+
+    @Nullable
     public static ArrayList<Object[]> getMessages() {
         final var hql = "SELECT gm.content, gm.timestp, u.profilePicB64, u.username, u.loginUUID " +
                 "FROM GlobalMessage gm JOIN User u ON(gm.senderId = u.id)";
