@@ -21,6 +21,8 @@ const fidim = () => {
                 cells[i][j] = new Cell(i, j, new Array(4).fill(true), false);
             }
         }
+        start = { line: 0, col: 0 };
+        finish = { line: n - 1, col: m - 1 };
     } else {
         n = mzform.nrLines, m = mzform.nrCols;
         $('#lines').val(n), $('#cols').val(m);
@@ -91,6 +93,7 @@ $('.radio2').click(e => {
 
 $('#submit-maze').click(async e => {
     e.preventDefault();
+    //console.log(start, finish);
     const res = await fetch('/api/upload-maze', {
         method: 'POST',
         cache: 'no-cache',
@@ -131,8 +134,6 @@ const initP5 = p5context => {
         }
         p5context.createCanvas(window.innerWidth * 3 / 4, window.innerHeight);
         fidim();
-        start = { line: 0, col: 0 };
-        finish = { line: n - 1, col: m - 1 };
     }
 
     p5context.draw = () => {
