@@ -69,6 +69,6 @@ public class Room {
     public void removePlayer(int nr) {
         assert nr < plUUIDs.length;
         plUUIDs[nr] = null;
-
     }
+
 }

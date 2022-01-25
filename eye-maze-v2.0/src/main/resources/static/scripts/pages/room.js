@@ -1,3 +1,6 @@
+import leaveRoom from "../api/room/leave.js";
+import sleep from "../util/sleep.js";
+
 const broadcastCh = new BroadcastChannel('check-dupl');
 broadcastCh.postMessage('open');
 broadcastCh.onmessage = event => {
@@ -26,8 +29,12 @@ function checkRef() {
     }
 }
 
-function showMessage(from, message) {
-    $('#message-history').append(`<p><b>${from}:</b> ${message}</p>`);
+function showMessage(from, message, isAdmin = false) {
+    let style = '';
+    if (isAdmin) {
+        style = 'style="color: red;"';
+    }
+    $('#message-history').append(`<p><b ${style} >${from}:</b> ${message}</p>`);
     $('#message-history')[0].scrollTop = $('#message-history')[0].scrollHeight;
 }
 
@@ -48,7 +55,18 @@ function connect() {
     let socket = new SockJS('/our-websocket');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, frame => {
+        console.log(12345);
         //console.log('connected:' + frame);
+        stompClient.subscribe('/user/topic/join-leave', resMessage => {
+            const { who, state } = JSON.parse(resMessage.body);
+
+            if (state === "JOINED") {
+                $('#lobby-players').append(`<h5 class="lobby-pl" id="${who}">${who}</h5>`);
+            } else {
+                $(`#${who}`).remove();
+            }
+        })
+
         stompClient.subscribe('/user/topic/room-messages', message => {
             const { from, content } = JSON.parse(message.body);
             showMessage(from, content);
@@ -59,10 +77,10 @@ function connect() {
                 return;
             }
             const { who, state } = JSON.parse(message.body);
-            const roomUUID = document.querySelector('meta[name=currRoomUUID]').content;
+            const roomUUID = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
             if (state === 'LAUNCH') {
                 window.onbeforeunload = undefined;
-                stompClient.disconnect(() => { }, {});
+                stompClient.disconnect(() => {});
                 sessionStorage.wMouse = (new URLSearchParams(window.location.search)).has('wmouse');
                 window.location.assign(`/arena/${roomUUID}`);
                 return;
@@ -71,19 +89,16 @@ function connect() {
             $('#are-ready').append(`<h5>${who}</h5>`);
         })
     })
+    //sleep(5e3)
+    if (!document.querySelectorAll('.lobby-pl').length) {
+        //leaveRoom();
+    }
 }
 
 $('#leave-btn').click(async event => {
     event.preventDefault();
-    const res = await fetch('/api/leave-room', {
-        method: 'PUT',
-        cache: 'no-cache',
-        credentials: 'same-origin'
-    });
-    if (res.status !== 200) {
-        alert('fail to leave lobby');
-        return;
-    }
+    await stompClient.disconnect();
+    await leaveRoom();
     window.location.assign('/play');
 })
 
@@ -105,5 +120,7 @@ window.onblur = async () => {
     window.location.assign('/play');
 }
 
-checkRef();
-connect();
+window.onload = async () => {
+    checkRef();
+    connect();
+}

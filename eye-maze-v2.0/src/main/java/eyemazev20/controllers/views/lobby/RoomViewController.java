@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -22,6 +23,10 @@ public class RoomViewController {
         if (!AuthService.isAuth(httpSession)) {
             return new ModelAndView("redirect:/login");
         }
+        if (RoomService.uidToRoom.get(uuid) == null) {
+            return (new ModelAndView("redirect:/play"));
+        }
+
         final  var loginUUID = httpSession.getAttribute("loginUUID").toString();
 
         final var player0 = RoomService.uidToRoom.get(uuid).getPlUUIDs()[0];

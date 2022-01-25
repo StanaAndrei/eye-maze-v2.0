@@ -1,9 +1,9 @@
 package eyemazev20.Services.ws;
 
+import eyemazev20.Dtos.ws.JoinLeaveDto;
 import eyemazev20.Dtos.ws.LaunchResMess;
 import eyemazev20.Dtos.ws.ResMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -23,5 +23,16 @@ public class MessageService {
 
     public void sendLauchMess(String userId, LaunchResMess launchResMess) {
         simpMessagingTemplate.convertAndSendToUser(userId, "/topic/launch-message", launchResMess);
+    }
+
+    public void sendJoinLeaveMessage(String userId, JoinLeaveDto.STATE state, String who) {
+        if (userId == null) {
+            //System.err.println("NULL");
+            return;
+        }
+
+        final var joinLeaveDto = new JoinLeaveDto(who, state);
+        simpMessagingTemplate.convertAndSendToUser(userId, "/topic/join-leave", joinLeaveDto);
+        //System.out.println("SEND");
     }
 }

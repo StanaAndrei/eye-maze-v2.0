@@ -8,7 +8,6 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta th:name="currRoomUUID" th:content="${session.currRoomUUID}">
     <script type="module" th:src="@{/scripts/pages/room.js}"></script>
 </head>
 
@@ -32,7 +31,9 @@
     <button id="launch">ready</button>
     <br><br>
     <p>press ready! After both players are ready the game will start soon!</p>
-    <b style="color: red;">DO NOT REFRESH THE PAGE!</b>
+    <b style="color: red;">DO NOT REFRESH THE PAGE! <br> <!--(if the lobby functions like messaging stop working leave the lobby)--></b>
+    <h4 style="display: block;">PLAYERS IN THE LOBBY:</h4>
+    <div id="lobby-players"></div>
     <h4 style="display: block;">PLAYERS THAT ARE READY:</h4>
     <div id="are-ready"></div>
 </body>

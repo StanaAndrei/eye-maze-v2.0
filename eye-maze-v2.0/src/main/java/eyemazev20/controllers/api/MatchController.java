@@ -34,7 +34,7 @@ public class MatchController {
         final var uuid = UUID.randomUUID();
         final var loginUUID = httpSession.getAttribute("loginUUID").toString();
         RoomService.uidToRoom.put(uuid, new Room(loginUUID, mazeParams, mzName));
-        httpSession.setAttribute("currRoomUUID", uuid.toString());
+        //httpSession.setAttribute("currRoomUUID", uuid.toString());
         return ResponseEntity.ok(uuid);
     }
 
@@ -47,7 +47,7 @@ public class MatchController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
         leaveRoom(httpSession);
-        httpSession.setAttribute("currRoomUUID", roomUuid.toString());
+        //httpSession.setAttribute("currRoomUUID", roomUuid.toString());
         RoomService.joinRoom(roomUuid, httpSession.getAttribute("loginUUID").toString());
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -60,7 +60,7 @@ public class MatchController {
         final var loginUUID = httpSession.getAttribute("loginUUID").toString();
         final var roomUUID = RoomService.getRoomUUIDOfPlayer(loginUUID);
         RoomService.leaveRoom(roomUUID, loginUUID);
-        httpSession.removeAttribute("currRoomUUID");
+        //httpSession.removeAttribute("currRoomUUID");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
