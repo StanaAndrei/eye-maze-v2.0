@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -57,7 +56,7 @@ public class MazeServices {
         final var qs = "SELECT COUNT(*)=1 FROM MazeOrm WHERE mzName = :mzName";
         final var query = UtilVars.session.createQuery(qs);
         query.setParameter("mzName", mzName);
-        boolean r = ((List<Boolean>) query.list()).get(0);
+        final boolean r = ((List<Boolean>) query.list()).get(0);
         return r;
     }
 
@@ -79,5 +78,12 @@ public class MazeServices {
             rows.add(cols);
         }
         return rows;
+    }
+
+    public static ArrayList<String> getAllPcGenMazes() {
+        final var hql = "SELECT name FROM MazeOrm WHERE mkerId IS NULL";
+        final var query = UtilVars.session.createQuery(hql);
+        final var list = query.list();
+        return (ArrayList<String>) list;
     }
 }

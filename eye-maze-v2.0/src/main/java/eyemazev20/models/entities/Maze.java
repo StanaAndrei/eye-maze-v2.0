@@ -4,10 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eyemazev20.Services.MazeGenService;
 import eyemazev20.utils.Point;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
+import javafx.util.Pair;
 
 public class Maze {
     private MazeCell[][]mazeCells;
@@ -53,7 +57,7 @@ public class Maze {
     }
 
     public Maze(final String mazeForm) throws JsonProcessingException {
-        System.out.println(mazeForm);
+        //System.out.println(mazeForm);
         final var objMapper = new ObjectMapper();
         final var jsonMz = new JSONObject(mazeForm);
 
@@ -70,5 +74,30 @@ public class Maze {
                 mazeCells[i][j] = cells1d.get(nr++);
             }
         }
+    }
+
+    public Pair<UUID, String> toDbObj() {
+        JSONObject mazeOrm = new JSONObject();
+
+        mazeOrm.put("nrLines", mazeCells.length);
+        mazeOrm.put("nrCols", mazeCells[0].length);
+        mazeOrm.put("start", start.toJson());
+        mazeOrm.put("finish", finish.toJson());
+
+        JSONArray cellsAsJson = new JSONArray();
+        for (final var line : mazeCells) {
+            for (final var cell : line) {
+                final var cellAsJson = new JSONObject();
+                cellAsJson.put("line", cell.getLine());
+                cellAsJson.put("col", cell.getCol());
+                cellAsJson.put("hasCoin", cell.getHasCoin());
+                cellAsJson.put("walls", cell.getWalls());
+
+                cellsAsJson.put(cellAsJson.toString());
+            }
+        }
+        mazeOrm.put("cells", cellsAsJson);
+
+        return new Pair<>(UUID.randomUUID(), mazeOrm.toString());
     }
 }

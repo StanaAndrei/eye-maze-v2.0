@@ -39,6 +39,11 @@ public class GameService {
         if (mzName == null) {
             maze = new Maze(nrLines, nrCols, way,
                     new Point(), new Point(nrLines - 1, nrCols - 1));
+
+            final var dbMz = maze.toDbObj();
+            MazeServices.saveMazeToDb(
+                    new MazeOrm(dbMz.getKey().toString(), dbMz.getValue(), null)
+            );
         } else {
             final MazeOrm mzOrm = MazeServices.getDataByName(mzName);
             maze = new Maze(mzOrm.getForm());

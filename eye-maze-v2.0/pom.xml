@@ -104,7 +104,14 @@
             <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
-    </dependencies>
+		<!-- pair -->
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-base</artifactId>
+			<version>16</version>
+		</dependency>
+
+	</dependencies>
 
 	<build>
 		<plugins>

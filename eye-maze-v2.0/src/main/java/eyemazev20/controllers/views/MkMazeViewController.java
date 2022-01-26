@@ -28,6 +28,7 @@ public class MkMazeViewController {
                     model.addAttribute("mzform", mzData.getForm());
                 }
             } catch (Exception e) {
+                //System.err.println("ERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
                 return "mkmaze";
             }
         }//*/
@@ -47,5 +48,15 @@ public class MkMazeViewController {
         final var mazesName = MazeServices.getAllMazesName(user.getId());
         model.addAttribute("names", mazesName);
         return "my-mazes";
+    }
+
+    @GetMapping("/random-made-mazes")
+    public String viewAllGenMazes(final HttpSession httpSession, final Model model) {
+        if (!AuthService.isAuth(httpSession)) {
+            return "redirect:/login";
+        }
+        final var res = MazeServices.getAllPcGenMazes();
+        model.addAttribute("mazes", res);
+        return "random-made-mazes";
     }
 }

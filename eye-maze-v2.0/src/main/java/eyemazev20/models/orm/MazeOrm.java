@@ -10,7 +10,7 @@ import javax.persistence.*;
 public class MazeOrm {
     @Id
     @GeneratedValue
-    @Column(name = "id", updatable = false)
+    @Column(name = "maze_id", updatable = false)
     private int id;
 
     @Column(name = "mzname", unique = true, nullable = false)
@@ -20,9 +20,9 @@ public class MazeOrm {
     private String form;
 
     @JoinColumn(name = "mkerid", referencedColumnName = "id", updatable = false)
-    private int mkerId;
+    private Integer mkerId;
 
-    public MazeOrm(String name, String form, int mkerId) {
+    public MazeOrm(String name, String form, Integer mkerId) {
         this.name = name;
         this.form = form;
         this.mkerId = mkerId;
