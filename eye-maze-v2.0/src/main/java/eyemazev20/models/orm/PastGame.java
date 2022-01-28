@@ -12,6 +12,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.sql.Timestamp;
+import java.util.Arrays;
 
 @TypeDefs({
         @TypeDef(
@@ -92,5 +93,16 @@ public class PastGame {
 
     public void setPlUUIDs(String[] plUUIDs) {
         this.plUUIDs = plUUIDs;
+    }
+
+    @Override
+    public String toString() {
+        return "PastGame{" +
+                "roomUUID='" + roomUUID + '\'' +
+                ", scores=" + Arrays.toString(scores) +
+                ", plUUIDs=" + Arrays.toString(plUUIDs) +
+                ", timestp=" + timestp +
+                ", mazeId=" + mazeId +
+                '}';
     }
 }

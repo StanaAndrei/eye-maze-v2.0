@@ -25,8 +25,8 @@ public class GameViewController {
         if (!AuthService.isAuth(httpSession)) {
             return "redirect:/login";
         }
-        final var loginUUID = httpSession.getAttribute("loginUUID");
-        final var pgDto = GameService.getPastGameData(uuid, loginUUID.toString());
+        var loginUUID = httpSession.getAttribute("loginUUID");
+        var pgDto = GameService.getPastGameData(uuid, loginUUID.toString());
         model.addAttribute("pg", pgDto.toJson());
         RoomService.uidToRoom.remove(uuid);
         return "past-game";

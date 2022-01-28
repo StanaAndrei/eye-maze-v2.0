@@ -17,6 +17,10 @@ public class PastGameDto {
     private String mzName;
     private String []profilePics;
 
+    public void swapScores() {
+
+    }
+
     public JSONObject toJson() {
         final var jsonObject = new JSONObject();
         jsonObject.put("scores", scores);

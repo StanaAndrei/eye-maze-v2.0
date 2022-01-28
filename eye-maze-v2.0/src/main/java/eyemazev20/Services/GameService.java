@@ -107,12 +107,12 @@ public class GameService {
     }
 
     public static PastGameDto getPastGameData(UUID roomUUID, String loginUUID) {
-        final var qs = "SELECT " +
-                "{pg.*}, {u.*}, {u2.*}, {mz.*} " +
-                "FROM PastGames pg NATURAL JOIN Mazes mz " +
-                "JOIN Users u ON(u.loginUUID = ANY(pg.pluuids)) \n" +
-                "JOIN Users u2 ON(u2.loginUUID = ANY(pg.pluuids))\n" +
-                "WHERE pg.roomUUID = :roomUUID AND u.username <> u2.username AND u.loginUUID = :loginUUID";
+        final var qs = "SELECT DISTINCT ON(pg.roomUUID)\n" +
+                "{pg.*}, {u.*}, {u2.*}, {mz.*}\n" +
+                "FROM PastGames pg NATURAL JOIN Mazes mz\n" +
+                "JOIN Users u ON(u.loginUUID = pg.pluuids[1]) \n" +
+                "JOIN Users u2 ON(u2.loginUUID = pg.pluuids[2])\n" +
+                "WHERE pg.roomUUID = :roomUUID AND u.username <> u2.username";
         ;
         final var query = UtilVars.session.createSQLQuery(qs);//Query(qs);
 
@@ -122,24 +122,37 @@ public class GameService {
         query.addEntity("mz", MazeOrm.class);
 
         query.setParameter("roomUUID", roomUUID.toString());
-        query.setParameter("loginUUID", loginUUID);
 
         final List<Object[]> list = query.list();
-        final var res = list.get(0);
+        final Object[] res;
+        try {
+            res = list.get(0);
+        } catch (IndexOutOfBoundsException exception) {
+            return null;
+        }
         final var u = (User) res[0];
         final var u2 = (User) res[1];
         final var pg = (PastGame) res[2];
         final var mz = (MazeOrm) res[3];
         System.out.println(u.getUsername() + "---"  + u2.getUsername());
-        System.out.println(pg.getScores()[0] + "---" + pg.getScores()[1]);
+        System.out.println(pg);
+
+        int score0, score1;
+        if (u.getLoginUUID().equals(pg.getPlUUIDs()[0])) {
+            score0 = pg.getScores()[0];
+            score1 = pg.getScores()[1];
+        } else {
+            score0 = pg.getScores()[1];
+            score1 = pg.getScores()[0];
+        }
         return new PastGameDto(
                 new String[] {
                         u.getUsername(),
                         u2.getUsername()
                 },
                 new int[] {
-                        pg.getScores()[0],
-                        pg.getScores()[1]
+                        score0,
+                        score1
                 },
                 pg.getTimestp(),
                 mz.getName(),
@@ -150,11 +163,23 @@ public class GameService {
         );//*/
     }
 
-    public static ArrayList<PastGame> getPastGamesOfUser(String loginUUID) {
+    public static ArrayList<PastGame> getPastGamesOfUser(final String loginUUID) {
         final var qs = "SELECT {pg.*} FROM PastGames AS pg WHERE :loginUUID = ANY(pg.plUUIDs)";
         final var query = UtilVars.session.createSQLQuery(qs);
         query.setParameter("loginUUID", loginUUID);
         query.addEntity("pg", PastGame.class);
         return (ArrayList<PastGame>) query.list();
     }//*/
+
+    public static String getOther(final String roomUUID, final String loginUUID) {
+        final var qs = "FROM PastGame WHERE roomUUID = :roomUUID";
+        final var query = UtilVars.session.createQuery(qs);
+        query.setParameter("roomUUID", roomUUID);
+        final var res = ((List<PastGame>) query.list()).get(0);
+        if (res.getPlUUIDs()[0].equals(loginUUID)) {
+            return res.getPlUUIDs()[1];
+        } else  {
+            return res.getPlUUIDs()[0];
+        }
+    }
 }
