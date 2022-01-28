@@ -16,32 +16,45 @@
     <br>
     <i style="color: red;">if data isn't loading pls refresh the page</i>
     <br>
+    <h6>map:</h6>
+    <a id="map"></a>
+    <hr>
     <h6>finished at:</h6>
     <h6 id="data"></h6>
     <table style="width:100%">
-        <tr>
-            <th>Name</th>
-            <th>Score</th>
+        <tr id="fi-tr">
+            <th>player1</th>
+            <th>player2</th>
         </tr>
         <tr>
             <td id="name0"></td>
-            <td id="score0"></td>
+            <td id="name1"></td>
         </tr>
         <tr>
-            <td id="name1"></td>
+            <td><img id="img0" width="70" height="70" src="" alt="FAILED TO LOAD IMG"></td>
+            <td><img id="img1" width="70" height="70" src="" alt="FAILED TO LOAD IMG"></td>
+        </tr>
+        <tr>
+            <td id="score0"></td>
             <td id="score1"></td>
         </tr>
     </table>
 </body>
 <script>
     function loadData() {
-        const pgAsJson = '[[${pg}]]'.replaceAll('&quot;', '"');
+        let pgAsJson = '[[${pg}]]';
+        pgAsJson = pgAsJson.replaceAll('&quot;', '"');
         const pg = JSON.parse(pgAsJson);
-
+        console.log('====================================');
+        console.log(pg);
+        console.log('====================================');
         $('#data').text(pg.timestp);
+        $('#map').text(pg.mzName);
+        $('#map')[0].href = `/mkmaze/${pg.mzName}`;
         for (let i = 0; i < pg.playersName.length; i++) {
             $(`#name${i}`).text(pg.playersName[i]);
             $(`#score${i}`).text(pg.scores[i]);
+            $(`#img${i}`)[0].src = pg.profilePics[i];
         }
     }
     loadData();

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.sql.Timestamp;
@@ -59,6 +60,9 @@ public class PastGame {
     @Generated(GenerationTime.INSERT)
     private Timestamp timestp;//*/
 
+    @Column(name = "maze_id")
+    private int mazeId;
+
     public int[] getScores() {
         return scores;
     }
@@ -75,10 +79,11 @@ public class PastGame {
         this.roomUUID = roomUUID;
     }
 
-    public PastGame(String roomUUID, String[] plUUIDs, int[] scores) {
+    public PastGame(String roomUUID, String[] plUUIDs, int[] scores, int mazeId) {
         this.roomUUID = roomUUID;
         this.plUUIDs = plUUIDs;
         this.scores = scores;
+        this.mazeId = mazeId;
     }
 
     public String[] getPlUUIDs() {

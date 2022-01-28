@@ -12,10 +12,16 @@ import java.util.function.BiConsumer;
 public class Game {
     final private Maze maze;
     final private Player[]players;
-    public Game(Player []players, Maze maze) throws InvalidParameterException {
+    private int mazeId;
+    public Game(Player []players, Maze maze, int mazeId) throws InvalidParameterException {
         assert (players.length == 2);
         this.maze = maze;
         this.players = players;
+        this.mazeId = mazeId;
+    }
+
+    public int getMazeId() {
+        return mazeId;
     }
 
     public JSONObject getGameStateAsJson(final UUID roomUUId) {

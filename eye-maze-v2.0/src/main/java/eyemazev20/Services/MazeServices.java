@@ -8,21 +8,24 @@ import org.hibernate.Transaction;
 import org.springframework.stereotype.Service;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class MazeServices {
 
-    public static void saveMazeToDb(final MazeOrm mazeOrm) {
+    public static int saveMazeToDb(final MazeOrm mazeOrm) {
+        Serializable mazeId = null;
         Transaction transaction = null;
         try {
             transaction = UtilVars.session.beginTransaction();
-            UtilVars.session.save(mazeOrm);
+            mazeId = UtilVars.session.save(mazeOrm);
             transaction.commit();
         } catch (HibernateException hibernateException) {
             HbmEx.handleHbmErrs(transaction, hibernateException);
         }
+        return (int) mazeId;
     }
 
     public static void removeMazeFromDb(final int id) {

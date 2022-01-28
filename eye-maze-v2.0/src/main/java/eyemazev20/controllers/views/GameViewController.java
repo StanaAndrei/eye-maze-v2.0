@@ -5,44 +5,35 @@ import eyemazev20.Services.AuthService;
 import eyemazev20.Services.GameService;
 import eyemazev20.Services.RoomService;
 import eyemazev20.Services.UserService;
+import eyemazev20.models.orm.PastGame;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import java.util.Collections;
-import java.util.UUID;
+import java.util.*;
 
+@SuppressWarnings("unused")
 @SessionAttributes("loginUUID")
 @Controller
 public class GameViewController {
     @GetMapping("/past-game/{uuid}")
-    public ModelAndView getPastGameStats(@PathVariable UUID uuid, HttpSession httpSession) {
-        final var mav = new ModelAndView("past-game");
-        try {
-            final var pastGame = GameService.getPastGameData(uuid);
-            //Thread.sleep((long) (1000 * Math.random() + Math.random() * 100));
-            final String pl0 = UserService.getUserData(pastGame.getPlUUIDs()[0]).getUsername();
-            //Thread.sleep((long) (1000 * Math.random() + Math.random() * 100));
-            final String pl1 = UserService.getUserData(pastGame.getPlUUIDs()[1]).getUsername();
-            //Thread.sleep((long) (1000 * Math.random() + Math.random() * 100));
-
-            //System.out.println("tst:" + pastGame.getTimestp());
-            var pastGameDto = new PastGameDto(new String[]{pl0, pl1}, pastGame.getScores(), pastGame.getTimestp());
-            mav.addObject("pg", pastGameDto.toJson());
-            RoomService.uidToRoom.remove(uuid);
-            httpSession.removeAttribute("currRoomUUID");
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        } finally {
-            return mav;
+    public String getPastGameStats(@PathVariable final UUID uuid, final HttpSession httpSession, final Model model) {
+        if (!AuthService.isAuth(httpSession)) {
+            return "redirect:/login";
         }
+        final var loginUUID = httpSession.getAttribute("loginUUID");
+        final var pgDto = GameService.getPastGameData(uuid, loginUUID.toString());
+        model.addAttribute("pg", pgDto.toJson());
+        RoomService.uidToRoom.remove(uuid);
+        return "past-game";
     }
 
     @GetMapping("/history")
-    public ModelAndView getHistoryPage(HttpSession httpSession) {
+    public ModelAndView getHistoryPage(final HttpSession httpSession) {
         if (!AuthService.isAuth(httpSession)) return new ModelAndView("redirect:/");
         final var mav = new ModelAndView("history");
         final var loginUUID = httpSession.getAttribute("loginUUID");

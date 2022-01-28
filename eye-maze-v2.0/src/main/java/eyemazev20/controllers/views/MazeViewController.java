@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import javax.servlet.http.HttpSession;
 
 @Controller
-public class MkMazeViewController {
+public class MazeViewController {
     @GetMapping(value = {"/mkmaze", "/mkmaze/{mzname}"})
     public String mkMaze(
             final HttpSession httpSession,

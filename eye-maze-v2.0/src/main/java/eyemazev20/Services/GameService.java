@@ -1,6 +1,7 @@
 package eyemazev20.Services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import eyemazev20.Dtos.http.PastGameDto;
 import eyemazev20.Dtos.http.StringDto;
 import eyemazev20.exceptions.HbmEx;
 import eyemazev20.models.entities.Game;
@@ -8,15 +9,23 @@ import eyemazev20.models.entities.Maze;
 import eyemazev20.models.entities.Player;
 import eyemazev20.models.orm.MazeOrm;
 import eyemazev20.models.orm.PastGame;
+import eyemazev20.models.orm.User;
 import eyemazev20.utils.Point;
 import eyemazev20.utils.UtilVars;
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
+import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+
+import com.vladmihalcea.hibernate.type.array.StringArrayType;
+import org.hibernate.dialect.PostgreSQL94Dialect;
 
 @Service
 public class GameService {
@@ -36,22 +45,24 @@ public class GameService {
 
         Maze maze;
         final var mzName = RoomService.uidToRoom.get(roomUUID).getMzName();
+        int mazeId;
         if (mzName == null) {
             maze = new Maze(nrLines, nrCols, way,
                     new Point(), new Point(nrLines - 1, nrCols - 1));
 
             final var dbMz = maze.toDbObj();
-            MazeServices.saveMazeToDb(
+            mazeId = MazeServices.saveMazeToDb(
                     new MazeOrm(dbMz.getKey().toString(), dbMz.getValue(), null)
             );
         } else {
             final MazeOrm mzOrm = MazeServices.getDataByName(mzName);
+            mazeId = mzOrm.getId();
             maze = new Maze(mzOrm.getForm());
             playerStartI = maze.getStart().getLine();
             playerStartJ = maze.getStart().getCol();
         }
         var players = new Player[] {new Player(playerStartI, playerStartJ), new Player(playerStartI, playerStartJ)};
-        RoomService.uidToRoom.get(roomUUID).game = new Game(players, maze);
+        RoomService.uidToRoom.get(roomUUID).game = new Game(players, maze, mazeId);
     }
 
     public static boolean movePlayer(final UUID roomUUId, final String dir, int playerNr) {
@@ -73,7 +84,7 @@ public class GameService {
     public static void addGameToPastGames(final UUID roomUUID) {
         final var game = RoomService.uidToRoom.get(roomUUID).game;
 
-        List<Integer> coins = new ArrayList<>();
+        final List<Integer> coins = new ArrayList<>();
         for (final var player : game.getPlayers()) {
             coins.add(player.getCoins());
         }
@@ -85,7 +96,8 @@ public class GameService {
             final var pastGame = new PastGame(
                     roomUUID.toString(),
                     RoomService.uidToRoom.get(roomUUID).getPlUUIDs(),
-                    coins.stream().mapToInt(coin -> coin).toArray()
+                    coins.stream().mapToInt(coin -> coin).toArray(),
+                    game.getMazeId()
             );
             UtilVars.session.save(pastGame);
             transaction.commit();
@@ -94,12 +106,48 @@ public class GameService {
         }
     }
 
-    public static PastGame getPastGameData(UUID roomUUID) {
-        final var qs = "SELECT {pg.*} FROM PastGames AS pg WHERE pg.roomUUID = :roomUUID";
+    public static PastGameDto getPastGameData(UUID roomUUID, String loginUUID) {
+        final var qs = "SELECT " +
+                "{pg.*}, {u.*}, {u2.*}, {mz.*} " +
+                "FROM PastGames pg NATURAL JOIN Mazes mz " +
+                "JOIN Users u ON(u.loginUUID = ANY(pg.pluuids)) \n" +
+                "JOIN Users u2 ON(u2.loginUUID = ANY(pg.pluuids))\n" +
+                "WHERE pg.roomUUID = :roomUUID AND u.username <> u2.username AND u.loginUUID = :loginUUID";
+        ;
         final var query = UtilVars.session.createSQLQuery(qs);//Query(qs);
-        query.setParameter("roomUUID", roomUUID.toString());
+
+        query.addEntity("u", User.class);
+        query.addEntity("u2", User.class);
         query.addEntity("pg", PastGame.class);
-        return ((List<PastGame>) query.list()).get(0);
+        query.addEntity("mz", MazeOrm.class);
+
+        query.setParameter("roomUUID", roomUUID.toString());
+        query.setParameter("loginUUID", loginUUID);
+
+        final List<Object[]> list = query.list();
+        final var res = list.get(0);
+        final var u = (User) res[0];
+        final var u2 = (User) res[1];
+        final var pg = (PastGame) res[2];
+        final var mz = (MazeOrm) res[3];
+        System.out.println(u.getUsername() + "---"  + u2.getUsername());
+        System.out.println(pg.getScores()[0] + "---" + pg.getScores()[1]);
+        return new PastGameDto(
+                new String[] {
+                        u.getUsername(),
+                        u2.getUsername()
+                },
+                new int[] {
+                        pg.getScores()[0],
+                        pg.getScores()[1]
+                },
+                pg.getTimestp(),
+                mz.getName(),
+                new String[] {
+                        u.getProfilePicB64(),
+                        u2.getProfilePicB64()
+                }
+        );//*/
     }
 
     public static ArrayList<PastGame> getPastGamesOfUser(String loginUUID) {
