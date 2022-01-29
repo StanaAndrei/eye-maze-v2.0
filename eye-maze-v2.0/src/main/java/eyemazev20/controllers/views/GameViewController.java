@@ -21,11 +21,17 @@ import java.util.*;
 @Controller
 public class GameViewController {
     @GetMapping("/past-game/{uuid}")
-    public String getPastGameStats(@PathVariable final UUID uuid, final HttpSession httpSession, final Model model) {
+    public String getPastGameStats(
+            @PathVariable final UUID uuid,
+            final HttpSession httpSession,
+            final Model model
+    ) throws InterruptedException {
         if (!AuthService.isAuth(httpSession)) {
             return "redirect:/login";
         }
         var loginUUID = httpSession.getAttribute("loginUUID");
+        Thread.sleep((new Random()).nextInt(1500 - 300) + 300);
+
         var pgDto = GameService.getPastGameData(uuid, loginUUID.toString());
         model.addAttribute("pg", pgDto.toJson());
         RoomService.uidToRoom.remove(uuid);

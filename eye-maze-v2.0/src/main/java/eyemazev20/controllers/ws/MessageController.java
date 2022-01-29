@@ -62,9 +62,9 @@ public class MessageController {
         final var currUser = UserService.getUserData(curr);
 
         messageService.sendJoinLeaveMessage(other, JoinLeaveDto.STATE.LEFT, currUser.getUsername());
-        if (RoomService.uidToRoom.get(roomUUID).game == null) {
+        if (RoomService.uidToRoom.get(roomUUID) != null && RoomService.uidToRoom.get(roomUUID).game == null) {
             RoomService.leaveRoom(roomUUID, curr);
-        }
+        }//*/
     }
 
     @MessageMapping("/launch-message")

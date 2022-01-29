@@ -5,10 +5,18 @@ import "https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"
 import handleInp from "./handleInp.js"
 import GameState from "./GameState.js";
 
+const myProfilePicB64 = document.querySelector('meta[name=myProfilePicB64]').content;
+const otherProfilePicB64 = document.querySelector('meta[name=otherProfilePicB64]').content;
+let myProfilePic, otherProfilePic;
+
 let stompClient;
 
 const initP5 = p5context => {
     p5context.preload = () => {
+        //load
+        myProfilePic = p5context.loadImage(myProfilePicB64);
+        otherProfilePic = p5context.loadImage(otherProfilePicB64);
+        //ws
         let socket = new SockJS('/our-websocket');
         stompClient = Stomp.over(socket);
         stompClient.connect({}, frame => {
@@ -18,7 +26,7 @@ const initP5 = p5context => {
                 }
                 const res = JSON.parse(message.body).buffer;
                 if (res.startsWith('OVER!')) {
-                    setTimeout(() => window.location.assign(`/past-game/${res.substr(6)}`), 1000);
+                    setTimeout(() => window.location.assign(`/past-game/${res.substr(6)}`), 1);
                 } else {
                     const state = JSON.parse(res);
                     GameState.setState(state);
@@ -51,7 +59,7 @@ const initP5 = p5context => {
         }
 
         p5context.background('black');
-        GameState.draw(p5context);
+        GameState.draw(p5context, myProfilePic, otherProfilePic);
 
         const inp = handleInp(p5context);
         if (inp) {

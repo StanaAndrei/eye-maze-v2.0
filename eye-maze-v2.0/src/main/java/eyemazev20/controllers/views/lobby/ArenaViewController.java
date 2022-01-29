@@ -1,26 +1,28 @@
 package eyemazev20.controllers.views.lobby;
 
 import eyemazev20.Services.RoomService;
+import eyemazev20.Services.UserService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.util.Random;
 import java.util.UUID;
 
 @SessionAttributes("loginUUID")
 @Controller
 public class ArenaViewController {
     @GetMapping("/arena/{uuid}")
-    public ModelAndView getArenaPage(@PathVariable UUID uuid, HttpSession httpSession) {
+    public String getArenaPage(@PathVariable final UUID uuid, final HttpSession httpSession, final Model model) throws InterruptedException {
         if (httpSession.getAttribute("loginUUID") == null) {
-            return new ModelAndView("redirect:/login");
+            return ("redirect:/login");
         }
 
         if (!RoomService.uidToRoom.containsKey(uuid)) {
-            return new ModelAndView("redirect:/");
+            return ("redirect:/");
         }
 
         final  var loginUUID = httpSession.getAttribute("loginUUID").toString();
@@ -30,14 +32,29 @@ public class ArenaViewController {
 
         if (player0 == null && player1 == null) {
             RoomService.uidToRoom.remove(uuid);
-            return new ModelAndView("redirect:/play");
+            return ("redirect:/play");
         }
         if (loginUUID != null) {
             if (player0 != null && !player0.equals(loginUUID) && player1 != null && !player1.equals(loginUUID)) {
-                return new ModelAndView("redirect:/play");
+                return ("redirect:/play");
             }
-        }//*/
-        final var mav = new ModelAndView("arena");
-        return mav;
+        }
+
+        String myLoginUUID, otherLoginUUID;
+        if (player0.equals(loginUUID)) {
+            myLoginUUID = player0;
+            otherLoginUUID = player1;
+        } else {
+            myLoginUUID = player1;
+            otherLoginUUID = player0;
+        }
+
+        Thread.sleep((new Random()).nextInt(1000));
+        final var user = UserService.getUserData(myLoginUUID);
+        model.addAttribute("myProfilePicB64", user.getProfilePicB64());
+        Thread.sleep((new Random()).nextInt(1000));
+        final var other = UserService.getUserData(otherLoginUUID);
+        model.addAttribute("otherProfilePicB64", other.getProfilePicB64());
+        return "arena";
     }
 }

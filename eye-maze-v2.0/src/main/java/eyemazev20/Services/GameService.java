@@ -134,8 +134,6 @@ public class GameService {
         final var u2 = (User) res[1];
         final var pg = (PastGame) res[2];
         final var mz = (MazeOrm) res[3];
-        System.out.println(u.getUsername() + "---"  + u2.getUsername());
-        System.out.println(pg);
 
         int score0, score1;
         if (u.getLoginUUID().equals(pg.getPlUUIDs()[0])) {

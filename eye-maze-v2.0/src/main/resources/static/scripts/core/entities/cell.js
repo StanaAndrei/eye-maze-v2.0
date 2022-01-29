@@ -9,12 +9,19 @@ export default class Cell {
         this.hasCoin = hasCoin;
     }
 
-    highlight(p5context, color) {
+    highlight(p5context, texture, op = undefined) {
         const startX = this.col * Cell.CELL_W;
         const startY = this.line * Cell.CELL_H;
-        p5context.noStroke();
-        p5context.fill(color);
-        p5context.rect(startX, startY, Cell.CELL_W - 3, Cell.CELL_H - 5);
+        if (op != undefined) {
+            p5context.push();
+            p5context.tint(255, op);
+            p5context.image(texture, startX, startY, Cell.CELL_W, Cell.CELL_H);
+            p5context.pop();
+        } else {
+            p5context.noStroke();
+            p5context.fill(texture);
+            p5context.rect(startX, startY, Cell.CELL_W - 3, Cell.CELL_H - 5);
+        }
     }
 
     draw(p5context) {

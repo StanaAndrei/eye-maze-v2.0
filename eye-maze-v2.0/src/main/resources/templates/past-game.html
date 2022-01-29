@@ -45,9 +45,6 @@
         let pgAsJson = '[[${pg}]]';
         pgAsJson = pgAsJson.replaceAll('&quot;', '"');
         const pg = JSON.parse(pgAsJson);
-        console.log('====================================');
-        console.log(pg);
-        console.log('====================================');
         $('#data').text(pg.timestp);
         $('#map').text(pg.mzName);
         $('#map')[0].href = `/mkmaze/${pg.mzName}`;

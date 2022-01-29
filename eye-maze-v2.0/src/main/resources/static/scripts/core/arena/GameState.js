@@ -19,7 +19,7 @@ export default class GameState {
         this.finish = state.finish;
     }
 
-    static draw(p5context) {
+    static draw(p5context, myProfilePic, otherProfilePic) {
         Cell.CELL_W = p5context.width / this.m;
         Cell.CELL_H = p5context.height / this.n;
         const loginUUID = document.querySelector('meta[name=loginUUID]').content;
@@ -29,9 +29,9 @@ export default class GameState {
                 for (let player of this.players) {
                     const { line, col, plUUID } = player;
                     if (i === line && j === col) {
-                        const op = plUUID === loginUUID ? 255 : 100;
-                        const color = p5context.color(245, 5, 5, op);
-                        this.cells[i][j].highlight(p5context, color);
+                        const texture = plUUID === loginUUID ? myProfilePic : otherProfilePic;
+                        const op = plUUID === loginUUID ? 255 : 200;
+                        this.cells[i][j].highlight(p5context, texture, op);
                     }
                     if (i === this.finish.line && j === this.finish.col) {
                         this.cells[i][j].highlight(p5context, p5context.color(56, 94, 0));
