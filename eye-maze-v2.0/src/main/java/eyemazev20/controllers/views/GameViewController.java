@@ -1,5 +1,6 @@
 package eyemazev20.controllers.views;
 
+import eyemazev20.Dtos.http.GameHistoryViewDto;
 import eyemazev20.Dtos.http.PastGameDto;
 import eyemazev20.Services.AuthService;
 import eyemazev20.Services.GameService;
@@ -39,28 +40,37 @@ public class GameViewController {
     }
 
     @GetMapping("/history")
-    public ModelAndView getHistoryPage(final HttpSession httpSession) {
-        if (!AuthService.isAuth(httpSession)) return new ModelAndView("redirect:/");
-        final var mav = new ModelAndView("history");
+    public String getHistoryPage(final HttpSession httpSession, final Model model) {
+        if (!AuthService.isAuth(httpSession)) return ("redirect:/");
         final var loginUUID = httpSession.getAttribute("loginUUID");
-        final var res = GameService.getPastGamesOfUser(loginUUID.toString());
+        final var pastGames = GameService.getPastGamesOfUser(loginUUID.toString());
 
-        for (var pastgame : res) {
-            if (!pastgame.getPlUUIDs()[0].equals(loginUUID.toString())) {
-                {
-                    var aux = pastgame.getPlUUIDs()[0];
-                    pastgame.getPlUUIDs()[0] = pastgame.getPlUUIDs()[1];
-                    pastgame.getPlUUIDs()[1] = aux;
-                }
-                {
-                    var aux = pastgame.getScores()[0];
-                    pastgame.getScores()[0] = pastgame.getScores()[1];
-                    pastgame.getScores()[1] = aux;
-                }
+
+        final var ans = new ArrayList<GameHistoryViewDto>();
+        for (final var pastGame : pastGames) {
+            GameHistoryViewDto.STATE state;
+            int meIdx, otherIdx;
+
+            if (loginUUID.toString().equals(pastGame.getPlUUIDs()[0])) {
+                meIdx = 0;
+            } else {
+                meIdx = 1;
             }
+            otherIdx = 1 - meIdx;
+
+            if (pastGame.getScores()[meIdx] < pastGame.getScores()[otherIdx]) {
+                state = GameHistoryViewDto.STATE.LOST;
+            } else if (pastGame.getScores()[meIdx] > pastGame.getScores()[otherIdx]) {
+                state = GameHistoryViewDto.STATE.WON;
+            } else {
+                state = GameHistoryViewDto.STATE.DRAW;
+            }
+
+            ans.add(new GameHistoryViewDto(pastGame.getRoomUUID(), state));
         }
-        Collections.reverse(res);
-        mav.addObject("pastGames", res);
-        return mav;
+
+        Collections.reverse(ans);
+        model.addAttribute("pastGames", ans.toString());
+        return "history";
     }
 }
