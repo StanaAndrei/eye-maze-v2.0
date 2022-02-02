@@ -11,6 +11,8 @@
 </head>
 
 <body th:attr="onload='{\''+${session.loginUUID}+ '\' !== `null` ? window.location.assign(`/`) : {}}'">
+    <div th:replace="frags :: header"></div>
+
     <h2>LOGIN</h2>
     <form>
         <input id="email" type="email" placeholder="email" autofocus>

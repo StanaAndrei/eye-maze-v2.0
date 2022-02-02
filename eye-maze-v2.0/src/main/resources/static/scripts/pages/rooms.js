@@ -1,6 +1,7 @@
 import joinRoom from "../api/room/join.js";
 
-$('li').click(async event => {
+console.warn('pressssss');
+$('.room').click(async event => {
     event.preventDefault();
     const code = event.target.id;
     await joinRoom(code);

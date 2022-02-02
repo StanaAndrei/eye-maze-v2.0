@@ -1,5 +1,4 @@
 import leaveRoom from "../api/room/leave.js";
-import sleep from "../util/sleep.js";
 
 const broadcastCh = new BroadcastChannel('check-dupl');
 broadcastCh.postMessage('open');
@@ -55,7 +54,6 @@ function connect() {
     let socket = new SockJS('/our-websocket');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, frame => {
-        console.log(12345);
         //console.log('connected:' + frame);
         stompClient.subscribe('/user/topic/join-leave', resMessage => {
             const { who, state } = JSON.parse(resMessage.body);
@@ -80,7 +78,7 @@ function connect() {
             const roomUUID = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
             if (state === 'LAUNCH') {
                 window.onbeforeunload = undefined;
-                stompClient.disconnect(() => {});
+                stompClient.disconnect(() => { });
                 sessionStorage.wMouse = (new URLSearchParams(window.location.search)).has('wmouse');
                 window.location.assign(`/arena/${roomUUID}`);
                 return;
@@ -97,6 +95,7 @@ function connect() {
 
 $('#leave-btn').click(async event => {
     event.preventDefault();
+    window.onbeforeunload = undefined;
     await stompClient.disconnect();
     await leaveRoom();
     window.location.assign('/play');
@@ -124,3 +123,5 @@ window.onload = async () => {
     checkRef();
     connect();
 }
+
+window.onbeforeunload = () => '';

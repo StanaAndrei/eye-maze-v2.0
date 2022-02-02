@@ -9,10 +9,12 @@
     <title>Document</title>
 </head>
 <body onload="setTimeout(() => window.location.reload(), 3000)">
+    <div th:replace="frags :: header"></div>
+
     <b>click to join!</b><br>
     <i th:text="'available rooms: ' + ${#lists.size(codes)}"></i><br>
-    <ul th:each="code : ${codes}">
-        <li th:id="${code}" th:text="${code}"></li>
+    <ul id="rooms" th:each="code : ${codes}">
+        <div class="room" th:id="${code}" th:text="${code}"></div>
     </ul>
 </body>
 <style>

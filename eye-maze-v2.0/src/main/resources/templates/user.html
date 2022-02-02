@@ -10,6 +10,8 @@
 </head>
 
 <body>
+    <div th:replace="frags :: header"></div>
+
     <h1>USER PAGE</h1>
     <p th:text="'Hello, ' + ${username} + '!'"></p>
     <hr>

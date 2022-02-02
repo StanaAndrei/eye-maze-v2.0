@@ -71,7 +71,8 @@ public class MessageController {
     @SendToUser("/topic/launch-message")
     public LaunchResMess launchGame(final Principal principal) throws Exception {
         final var roomUUID = RoomService.getRoomUUIDOfPlayer(principal.getName());
-        if (!RoomService.uidToRoom.get(roomUUID).addToReady(principal.getName())) {
+        if (RoomService.uidToRoom.get(roomUUID) != null &&
+                !RoomService.uidToRoom.get(roomUUID).addToReady(principal.getName())) {
             return null;
         }
 

@@ -11,9 +11,11 @@
 </head>
 
 <body>
+    <div th:replace="frags :: header"></div>
+
     <h1>HISTORY</h1>
-    <h3 th:text="'Total matches: ' + ${#lists.size(pastGames)}"></h3><br>
-    <ul></ul>
+    <!--<h3 th:text="'Total matches: ' + ${#lists.size(pastGames)}"></h3><br>-->
+    <ul id="matches"></ul>
 </body>
 <style>
     li {

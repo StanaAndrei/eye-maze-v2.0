@@ -8,10 +8,8 @@ for (let pastGame of pastGames) {
     stateToCol['WON'] = 'green';
     stateToCol['LOST'] = 'red';
     stateToCol['DRAW'] = '#e6e632';
-    $('ul').append(`
-        <li
-            id="${pastGame.code}"
-        >
+    $('#matches').append(`
+        <li>
             <a
                 style="color: ${stateToCol[pastGame.state]}"
                 href="/past-game/${pastGame.code}"
