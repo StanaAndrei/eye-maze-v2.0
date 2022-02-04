@@ -31,7 +31,7 @@ public class GameViewController {
             return "redirect:/login";
         }
         var loginUUID = httpSession.getAttribute("loginUUID");
-        Thread.sleep((new Random()).nextInt(1500 - 300) + 300);
+        Thread.sleep((new Random()).nextInt(2000 - 500) + 500);
 
         var pgDto = GameService.getPastGameData(uuid, loginUUID.toString());
         model.addAttribute("pg", pgDto.toJson());
@@ -44,7 +44,6 @@ public class GameViewController {
         if (!AuthService.isAuth(httpSession)) return ("redirect:/");
         final var loginUUID = httpSession.getAttribute("loginUUID");
         final var pastGames = GameService.getPastGamesOfUser(loginUUID.toString());
-
 
         final var ans = new ArrayList<GameHistoryViewDto>();
         for (final var pastGame : pastGames) {

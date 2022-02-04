@@ -1,6 +1,6 @@
 package eyemazev20;
 
-import eyemazev20.Services.GlobalMessageService;
+import eyemazev20.config.MatchMakerConfig;
 import eyemazev20.config.OrmConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,6 +23,7 @@ public class Application {
 		application.run(args);
 		var ctx = new AnnotationConfigApplicationContext();
 		ctx.register(OrmConfig.class);
+		ctx.register(MatchMakerConfig.class);
 		ctx.close();
 		testing();
 	}

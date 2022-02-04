@@ -9,6 +9,7 @@ import eyemazev20.Services.RoomService;
 import eyemazev20.Services.UserService;
 import eyemazev20.Services.ws.MessageService;
 import eyemazev20.models.entities.Room;
+import eyemazev20.models.orm.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.handler.annotation.Headers;
@@ -23,6 +24,7 @@ import org.springframework.web.util.HtmlUtils;
 import javax.servlet.http.HttpSession;
 import javax.websocket.server.HandshakeRequest;
 import java.security.Principal;
+import java.util.Random;
 
 @SuppressWarnings("unused")
 @Controller
@@ -31,59 +33,81 @@ public class MessageController {
     private MessageService messageService;
 
     @EventListener
-    public void onApplicationEvent(final SessionSubscribeEvent event) {
+    public void onApplicationEvent(final SessionSubscribeEvent event) throws InterruptedException {
         final String destination = SimpMessageHeaderAccessor.wrap(event.getMessage()).getDestination();
         if (!destination.equals("/user/topic/join-leave")) {
             return;
         }
 
+        //System.out.println("JOINNNNNNNNNNN");
         final var curr = event.getUser().getName();
         final var roomUUID = RoomService.getRoomUUIDOfPlayer(curr);
         final var other = RoomService.getOtherPlayer(roomUUID, curr);
 
+        Thread.sleep((new Random()).nextInt(1000 - 300) + 300);
         final var currUser = UserService.getUserData(curr);//*/
 
         messageService.sendJoinLeaveMessage(other, JoinLeaveDto.STATE.JOINED, currUser.getUsername());
         messageService.sendJoinLeaveMessage(curr, JoinLeaveDto.STATE.JOINED, currUser.getUsername());
 
+        //System.err.println("---------------______________----------------------------------------");
         if (!RoomService.canBeJoined(roomUUID)) {
-            final var otherUser = UserService.getUserData(other);
+            Thread.sleep((new Random()).nextInt(1000 - 300) + 300);
+            User otherUser = null;
+            try {
+                otherUser = UserService.getUserData(other);
+            } catch (Exception e) {
+                return;
+            }
             messageService.sendJoinLeaveMessage(curr, JoinLeaveDto.STATE.JOINED, otherUser.getUsername());
         }
     }
 
     @EventListener
-    private void handleSessionDisconnect(final SessionDisconnectEvent event) {
+    private void handleSessionDisconnect(final SessionDisconnectEvent event) throws InterruptedException {
+        //System.err.println("---------------______________----------------------------------------");
 
         final var curr = event.getUser().getName();
-        final var roomUUID = RoomService.getRoomUUIDOfPlayer(curr);
-        final var other = RoomService.getOtherPlayer(roomUUID, curr);
 
-        final var currUser = UserService.getUserData(curr);
+        for (final var room : RoomService.uidToRoom.values()) {
+            if (
+                    (room.getPlUUIDs()[0] != null && room.getPlUUIDs()[0].equals(curr)) ||
+                    (room.getPlUUIDs()[1] != null && room.getPlUUIDs()[1].equals(curr))
+            ) {
+                //System.err.println("---------------______________----------------------------------------" + curr);
+                final var roomUUID = RoomService.getRoomUUIDOfPlayer(curr);
+                final var other = RoomService.getOtherPlayer(roomUUID, curr);
 
-        messageService.sendJoinLeaveMessage(other, JoinLeaveDto.STATE.LEFT, currUser.getUsername());
-        if (RoomService.uidToRoom.get(roomUUID) != null && RoomService.uidToRoom.get(roomUUID).game == null) {
-            RoomService.leaveRoom(roomUUID, curr);
-        }//*/
+                Thread.sleep((new Random()).nextInt(1500 - 500) + 500);
+                final var currUser = UserService.getUserData(curr);
+
+                messageService.sendJoinLeaveMessage(other, JoinLeaveDto.STATE.LEFT, currUser.getUsername());
+                if (RoomService.uidToRoom.get(roomUUID) != null && RoomService.uidToRoom.get(roomUUID).game == null) {
+                    RoomService.leaveRoom(roomUUID, curr);
+                }//*/
+                return;
+            }
+        }
     }
 
     @MessageMapping("/launch-message")
     @SendToUser("/topic/launch-message")
     public LaunchResMess launchGame(final Principal principal) throws Exception {
         final var roomUUID = RoomService.getRoomUUIDOfPlayer(principal.getName());
-        if (RoomService.uidToRoom.get(roomUUID) != null &&
-                !RoomService.uidToRoom.get(roomUUID).addToReady(principal.getName())) {
-            return null;
-        }
-
         final var user = UserService.getUserData(principal.getName());
         final var other = RoomService.getOtherPlayer(roomUUID, principal.getName());
         var state = LaunchResMess.State.READY;
+        if (
+                other != null &&
+                RoomService.uidToRoom.get(roomUUID) != null &&
+                !RoomService.uidToRoom.get(roomUUID).addToReady(principal.getName())
+        ) {
+            return null;
+        }
+
+
         //state = LaunchResMess.State.LAUNCH;//just for the debug
         LaunchResMess launchResMess = new LaunchResMess(user.getUsername(), state);//*/
-        if (other == null) {
-            return launchResMess;
-        }
         messageService.sendLauchMess(other, launchResMess);
 
         if (RoomService.uidToRoom.get(roomUUID).canLaunch()) {

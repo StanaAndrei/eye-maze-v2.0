@@ -50,6 +50,7 @@ $('#send').click(event => {
     $('#message-cont').val('');
 })
 
+let nrCon = 0;
 function connect() {
     let socket = new SockJS('/our-websocket');
     stompClient = Stomp.over(socket);
@@ -57,11 +58,19 @@ function connect() {
         //console.log('connected:' + frame);
         stompClient.subscribe('/user/topic/join-leave', resMessage => {
             const { who, state } = JSON.parse(resMessage.body);
-
             if (state === "JOINED") {
-                $('#lobby-players').append(`<h5 class="lobby-pl" id="${who}">${who}</h5>`);
+                if (!$(`#${who}`)[0]) {
+                    $('#lobby-players').append(`<h5 class="lobby-pl" id="${who}">${who}</h5>`);
+                }
             } else {
                 $(`#${who}`).remove();
+                $(`#${who}`).remove();
+            }//*/
+
+            if ($('#lobby-players').children().length > 1) {
+                $('#launch')[0].disabled = false;
+            } else {
+                $('#launch')[0].disabled = true;
             }
         })
 
@@ -84,8 +93,9 @@ function connect() {
                 return;
             }
 
-            $('#are-ready').append(`<h5>${who}</h5>`);
+            $('#are-ready').append(`<h5 id="${who}">${who}</h5>`);
         })
+
     })
     //sleep(5e3)
     if (!document.querySelectorAll('.lobby-pl').length) {
@@ -102,6 +112,9 @@ $('#leave-btn').click(async event => {
 })
 
 $('#launch').click(event => {
+    event.preventDefault();
+    console.warn($('#launch')[0].disabled);
+    $('#launch')[0].disabled = true;
     stompClient.send('/ws/launch-message');
 })
 
@@ -122,6 +135,10 @@ window.onblur = async () => {
 window.onload = async () => {
     checkRef();
     connect();
+    setTimeout(() => {
+        $('#leave-btn')[0].disabled = false;
+        $('#send')[0].disabled = false;
+    }, 1750);
 }
 
 window.onbeforeunload = () => '';
