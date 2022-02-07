@@ -118,20 +118,22 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<configuration>
-							<mainClass></mainClass>
-						</configuration>
-					</execution>
-				</executions>
-				<configuration>
-					<executable>true</executable>
-					<jvmArguments>
-						--Xmx4096m
-						-Xmx1g
-					</jvmArguments>
-				</configuration>
+				<!-- heap space(destroy space between "-" on line 132)
+<executions>
+    <execution>
+        <configuration>
+            <mainClass></mainClass>
+        </configuration>
+    </execution>
+</executions>
+<configuration>
+    <executable>true</executable>
+    <jvmArguments>
+        - -Xmx4096m
+        -Xmx1g
+    </jvmArguments>
+</configuration>
+-->
 			</plugin>
 		</plugins>
 	</build>
