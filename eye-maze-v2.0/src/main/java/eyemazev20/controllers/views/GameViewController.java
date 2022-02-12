@@ -50,7 +50,7 @@ public class GameViewController {
             GameHistoryViewDto.STATE state;
             int meIdx, otherIdx;
 
-            if (loginUUID.toString().equals(pastGame.getPlUUIDs()[0])) {
+            if (pastGame.getPlUUIDs() != null && loginUUID.toString().equals(pastGame.getPlUUIDs()[0])) {
                 meIdx = 0;
             } else {
                 meIdx = 1;

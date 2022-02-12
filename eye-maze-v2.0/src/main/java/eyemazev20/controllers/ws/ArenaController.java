@@ -74,7 +74,7 @@ public class ArenaController {
 
     @SuppressWarnings("unused")
     @EventListener
-    public void onDisconnectEvent(SessionDisconnectEvent event) {/*
+    public void onDisconnectEvent(SessionDisconnectEvent event) {
         final UUID roomUUID = RoomService.getRoomUUIDOfPlayer(event.getUser().toString());
         if (RoomService.uidToRoom.get(roomUUID) == null) {
             return;
