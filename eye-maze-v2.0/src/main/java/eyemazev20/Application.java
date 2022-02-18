@@ -1,7 +1,7 @@
 package eyemazev20;
 
-import eyemazev20.config.MatchMakerConfig;
-import eyemazev20.config.OrmConfig;
+import eyemazev20.Configs.MatchMakerConfig;
+import eyemazev20.Configs.OrmConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;

@@ -1,9 +1,9 @@
 package eyemazev20.Services;
 
 import eyemazev20.Dtos.http.UserInfoDto;
-import eyemazev20.exceptions.HbmEx;
-import eyemazev20.models.orm.User;
-import eyemazev20.utils.UtilVars;
+import eyemazev20.Exceptions.HbmEx;
+import eyemazev20.Models.orm.User;
+import eyemazev20.Utils.UtilVars;
 import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
 

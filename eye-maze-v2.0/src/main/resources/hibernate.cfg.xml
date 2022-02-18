@@ -15,9 +15,9 @@
 
         <property name="show_sql">true</property>
 
-        <mapping class="eyemazev20.models.orm.PastGame"></mapping>
-        <mapping class="eyemazev20.models.orm.MazeOrm"></mapping>
-        <mapping class="eyemazev20.models.orm.User"></mapping>
-        <mapping class="eyemazev20.models.orm.GlobalMessage"></mapping>
+        <mapping class="eyemazev20.Models.orm.PastGame"></mapping>
+        <mapping class="eyemazev20.Models.orm.MazeOrm"></mapping>
+        <mapping class="eyemazev20.Models.orm.User"></mapping>
+        <mapping class="eyemazev20.Models.orm.GlobalMessage"></mapping>
     </session-factory>
 </hibernate-configuration>

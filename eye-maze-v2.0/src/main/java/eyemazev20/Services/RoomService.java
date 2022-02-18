@@ -1,7 +1,7 @@
 package eyemazev20.Services;
 
 import eyemazev20.Dtos.http.MazeParams;
-import eyemazev20.models.entities.Room;
+import eyemazev20.Models.entities.Room;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Service;

@@ -1,31 +1,23 @@
 package eyemazev20.Services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import eyemazev20.Dtos.http.PastGameDto;
 import eyemazev20.Dtos.http.StringDto;
-import eyemazev20.exceptions.HbmEx;
-import eyemazev20.models.entities.Game;
-import eyemazev20.models.entities.Maze;
-import eyemazev20.models.entities.Player;
-import eyemazev20.models.orm.MazeOrm;
-import eyemazev20.models.orm.PastGame;
-import eyemazev20.models.orm.User;
-import eyemazev20.utils.Point;
-import eyemazev20.utils.UtilVars;
-import org.hibernate.Hibernate;
+import eyemazev20.Exceptions.HbmEx;
+import eyemazev20.Models.entities.Game;
+import eyemazev20.Models.entities.Maze;
+import eyemazev20.Models.entities.Player;
+import eyemazev20.Models.orm.MazeOrm;
+import eyemazev20.Models.orm.PastGame;
+import eyemazev20.Models.orm.User;
+import eyemazev20.Utils.Point;
+import eyemazev20.Utils.UtilVars;
 import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
-import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-
-import com.vladmihalcea.hibernate.type.array.StringArrayType;
-import org.hibernate.dialect.PostgreSQL94Dialect;
 
 @Service
 public class GameService {

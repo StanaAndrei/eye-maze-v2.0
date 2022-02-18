@@ -1,13 +1,12 @@
 package eyemazev20.Services;
 
-import eyemazev20.utils.IdGetter;
-import eyemazev20.utils.PairCmpPq;
+import eyemazev20.Utils.IdGetter;
+import eyemazev20.Utils.PairCmpPq;
 import javafx.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.PriorityQueue;
-import java.util.Queue;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service

@@ -1,7 +1,7 @@
 package eyemazev20.Dtos.http;
 
-import eyemazev20.models.entities.MazeCell;
-import eyemazev20.utils.Point;
+import eyemazev20.Models.entities.MazeCell;
+import eyemazev20.Utils.Point;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,8 +1,8 @@
 package eyemazev20.Services;
 
-import eyemazev20.exceptions.HbmEx;
-import eyemazev20.models.orm.MazeOrm;
-import eyemazev20.utils.UtilVars;
+import eyemazev20.Exceptions.HbmEx;
+import eyemazev20.Models.orm.MazeOrm;
+import eyemazev20.Utils.UtilVars;
 import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Service;
