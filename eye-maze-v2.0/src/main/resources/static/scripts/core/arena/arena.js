@@ -2,6 +2,7 @@ import "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
 import "https://cdn.jsdelivr.net/npm/p5@1.4.0/lib/p5.js"
 import "https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"
 import "https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"
+import 'https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/addons/p5.sound.min.js'
 import handleInp from "./handleInp.js"
 import GameState from "./GameState.js";
 
@@ -10,6 +11,7 @@ const otherProfilePicB64 = document.querySelector('meta[name=otherProfilePicB64]
 let myProfilePic, otherProfilePic;
 
 let stompClient;
+let mazeMusic;
 
 const initP5 = p5context => {
     p5context.preload = () => {
@@ -36,8 +38,14 @@ const initP5 = p5context => {
             stompClient.send('/ws/move-message', {}, JSON.stringify({
                 'buffer': 'UP'
             }));//*/
+
+        }, () => {
+            mazeMusic.pause();
+            alert('LOST CONNECTION!!!');
+            window.location.assign('/play');
         });
 
+        mazeMusic = p5context.loadSound('./../../../assets/sound/maze-music.mp3');
     }
 
     p5context.setup = () => {
@@ -49,8 +57,11 @@ const initP5 = p5context => {
                 'buffer': 'afk'
             }));//*/
         }
+
+        mazeMusic.loop();        
     }
 
+    let fi = false;
     p5context.draw = () => {
         if (!document.hasFocus()) {/*
             stompClient.send('/ws/move-message', {}, JSON.stringify({
@@ -66,6 +77,18 @@ const initP5 = p5context => {
             stompClient.send('/ws/move-message', {}, JSON.stringify({
                 'buffer': inp
             }));//*/
+        }
+    }
+
+    p5context.keyPressed = () => {
+        //press 'M'
+        if (p5context.keyCode === 77) {
+            if (mazeMusic.isPlaying()) {
+                mazeMusic.pause();
+            } else {
+                mazeMusic.loop();
+            }
+            return;
         }
     }
 }
