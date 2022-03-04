@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import javax.servlet.http.HttpSession;
 
+@SuppressWarnings("unused")
 @SessionAttributes("loginUUID")
 @Controller
 public class MazeViewController {

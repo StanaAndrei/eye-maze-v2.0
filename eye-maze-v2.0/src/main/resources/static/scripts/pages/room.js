@@ -1,5 +1,6 @@
 import leaveRoom from "../api/room/leave.js";
 
+//console.error('gewrihegruj');
 const broadcastCh = new BroadcastChannel('check-dupl');
 broadcastCh.postMessage('open');
 broadcastCh.onmessage = event => {
@@ -37,6 +38,12 @@ function showMessage(from, message, isAdmin = false) {
     $('#message-history')[0].scrollTop = $('#message-history')[0].scrollHeight;
 }
 
+function sendMessage(message) {
+    stompClient.send('/ws/room-messages', {}, JSON.stringify({
+        'buffer': message
+    }));
+}
+
 $('#send').click(event => {
     event.preventDefault();
     const message = $('#message-cont').val().trim();
@@ -44,13 +51,13 @@ $('#send').click(event => {
         alert(`message cann't be empty!`);
         return;
     }
-    stompClient.send('/ws/room-messages', {}, JSON.stringify({
-        'buffer': message
-    }));
+    
+    sendMessage(message);
     $('#message-cont').val('');
 })
 
 let nrCon = 0;
+let paramToAdd = 'eyes';
 function connect() {
     let socket = new SockJS('/our-websocket');
     stompClient = Stomp.over(socket);
@@ -88,8 +95,12 @@ function connect() {
             if (state === 'LAUNCH') {
                 window.onbeforeunload = undefined;
                 stompClient.disconnect(() => { });
-                sessionStorage.wMouse = (new URLSearchParams(window.location.search)).has('wmouse');
-                window.location.assign(`/arena/${roomUUID}`);
+                
+                if (sessionStorage.wmouse) {
+                    paramToAdd = 'wmouse';
+                }
+
+                window.location.assign(`/arena/${roomUUID}?${paramToAdd}`);
                 return;
             }
 
@@ -142,3 +153,15 @@ window.onload = async () => {
 }
 
 window.onbeforeunload = () => '';
+
+$('#toggle-ctrl').click(event => {
+    event.preventDefault();
+
+    if (paramToAdd === 'eyes') {
+        paramToAdd = 'arrows';
+    } else {
+        paramToAdd = 'eyes';
+    }
+
+    sendMessage(`I'll play with ${paramToAdd}!`);
+})

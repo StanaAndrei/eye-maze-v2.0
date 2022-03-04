@@ -5,7 +5,7 @@ import "https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"
 import 'https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/addons/p5.sound.min.js'
 import handleInp from "./handleInp.js"
 import GameState from "./GameState.js";
-
+const usp = new URLSearchParams(window.location.search);
 const myProfilePicB64 = document.querySelector('meta[name=myProfilePicB64]').content;
 const otherProfilePicB64 = document.querySelector('meta[name=otherProfilePicB64]').content;
 let myProfilePic, otherProfilePic;
@@ -49,7 +49,7 @@ const initP5 = p5context => {
     }
 
     p5context.setup = () => {
-        const DELTA_WIDTH = sessionStorage.wMouse ? 0 : 340;
+        const DELTA_WIDTH = ((usp.has('wmouse') || usp.has('arrows')) ? 0 : 340);
         let canvas = p5context.createCanvas(window.innerWidth - DELTA_WIDTH, window.innerHeight);
         canvas.position(DELTA_WIDTH, 0);
         if (!document.hasFocus()) {/*
@@ -58,7 +58,7 @@ const initP5 = p5context => {
             }));//*/
         }
 
-        mazeMusic.loop();        
+        mazeMusic.loop();
     }
 
     let fi = false;
@@ -72,11 +72,13 @@ const initP5 = p5context => {
         p5context.background('black');
         GameState.draw(p5context, myProfilePic, otherProfilePic);
 
-        const inp = handleInp(p5context);
-        if (inp) {
-            stompClient.send('/ws/move-message', {}, JSON.stringify({
-                'buffer': inp
-            }));//*/
+        if (usp.has('wmouse')) {
+            const inp = handleInp(p5context);
+            if (inp) {
+                stompClient.send('/ws/move-message', {}, JSON.stringify({
+                    'buffer': inp
+                }));//*/
+            }
         }
     }
 
@@ -89,6 +91,31 @@ const initP5 = p5context => {
                 mazeMusic.loop();
             }
             return;
+        }
+
+        if (usp.has('arrows')) {
+            const {
+                LEFT_ARROW,
+                RIGHT_ARROW,
+                UP_ARROW,
+                DOWN_ARROW
+            } = p5context;
+
+            let inp;
+            if (p5context.keyCode === UP_ARROW) {
+                inp = 'UP';
+            } else if (p5context.keyCode === RIGHT_ARROW) {
+                inp = 'RIGHT';
+            } else if (p5context.keyCode === DOWN_ARROW) {
+                inp = 'DOWN';
+            } else if (p5context.keyCode === LEFT_ARROW) {
+                inp = 'LEFT';
+            } else {
+                return;
+            }
+            stompClient.send('/ws/move-message', {}, JSON.stringify({
+                'buffer': inp
+            }));//*/
         }
     }
 }
