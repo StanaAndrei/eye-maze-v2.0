@@ -33,6 +33,7 @@ $('#join-btn').click(async event => {
 })
 
 let stompClient;
+let elapsedSecs = 0, elapsedMins = 0, intervalObj;
 $('#matchmaking').click(async event => {
     event.preventDefault();
 
@@ -42,10 +43,28 @@ $('#matchmaking').click(async event => {
         subscription = undefined;
         $('#mmk-state').text('');
         $('#matchmaking').text('matchmaking');
+        $('#ela').text(``);
+        elapsedMins = elapsedSecs = 0;
+        clearInterval(intervalObj);
     } else {
+
         if (!subscription) {
             subscription = stompClient.subscribe(mmkRoute, mmkCallback)
         }
+
+        $('#ela').text(`elapsed time: 00:00`);
+        intervalObj = setInterval(() => {
+            elapsedSecs++;
+            if (elapsedSecs === 15) {
+                elapsedSecs = 0;
+                elapsedMins++;
+            }
+            $('#ela').text(`
+                elapsed time: 
+                ${elapsedMins < 10 ? '0' : ''}${elapsedMins}:${elapsedSecs < 10 ? '0' : ''}${elapsedSecs}
+            `);
+        }, 1e3);
+
         await stompClient.send('/ws/mmk');//*/
         $('#mmk-state').text('searching...');
         $('#matchmaking').text('cancel');
