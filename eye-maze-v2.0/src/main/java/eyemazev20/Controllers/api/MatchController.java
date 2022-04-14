@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.Map;
 import java.util.UUID;
 
 @SuppressWarnings("unused")
@@ -19,8 +20,18 @@ public class MatchController {
     public ResponseEntity<UUID> createRoom(
             final HttpSession httpSession,
             @RequestBody(required = false) final MazeParams mazeParams,
-            @RequestParam(name = "mz-name", required = false) final String mzName
+            @RequestParam Map<String, String> queryParams
     ) {
+        if (!queryParams.containsKey("is-public") || !queryParams.containsKey("mz-name")) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        final var isPublic = Boolean.parseBoolean(queryParams.get("is-public"));
+
+        var mzName = queryParams.get("mz-name");
+        if (mzName.length() == 0) {
+            mzName = null;
+        }
 
         if (!AuthService.isAuth(httpSession)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -31,15 +42,20 @@ public class MatchController {
         //leaveRoom(httpSession);
 
         final var loginUUID = httpSession.getAttribute("loginUUID").toString();
-        final var roomUUID = RoomService.createRoom(loginUUID, mazeParams, mzName);
+        final var roomUUID = RoomService.createRoom(loginUUID, mazeParams, mzName, isPublic);
 
-        return ResponseEntity.ok(roomUUID);
+        return ResponseEntity.ok(roomUUID);//*/
+        //return null;
     }
 
     @PutMapping("/join-room/{roomUuid}")
     public ResponseEntity<Void> joinRoom(@PathVariable final UUID roomUuid, final HttpSession httpSession) {
+        //System.err.println("JOIN!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         if (!AuthService.isAuth(httpSession)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        if (RoomService.uidToRoom.get(roomUuid) == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         if (!RoomService.canBeJoined(roomUuid)) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);

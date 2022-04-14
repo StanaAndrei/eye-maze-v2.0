@@ -1,5 +1,5 @@
-export default async function createRoom(mazeParams = null, param = '') {
-    const res = await fetch(`/api/create-room?${param}`, {
+export default async function createRoom(isPublic, mazeParams = null, mzName = '') {
+    const res = await fetch(`/api/create-room?is-public=${isPublic}&mz-name=${mzName}`, {
         method: 'POST',
         cache: 'no-cache',
         credentials: 'same-origin',

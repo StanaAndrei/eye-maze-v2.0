@@ -56,7 +56,7 @@ public class RoomViewController {
 
         List<String> list = new ArrayList<>();
         for (final var code : RoomService.uidToRoom.keySet()) {
-            if (RoomService.canBeJoined(code)) {
+            if (RoomService.canBeJoined(code) && RoomService.uidToRoom.get(code).isPublic()) {
                 list.add(code.toString());
             }
         }

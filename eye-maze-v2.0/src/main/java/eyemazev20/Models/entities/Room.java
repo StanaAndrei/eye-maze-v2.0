@@ -39,11 +39,12 @@ public class Room {
         return mzName;
     }
 
-    public Room(final String first, final MazeParams mazeParams, final String mzName) {
+    public Room(final String first, final MazeParams mazeParams, final String mzName, final boolean isPublic) {
         ready = new HashSet<>();
         plUUIDs = new String[]{first, null};
         this.mazeParams = mazeParams;
         this.mzName = mzName;
+        this.isPublic = isPublic;
     }
 
     @Override
@@ -70,4 +71,15 @@ public class Room {
         plUUIDs[nr] = null;
     }
 
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public void makePublic() {
+        isPublic = true;
+    }
+
+    public void makePrivate() {
+        isPublic = false;
+    }
 }

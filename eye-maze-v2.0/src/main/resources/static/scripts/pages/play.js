@@ -29,7 +29,10 @@ $('#join-btn').click(async event => {
     if (!uuid) {
         return;
     }
-    await joinRoom(uuid);
+    stompClient?.disconnect(async () => { 
+        await joinRoom(uuid);
+        //window.location.reload();
+    });
 })
 
 let stompClient;
@@ -75,7 +78,6 @@ window.onload = () => {
     let socket = new SockJS('/our-websocket');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, frame => {
-        console.log('afed');
         $('#matchmaking')[0].disabled = false;
-    });
+    });//*/
 }

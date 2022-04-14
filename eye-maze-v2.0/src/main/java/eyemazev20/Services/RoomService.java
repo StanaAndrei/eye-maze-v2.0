@@ -13,9 +13,14 @@ import java.util.UUID;
 public class RoomService {
     public static HashMap<UUID, Room> uidToRoom = new HashMap<>();
 
-    public static @NotNull UUID createRoom(final String loginUUID, final MazeParams mazeParams, final String mzName) {
+    public static @NotNull UUID createRoom(
+            final String loginUUID,
+            final MazeParams mazeParams,
+            final String mzName,
+            final boolean isPublic
+    ) {
         final var uuid = UUID.randomUUID();
-        RoomService.uidToRoom.put(uuid, new Room(loginUUID, mazeParams, mzName));
+        RoomService.uidToRoom.put(uuid, new Room(loginUUID, mazeParams, mzName, isPublic));
         System.out.println("UUID:" + uuid);
         System.out.println(RoomService.uidToRoom.get(uuid));
         return uuid;
