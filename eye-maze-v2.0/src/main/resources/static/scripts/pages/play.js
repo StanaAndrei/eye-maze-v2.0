@@ -31,7 +31,6 @@ $('#join-btn').click(async event => {
     }
     stompClient?.disconnect(async () => { 
         await joinRoom(uuid);
-        //window.location.reload();
     });
 })
 

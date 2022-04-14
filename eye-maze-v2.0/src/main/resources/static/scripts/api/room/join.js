@@ -8,7 +8,9 @@ export default async function joinRoom(uuid) {
         window.location.assign(`/room/${uuid}`);
     } else if (res.status === 409) {
         alert('lobby is full!');
+        window.location.reload();
     } else {
         alert(`lobby doesn't exist!`);
+        window.location.reload();
     }
 }
