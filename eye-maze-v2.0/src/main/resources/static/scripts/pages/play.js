@@ -57,7 +57,7 @@ $('#matchmaking').click(async event => {
         $('#ela').text(`elapsed time: 00:00`);
         intervalObj = setInterval(() => {
             elapsedSecs++;
-            if (elapsedSecs === 15) {
+            if (elapsedSecs === 60) {
                 elapsedSecs = 0;
                 elapsedMins++;
             }
