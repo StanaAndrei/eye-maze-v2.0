@@ -163,5 +163,5 @@ $('#toggle-ctrl').click(event => {
         paramToAdd = 'eyes';
     }
 
-    sendMessage(`I'll play with ${paramToAdd}!`);
+    //sendMessage(`I'll play with ${paramToAdd}!`);
 })
