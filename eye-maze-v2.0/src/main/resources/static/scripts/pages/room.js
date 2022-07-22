@@ -57,7 +57,7 @@ $('#send').click(event => {
 })
 
 let nrCon = 0;
-let paramToAdd = 'eyes';
+let paramToAdd = 'arrows';
 function connect() {
     let socket = new SockJS('/our-websocket');
     stompClient = Stomp.over(socket);
