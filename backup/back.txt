@@ -1,0 +1,290 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 13.7
+-- Dumped by pg_dump version 13.7
+
+-- Started on 2024-10-13 00:37:03
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 2 (class 3079 OID 17096)
+-- Name: uuid-ossp; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
+
+
+--
+-- TOC entry 3040 (class 0 OID 0)
+-- Dependencies: 2
+-- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UUIDs)';
+
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 205 (class 1259 OID 17413)
+-- Name: globalmessages; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.globalmessages (
+    id integer NOT NULL,
+    cont text NOT NULL,
+    timestp timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    senderid integer NOT NULL
+);
+
+
+ALTER TABLE public.globalmessages OWNER TO postgres;
+
+--
+-- TOC entry 204 (class 1259 OID 17411)
+-- Name: globalmessages_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.globalmessages_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.globalmessages_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3041 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: globalmessages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.globalmessages_id_seq OWNED BY public.globalmessages.id;
+
+
+--
+-- TOC entry 201 (class 1259 OID 17071)
+-- Name: hibernate_sequence; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.hibernate_sequence
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.hibernate_sequence OWNER TO postgres;
+
+--
+-- TOC entry 207 (class 1259 OID 17520)
+-- Name: mazes; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.mazes (
+    maze_id integer NOT NULL,
+    mzname text NOT NULL,
+    form text NOT NULL,
+    mkerid integer
+);
+
+
+ALTER TABLE public.mazes OWNER TO postgres;
+
+--
+-- TOC entry 206 (class 1259 OID 17518)
+-- Name: mazes_maze_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.mazes_maze_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.mazes_maze_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3042 (class 0 OID 0)
+-- Dependencies: 206
+-- Name: mazes_maze_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.mazes_maze_id_seq OWNED BY public.mazes.maze_id;
+
+
+--
+-- TOC entry 203 (class 1259 OID 17171)
+-- Name: pastgames; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.pastgames (
+    roomuuid text NOT NULL,
+    pluuids text[] NOT NULL,
+    scores integer[] NOT NULL,
+    timestp timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    maze_id integer
+);
+
+
+ALTER TABLE public.pastgames OWNER TO postgres;
+
+--
+-- TOC entry 202 (class 1259 OID 17079)
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.users (
+    username text,
+    userpassword text,
+    email text,
+    id integer NOT NULL,
+    loginuuid text,
+    profilepicb64 text DEFAULT 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC8AAAAvCAMAAABE+WOeAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAABNVBMVEXk5ufj5ebn6Ono6uro6uvn6erl5+jo6erX2tzO0dPKztDM0NLV2Nnh4+TN0NK1u72ssrWqsbSqsLSrsrWyuLrGyszn6enm6Ong4uO6v8KqsLOss7autLevtbits7azuLvZ293Y2929wsTR1NbEycu5vsCwtrje4eLa3d7O0tTP0tTCxsnHy86rsbW7wMPFysyvtbe5vsHIzM6rsbS8wcPQ09XDyMrc3uCxt7rg4+SpsLO2vL67wMKyt7rd4OHj5efBxcittLe4vsDe4OHT19iwtrm4vcDN0dPp6uvJzc/W2dvp6+zd3+G6v8G0ubyyuLvCx8nb3t/i5OXl5+fM0NGzubvi5Oa3vL+0urzV2Nqssrbc3+DY2ty+w8Xj5ufa3N7Dx8qnrrGor7KzubzBxsjDx8n////O98nUAAAAAWJLR0RmLNTZJQAAAAd0SU1FB+YBDRE1K9CqUeMAAAHRSURBVEjH7ZVZQxMxFIUnnSahmyRTIJgmKViLQOkaQFqrKItQWVRQNheKy///C0zR2jYtSV/0yfM0D9/JTXLvmXjef/19gY7Gp72IH/UhGteBwUQsnkim/HEcAKEHk4QGQXpqOjXjNAA2+5BnhAyleHYOugwoNUml+CVJxLyrAnvEu3jHkE0h625gLujhoYE/xtYCKE/6eSEWntgKsEU1QAtJlywFAF6m0uALNt5fCQy+WGKW4/plg6+QqmX/IFoz19ertvXx2tD+120Xyp4K835y1gawUnGggNqoI2t/k3qwvzUf2Aei0OibH/3MnYBmQ8ou/vwFcw705kutX3Vwwre2mTswHttZ3VUZJV/vec5AhjSE+2gu1kq8AQcYMg9Ys4vZ4dr60fHbUNnj/Lul9+j+0APPP1luSkrTGXUnQqmoJurR05EOEPE+fAzSnah3hy38InyjdTYq9cCfP+dKSmMgKuFv4uISD+GbOKaICf9uw5VuwaHJjHMxGg8NolGG5iDz++g7RyM+MKbsk3CIfI70DGDmi5ZWXKb7cvmVXSvX+lIn/9wqiLb0rrRrodjunYBt3Whql/72ve+8tR/tnw4Vyic9HmK3oPm+ufRPXtpbgddoiP1fH/oAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjItMDEtMTNUMTc6NTM6MzUrMDA6MDD964iwAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIyLTAxLTEzVDE3OjUzOjM1KzAwOjAwjLYwDAAAAABJRU5ErkJggg=='::text NOT NULL
+);
+
+
+ALTER TABLE public.users OWNER TO postgres;
+
+--
+-- TOC entry 2883 (class 2604 OID 17416)
+-- Name: globalmessages id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.globalmessages ALTER COLUMN id SET DEFAULT nextval('public.globalmessages_id_seq'::regclass);
+
+
+--
+-- TOC entry 2885 (class 2604 OID 17523)
+-- Name: mazes maze_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.mazes ALTER COLUMN maze_id SET DEFAULT nextval('public.mazes_maze_id_seq'::regclass);
+
+
+--
+-- TOC entry 2897 (class 2606 OID 17422)
+-- Name: globalmessages globalmessages_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.globalmessages
+    ADD CONSTRAINT globalmessages_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2899 (class 2606 OID 17530)
+-- Name: mazes mazes_mzname_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.mazes
+    ADD CONSTRAINT mazes_mzname_key UNIQUE (mzname);
+
+
+--
+-- TOC entry 2901 (class 2606 OID 17528)
+-- Name: mazes mazes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.mazes
+    ADD CONSTRAINT mazes_pkey PRIMARY KEY (maze_id);
+
+
+--
+-- TOC entry 2895 (class 2606 OID 17178)
+-- Name: pastgames pastgames_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.pastgames
+    ADD CONSTRAINT pastgames_pkey PRIMARY KEY (roomuuid);
+
+
+--
+-- TOC entry 2887 (class 2606 OID 17091)
+-- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_email_key UNIQUE (email);
+
+
+--
+-- TOC entry 2889 (class 2606 OID 17118)
+-- Name: users users_loginuuid_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_loginuuid_key UNIQUE (loginuuid);
+
+
+--
+-- TOC entry 2891 (class 2606 OID 17353)
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2893 (class 2606 OID 17089)
+-- Name: users users_username_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_username_key UNIQUE (username);
+
+
+--
+-- TOC entry 2904 (class 2606 OID 17531)
+-- Name: mazes fk_user; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.mazes
+    ADD CONSTRAINT fk_user FOREIGN KEY (mkerid) REFERENCES public.users(id);
+
+
+--
+-- TOC entry 2903 (class 2606 OID 17423)
+-- Name: globalmessages globalmessages_senderid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.globalmessages
+    ADD CONSTRAINT globalmessages_senderid_fkey FOREIGN KEY (senderid) REFERENCES public.users(id);
+
+
+--
+-- TOC entry 2902 (class 2606 OID 17543)
+-- Name: pastgames pastgames_maze_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.pastgames
+    ADD CONSTRAINT pastgames_maze_id_fkey FOREIGN KEY (maze_id) REFERENCES public.mazes(maze_id) ON DELETE SET NULL;
+
+
+-- Completed on 2024-10-13 00:37:04
+
+--
+-- PostgreSQL database dump complete
+--
+
